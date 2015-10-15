@@ -1,0 +1,107 @@
+.card {
+  color: #e0e0e0 ;
+  padding: 15px;
+}
+
+.card .card-title {
+  color: #9e9e9e ;
+  font-size: 32px;
+}
+
+.card .card-action a.action-verb {
+  color: white;
+  font-weight: bold;
+  float: right;
+  margin-right: 20px;
+  margin-bottom: 10px;
+}
+
+/*temperature*/
+.card-temperature {
+  font-size: 48px;
+  color: black;
+  text-align: right;
+  margin-right: 20px;
+}
+
+#boil-card .card-temperature {
+  color: #b71c1c;
+}
+#malt-card .card-temperature {
+  color: #ff6f00;
+}
+#hot-card .card-temperature {
+  color: #01579b;
+}
+
+ /*volume */
+.card-volume {
+  font-size: 32px;
+  color: black;
+  text-align: right;
+  margin-right: 20px;
+}
+
+.card-volume #boil-volume{
+  color: #b71c1c;
+}
+.card-volume #malt-volume {
+  color: #ff6f00;
+  margin-right: 50px;
+}
+.card-volume #hot-volume {
+  color: #01579b;
+  margin-right: 50px;
+}
+
+/*task*/
+label.done {
+  color: black;
+  text-decoration: line-through;
+}
+
+label.waiting {
+  color: black;
+}
+
+.add-task {
+  float: right;
+  margin-right: 30px;
+  font-style: normal;
+}
+
+
+.recipe {
+  color: black;
+}
+
+.recipe-name {
+  font-size: 24px;
+  margin-right: 150px;
+}
+
+.recipe-step {
+  font-size: 18px;
+  color: #9e9e9e ;
+  margin-right: 50px;
+}
+.recipe-time {
+  font-size: 18px;
+  color: #9e9e9e ;
+}
+.edit img {
+  margin-left: 20px;
+  margin-top: 12px;
+}
+
+/*valve*/
+.valve-name {
+  font-size: 18px;
+  margin-right: 200px;
+}
+
+/*resistor*/
+.resistor-name {
+  font-size: 18px;
+  margin-right: 200px;
+}

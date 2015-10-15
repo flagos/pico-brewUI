@@ -1,0 +1,404 @@
+<html>
+
+<head>
+
+  <title>Pico brewUI</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
+
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.1/css/materialize.min.css">
+
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.1/js/materialize.min.js"></script>
+
+
+  <!-- Compiled and minified JavaScript for Chart -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+
+  <!-- Custom css -->
+  <link rel="stylesheet" href="static/style.css">
+
+
+
+</head>
+
+<body>
+  <nav>
+    <div class="nav-wrapper">
+      <a href="#" class="brand-logo">Pico</a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="sass.html">Sass</a> blue-text text-darken-2</li>
+        <li><a href="badges.html">Components</a></li>
+        <li><a href="collapsible.html">JavaScript</a></li>
+      </ul>
+    </div>
+  </nav>
+
+
+  <div class="row" style="margin-top:60px">
+
+    <!-- Temperature cards -->
+    <!-- hot tank -->
+    <div class="col m4"  >
+      <div class="card" id="hot-card">
+        <div class="card-content">
+          <span class="card-title">Hot tank</span>
+        </div>
+        <div class="card-temperature"> 70 °C</div>
+        <div class="card-temperature-chart">
+        </div>
+        <canvas id="hot-canvas" width="550" height="150"></canvas>
+        <div class="card-action">
+          <a href="#">More History</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- malt tank -->
+    <div class="col m4"  >
+      <div class="card" id="malt-card">
+        <div class="card-content">
+          <span class="card-title">Malt tank</span>
+        </div>
+        <div class="card-temperature"> 78 °C</div>
+        <div class="card-temperature-chart">
+          <canvas id="malt-canvas" width="550" height="150"></canvas>
+        </div>
+        <div class="card-action">
+          <a href="#">More History</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- boil tank -->
+    <div class="col m4">
+      <div class="card" id="boil-card">
+        <div class="card-content">
+          <span class="card-title">Boil tank</span>
+        </div>
+        <div class="card-temperature"> 98 °C</div>
+        <div class="card-temperature-chart">
+          <canvas id="boil-canvas" width="550" height="150"></canvas>
+        </div>
+        <div class="card-action">
+          <a href="#">More History</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Volumes card -->
+    <div class="col s8">
+      <div class="card ">
+        <div class="card-content">
+          <span class="card-title">Tank volumes</span>
+        </div>
+        <div class="card-volume"> <span id="hot-volume"> hot: 50L </span><span id="malt-volume"> malt: 30L </span><span id="boil-volume"> boil: 20L </span></div>
+        <div class="card-volume-chart">
+          <canvas id="volume-canvas" width="1100" height="480"></canvas>
+        </div>
+        <div class="card-action">
+          <a href="#" class="waves-effect waves-light btn action-verb">Define</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Next steps card -->
+    <div class="col s4">
+      <div class="card task">
+        <div class="card-content">
+          <span class="card-title">Next steps</span>
+        </div>
+        <form action="#">
+          <p>
+            <input type="checkbox" class="filled-in" id="check0" checked="checked" />
+            <label for="check0" class="done">Fill in malt for Dark IPA</label>
+          </p>
+          <p>
+            <input type="checkbox" class="filled-in" id="check1" />
+            <label for="check1" class="waiting">Fill in malt for Bitter</label>
+          </p>
+          <p>
+            <input type="checkbox" id="check2" disabled="disabled" />
+            <label for="check2" class="unavailable">Chill out Dark IPA</label>
+          </p>
+          <p>
+            <input type="checkbox" id="check3" disabled="disabled" />
+            <label for="check3" class="unavailable">Fill in Stout</label>
+          </p>
+        </form>
+        <div class="add-task">
+          <a class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons" style="font-style: normal;">+</i></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recipes card -->
+    <div class="col s4">
+      <div class="card ">
+        <div class="card-content">
+          <span class="card-title">Recipes</span>
+        </div>
+        <table class="responsive-table">
+          <tbody>
+            <tr class="recipe">
+              <td class="recipe-name">+ Dark IPA</td>
+              <td class="recipe-step">Boil</td>
+              <td class="recipe-time">25m 10s</td>
+            </tr>
+            <tr>
+              <td class="recipe-name">+ Bitter</td>
+              <td class="recipe-step">Malt - first</td>
+              <td class="recipe-time">30m 45s</td>
+            </tr>
+            <tr>
+              <td class="recipe-name">+ Stout</td>
+              <td class="recipe-step">Hot</td>
+              <td class="recipe-time">NA</td>
+            </tr>
+          </tbody>
+        </table>
+        <span class="edit">
+          <a href="#"><img src="static/icons/edit.png" width=28px/></a>
+        </span>
+        <span class="add-task">
+          <a class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons" style="font-style: normal;">+</i></a>
+        </span>
+      </div>
+    </div>
+
+    <!-- valve card -->
+    <div class="col s4">
+      <div class="card ">
+        <div class="card-content">
+          <span class="card-title">Valves</span>
+        </div>
+        <div class="card-valve switch">
+          <table class="responsive-table">
+            <tbody>
+              <tr class="valve">
+                <td class="valve-name">Hot</td>
+                <td class="valve-actuator">
+                  <label>
+                    Off
+                    <input type="checkbox">
+                    <span class="lever"></span>
+                    On
+                  </label>
+                </td>
+              </tr>
+              <tr class="valve">
+                <td class="valve-name">Malt</td>
+                <td class="valve-actuator">
+                  <label>
+                    Off
+                    <input type="checkbox">
+                    <span class="lever"></span>
+                    On
+                  </label>
+                </td>
+              </tr>
+              <tr class="valve">
+                <td class="valve-name">Boil</td>
+                <td class="valve-actuator">
+                  <label>
+                    Off
+                    <input type="checkbox">
+                    <span class="lever"></span>
+                    On
+                  </label>
+                </td>
+              </tr>
+              <tr class="valve">
+                <td class="valve-name">Out</td>
+                <td class="valve-actuator">
+                  <label>
+                    Off
+                    <input type="checkbox">
+                    <span class="lever"></span>
+                    On
+                  </label>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Resistor card -->
+    <div class="col s4">
+      <div class="card ">
+        <div class="card-content">
+          <span class="card-title">Resistors</span>
+        </div>
+        <div class="card-resistor switch">
+          <table class="responsive-table">
+            <tbody>
+              <tr class="valve">
+                <td class="resistor-name">Hot</td>
+                <td class="resistor-actuator">
+                  <label>
+                    Off
+                    <input type="checkbox">
+                    <span class="lever"></span>
+                    On
+                  </label>
+                </td>
+              </tr>
+              <tr class="resistor">
+                <td class="resistor-name">Malt</td>
+                <td class="resistor-actuator">
+                  <label>
+                    Off
+                    <input type="checkbox">
+                    <span class="lever"></span>
+                    On
+                  </label>
+                </td>
+              </tr>
+              <tr class="resistor">
+                <td class="resistor-name">Boil</td>
+                <td class="resistor-actuator">
+                  <label>
+                    Off
+                    <input type="checkbox">
+                    <span class="lever"></span>
+                    On
+                  </label>
+                </td>
+              </tr>
+              <tr class="resistor">
+                <td class="resistor-name">Out</td>
+                <td class="resistor-actuator">
+                  <label>
+                    Off
+                    <input type="checkbox">
+                    <span class="lever"></span>
+                    On
+                  </label>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+  <script type="text/javascript">
+
+  var hotcanvas = document.getElementById('hot-canvas').getContext('2d');
+  var hotData = {
+  	labels : ["16:00","16:05","16:10","16:15","16:20","16:25"],
+  	datasets : [
+  		{
+  			fillColor : "#b3e5fc",
+  			strokeColor : "#01579b",
+  			pointColor : "#fff",
+  			pointStrokeColor : "#01579b",
+  			data : [59,65,68,70,70,70]
+  		}
+  	]
+  }
+  new Chart(hotcanvas).Line(hotData, {
+    //Boolean - Whether to show horizontal lines (except X axis)
+ scaleShowHorizontalLines: false,
+ //Boolean - Whether to show vertical lines (except Y axis)
+ scaleShowVerticalLines: false,
+
+
+  });
+
+  var maltcanvas = document.getElementById('malt-canvas').getContext('2d');
+  var maltData = {
+  	labels : ["16:00","16:05","16:10","16:15","16:20","16:25"],
+  	datasets : [
+  		{
+  			fillColor : "#ffecb3",
+  			strokeColor : "#ff6f00",
+  			pointColor : "#fff",
+  			pointStrokeColor : "#ff6f00",
+  			data : [68,68,68,72,78,78]
+  		}
+  	]
+  }
+  new Chart(maltcanvas).Line(maltData, {
+    //Boolean - Whether to show horizontal lines (except X axis)
+ scaleShowHorizontalLines: false,
+ //Boolean - Whether to show vertical lines (except Y axis)
+ scaleShowVerticalLines: false,
+
+
+  });
+
+  var boilcanvas = document.getElementById('boil-canvas').getContext('2d');
+  var boilData = {
+    labels : ["16:00","16:05","16:10","16:15","16:20","16:25"],
+    datasets : [
+      {
+        fillColor : "#ffcdd2",
+        strokeColor : "#b71c1c",
+        pointColor : "#fff",
+        pointStrokeColor : "#b71c1c",
+        data : [79,86,95,98,98,98]
+      }
+    ]
+  }
+  new Chart(boilcanvas).Line(boilData, {
+    //Boolean - Whether to show horizontal lines (except X axis)
+ scaleShowHorizontalLines: false,
+ //Boolean - Whether to show vertical lines (except Y axis)
+ scaleShowVerticalLines: false,
+
+
+  });
+
+  var volumecanvas = document.getElementById('volume-canvas').getContext('2d');
+  var volumeData = {
+    labels : ["16:00","16:05","16:10","16:15","16:20","16:25"],
+    datasets : [
+      {
+        label: "Hot tank",
+        fillColor : "#b3e5fc",
+  			strokeColor : "#01579b",
+  			pointColor : "#fff",
+  			pointStrokeColor : "#01579b",
+        data : [50,45,42,44,48,50]
+      },
+      {
+        label: "Malt tank",
+        fillColor : "#ffecb3",
+  			strokeColor : "#ff6f00",
+  			pointColor : "#fff",
+  			pointStrokeColor : "#ff6f00",
+        data: [20, 25, 30, 30, 30, 30, 30]
+      },
+      {
+        label: "Boil tank",
+        fillColor : "#ffcdd2",
+        strokeColor : "#b71c1c",
+        pointColor : "#fff",
+        pointStrokeColor : "#b71c1c",
+        data: [0, 0, 7, 12, 20, 20, 20]
+      }
+    ]
+  }
+  new Chart(volumecanvas).Line(volumeData, {
+    //Boolean - Whether to show horizontal lines (except X axis)
+ scaleShowHorizontalLines: false,
+ //Boolean - Whether to show vertical lines (except Y axis)
+ scaleShowVerticalLines: false,
+
+
+  });
+
+
+</script>
+</body>
+
+</html>
