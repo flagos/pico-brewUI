@@ -292,30 +292,34 @@
 
   <script type="text/javascript">
 
-  var hotcanvas = document.getElementById('hot-canvas').getContext('2d');
-  var hotData = {
-  	labels : ["16:00","16:05","16:10","16:15","16:20","16:25"],
-  	datasets : [
-  		{
-  			fillColor : "#b3e5fc",
-  			strokeColor : "#01579b",
-  			pointColor : "#fff",
+  function chart_fill(canvas_id, chart_data) {
+
+    var canvas = document.getElementById(canvas_id).getContext('2d');
+
+    new Chart(canvas).Line(chart_data, {
+      //Boolean - Whether to show horizontal lines (except X axis)
+      scaleShowHorizontalLines: false,
+      //Boolean - Whether to show vertical lines (except Y axis)
+      scaleShowVerticalLines: false,
+    });
+
+  }
+
+  var Data = {
+    labels : ["16:00","16:05","16:10","16:15","16:20","16:25"],
+    datasets : [
+      {
+        fillColor : "#b3e5fc",
+        strokeColor : "#01579b",
+        pointColor : "#fff",
   			pointStrokeColor : "#01579b",
   			data : [59,65,68,70,70,70]
   		}
   	]
   }
-  new Chart(hotcanvas).Line(hotData, {
-    //Boolean - Whether to show horizontal lines (except X axis)
- scaleShowHorizontalLines: false,
- //Boolean - Whether to show vertical lines (except Y axis)
- scaleShowVerticalLines: false,
+  chart_fill('hot-canvas', Data);
 
-
-  });
-
-  var maltcanvas = document.getElementById('malt-canvas').getContext('2d');
-  var maltData = {
+  Data = {
   	labels : ["16:00","16:05","16:10","16:15","16:20","16:25"],
   	datasets : [
   		{
@@ -327,17 +331,9 @@
   		}
   	]
   }
-  new Chart(maltcanvas).Line(maltData, {
-    //Boolean - Whether to show horizontal lines (except X axis)
- scaleShowHorizontalLines: false,
- //Boolean - Whether to show vertical lines (except Y axis)
- scaleShowVerticalLines: false,
+  chart_fill('malt-canvas', Data);
 
-
-  });
-
-  var boilcanvas = document.getElementById('boil-canvas').getContext('2d');
-  var boilData = {
+  Data = {
     labels : ["16:00","16:05","16:10","16:15","16:20","16:25"],
     datasets : [
       {
@@ -349,17 +345,9 @@
       }
     ]
   }
-  new Chart(boilcanvas).Line(boilData, {
-    //Boolean - Whether to show horizontal lines (except X axis)
- scaleShowHorizontalLines: false,
- //Boolean - Whether to show vertical lines (except Y axis)
- scaleShowVerticalLines: false,
+  chart_fill('boil-canvas', Data);
 
-
-  });
-
-  var volumecanvas = document.getElementById('volume-canvas').getContext('2d');
-  var volumeData = {
+  Data = {
     labels : ["16:00","16:05","16:10","16:15","16:20","16:25"],
     datasets : [
       {
@@ -388,14 +376,7 @@
       }
     ]
   }
-  new Chart(volumecanvas).Line(volumeData, {
-    //Boolean - Whether to show horizontal lines (except X axis)
- scaleShowHorizontalLines: false,
- //Boolean - Whether to show vertical lines (except Y axis)
- scaleShowVerticalLines: false,
-
-
-  });
+  chart_fill('volume-canvas', Data);
 
 
 </script>
