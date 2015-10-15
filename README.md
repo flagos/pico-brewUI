@@ -5,7 +5,7 @@ A webserver for pico brewery automation. The hardware is described here: https:/
 To start the server, please install python (seen ok with 2.7) and pip. 
 
 Then, in the repository:
-# pip install virtualenv # in root
+$ sudo pip install virtualenv
 $ source env/bin/activate
 $ python app.py
 
