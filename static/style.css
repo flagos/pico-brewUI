@@ -124,6 +124,10 @@ label.waiting {
 }
 
 /*resistor*/
+.card-resistor {
+    margin-bottom: 52px;
+}
+
 .resistor-name {
   font-size: 18px;
   margin-right: 200px;
