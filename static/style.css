@@ -16,6 +16,17 @@
   margin-bottom: 10px;
 }
 
+/* head */
+.title {
+  width: 100px;
+  margin-left: 30px;
+}
+
+.head-button {
+  width: 50px;
+  margin-left: 20px;
+}
+
 /*temperature*/
 .card-temperature {
   font-size: 48px;
@@ -92,6 +103,18 @@ label.waiting {
 .edit img {
   margin-left: 20px;
   margin-top: 12px;
+}
+
+.recipe .delete-button {
+  color: white;
+}
+
+.recipe .td-delete {
+  width: 5%;
+}
+
+.recipe .delete-button:hover {
+  color: grey;
 }
 
 /*valve*/
