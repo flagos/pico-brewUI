@@ -27,6 +27,10 @@
   margin-left: 20px;
 }
 
+nav {
+  background-color: #29b6f6;
+}
+
 /*temperature*/
 .card-temperature {
   font-size: 48px;
