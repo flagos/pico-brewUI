@@ -69,6 +69,10 @@ nav {
   margin-right: 50px;
 }
 
+.modal-tank-title{
+  color: #212121;
+}
+
 /*task*/
 label.done {
   color: black;

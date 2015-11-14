@@ -31,8 +31,8 @@
     <div class="nav-wrapper">
       <a href="#" class="brand-logo title">Pico</a>
       <ul id="nav-mobile" class="right hide-on-med-and-down">
-        <li> <i class="large material-icons head-button">pause_circle_outline</i></li>
-        <li> <i class="large material-icons head-button">power_settings_new</i></li>
+        <li> <i class="large material-icons head-button tooltipped" data-position="bottom" data-delay="50" data-tooltip="Pause all actuators in security mode">pause_circle_outline</i></li>
+        <li> <i class="large material-icons head-button tooltipped" data-position="bottom" data-delay="50" data-tooltip="Finish and delete all data"">power_settings_new</i></li>
       </ul>
     </div>
   </nav>
@@ -100,7 +100,19 @@
           <canvas id="volume-canvas" width="1100" height="480"></canvas>
         </div>
         <div class="card-action">
-          <a href="#" class="waves-effect waves-light btn action-verb">Define</a>
+          <!-- Modal Trigger -->
+          <a class="waves-effect waves-light btn modal-trigger  action-verb" href="#modal1">Define</a>
+
+          <!-- Modal Structure -->
+          <div id="modal1" class="modal">
+            <div class="modal-content">
+              <h4 class="modal-tank-title">Define tank volumes</h4>
+
+            </div>
+            <div class="modal-footer">
+              <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Send</a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -440,7 +452,10 @@
   }
   chart_fill('power-canvas', Data);
 
-
+  $(document).ready(function(){
+    // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+    $('.modal-trigger').leanModal();
+  });
 </script>
 </body>
 
