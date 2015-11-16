@@ -4,7 +4,8 @@
 
   <title>Pico brewUI</title>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script> -->
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 
   <!-- Compiled and minified CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.1/css/materialize.min.css">
@@ -93,6 +94,8 @@
     <div class="col s8">
       <div class="card ">
         <div class="card-content">
+
+
           <span class="card-title">Tank volumes</span>
         </div>
         <div class="card-volume"> <span id="hot-volume"> hot: 50L </span><span id="malt-volume"> malt: 30L </span><span id="boil-volume"> boil: 20L </span></div>
@@ -105,12 +108,64 @@
 
           <!-- Modal Structure -->
           <div id="modal1" class="modal">
-            <div class="modal-content">
+            <div class="modal-content volume-form">
               <h4 class="modal-tank-title">Define tank volumes</h4>
-
+                <div class="col s12">
+                  Please measure the volume in the tank and report it
+                </div>
+              <div class=" input-field col s4">
+                  <select name="hot" >
+                    <option value="0" selected>0 Liter</option>
+                    <option value="5">5 Liters</option>
+                    <option value="10">10 Liters</option>
+                    <option value="15">15 Liters</option>
+                    <option value="20">20 Liter</option>
+                    <option value="25">25 Liters</option>
+                    <option value="30">30 Liters</option>
+                    <option value="35">35 Liters</option>
+                    <option value="40">40 Liter</option>
+                    <option value="45">45 Liters</option>
+                    <option value="50">50 Liters</option>
+                  </select>
+                <label>Hot tank</label>
+              </div>
+              <div class=" input-field col s4">
+                  <select name="malt" >
+                    <option value="0" selected>0 Liter</option>
+                    <option value="5">5 Liters</option>
+                    <option value="10">10 Liters</option>
+                    <option value="15">15 Liters</option>
+                    <option value="20">20 Liter</option>
+                    <option value="25">25 Liters</option>
+                    <option value="30">30 Liters</option>
+                    <option value="35">35 Liters</option>
+                    <option value="40">40 Liter</option>
+                    <option value="45">45 Liters</option>
+                    <option value="50">50 Liters</option>
+                  </select>
+                <label>Malt tank</label>
+              </div>
+              <div class=" input-field col s4">
+                  <select name="boil" >
+                    <option value="0" selected>0 Liter</option>
+                    <option value="5">5 Liters</option>
+                    <option value="10">10 Liters</option>
+                    <option value="15">15 Liters</option>
+                    <option value="20">20 Liter</option>
+                    <option value="25">25 Liters</option>
+                    <option value="30">30 Liters</option>
+                    <option value="35">35 Liters</option>
+                    <option value="40">40 Liter</option>
+                    <option value="45">45 Liters</option>
+                    <option value="50">50 Liters</option>
+                  </select>
+                <label>Boil tank</label>
+              </div>
             </div>
             <div class="modal-footer">
-              <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Send</a>
+              <button class="btn waves-effect waves-light modal-close modal-action" type="submit" name="action">Submit
+                <i class="material-icons right">send</i>
+              </button>
             </div>
           </div>
         </div>
@@ -453,8 +508,14 @@
   chart_fill('power-canvas', Data);
 
   $(document).ready(function(){
+
+    // initialiaze selectors
+    $('select').material_select();
+
     // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
     $('.modal-trigger').leanModal();
+
+
   });
 </script>
 </body>
