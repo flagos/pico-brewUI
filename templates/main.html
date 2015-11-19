@@ -104,10 +104,10 @@
         </div>
         <div class="card-action">
           <!-- Modal Trigger -->
-          <a class="waves-effect waves-light btn modal-trigger  action-verb" href="#modal1">Define</a>
+          <a class="waves-effect waves-light btn modal-trigger  action-verb" href="#modal-tank">Define</a>
 
           <!-- Modal Structure -->
-          <div id="modal1" class="modal">
+          <div id="modal-tank" class="modal">
             <div class="modal-content volume-form">
               <h4 class="modal-tank-title">Define tank volumes</h4>
                 <div class="col s12">
@@ -197,7 +197,47 @@
           </p>
         </form>
         <div class="add-task">
-          <a class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons" style="font-style: normal;">+</i></a>
+          <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" href="#modal-add-task"><i class="material-icons" style="font-style: normal;">+</i></a>
+
+          <div id="modal-add-task" class="modal">
+            <div class="modal-content">
+              <h4>Add a task</h4>
+              <p>Define a task</p>
+
+              <div class="row input-task">
+                <form class="col s12">
+                  <div class="row">
+                    <div class="s3 col">
+                      <select name="boil" >
+                        <option value="0" selected>0 min</option>
+                        <option value="5">5 min</option>
+                        <option value="10">10 min</option>
+                        <option value="15">15 min</option>
+                        <option value="20">20 min</option>
+                        <option value="25">25 min</option>
+                        <option value="30">30 min</option>
+                        <option value="35">35 min</option>
+                        <option value="40">40 min</option>
+                        <option value="45">45 min</option>
+                        <option value="50">50 min</option>
+                      </select>
+                    <label>Boil tank</label>
+                    </div>
+                    <div class="input-field col s9">
+                      <textarea id="textarea1" class="materialize-textarea"></textarea>
+                      <label for="textarea1">Define your task</label>
+                    </div>
+                  </div>
+                </form>
+              </div>
+
+            </div>
+            <div class="modal-footer">
+              <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+            </div>
+          </div>
+
+
         </div>
       </div>
     </div>
@@ -515,6 +555,8 @@
     // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
     $('.modal-trigger').leanModal();
 
+    // trigger for textarea
+    $('#textarea1').trigger('autoresize');
 
   });
 </script>

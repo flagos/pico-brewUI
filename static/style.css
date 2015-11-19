@@ -93,6 +93,9 @@ label.waiting {
   font-style: normal;
 }
 
+.input-task{
+  color: black;
+}
 
 .recipe {
   color: black;
