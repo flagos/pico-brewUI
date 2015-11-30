@@ -10,6 +10,7 @@ class HotTank(Thread):
         self.testing_queue_input = testing_queue_input
         self.testing_queue_output = testing_queue_output
         self.saturation = saturation
+        self.temperature_order = 55  # be safe
         Thread.__init__(self)
         pass
 
@@ -46,10 +47,11 @@ class HotTank(Thread):
                 if (self.current_volume == 0):
                     self.add_liters(10)
                 else:
-                    if(temperature>=54):
-                        self.add_liters(1)
+                    if(temperature>=self.temperature_order - 1):
+                        if (self.current_volume < self.saturation):
+                            self.add_liters(1)
 
-                self.set_consign(55)
+                self.set_consign(self.temperature_order)
             else:
                 pass
 
