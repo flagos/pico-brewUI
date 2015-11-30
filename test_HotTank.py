@@ -5,10 +5,10 @@ import Queue
 
 class HotTankTest(unittest.TestCase):
 
-    def setUp(self):
+    def setUp(self, saturation=50):
         self.input_queue  = Queue.Queue()
         self.output_queue = Queue.Queue()
-        self.hottank = HotTank.HotTank(0.01, self.input_queue, self.output_queue)
+        self.hottank = HotTank.HotTank(saturation, 0.01, self.input_queue, self.output_queue)
         self.hottank.start()
 
     def run_test(self, orders, temperatures, expected):
@@ -33,8 +33,18 @@ class HotTankTest(unittest.TestCase):
         """Test with a generic pattern of 15 liters."""
         orders = [15]
         temperatures = [55, 55, 55, 55, 55, 55, 55, 55]
-        expected = [10, 11, 12, 13, 14, 15, 15, 15]
+        expected     = [10, 11, 12, 13, 14, 15, 15, 15]
         self.run_test(orders, temperatures, expected)
+
+    def test_saturation(self):
+        """Test with saturation of 15 liters."""
+        self.tearDown()
+        self.setUp(15)
+        orders = [16]
+        temperatures = [55, 55, 55, 55, 55, 55, 55, 55]
+        expected     = [10, 11, 12, 13, 14, 15, 15, 15]
+        self.run_test(orders, temperatures, expected)
+
 
 
     def tearDown(self):

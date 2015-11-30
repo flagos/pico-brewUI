@@ -3,12 +3,13 @@ import time
 
 class HotTank(Thread):
 
-    def __init__(self, period=1, testing_queue_input=None, testing_queue_output=None):
+    def __init__(self, saturation = 50, period=1, testing_queue_input=None, testing_queue_output=None):
         self.current_volume = 0
         self.target_volume = 0
         self.period = period
         self.testing_queue_input = testing_queue_input
         self.testing_queue_output = testing_queue_output
+        self.saturation = saturation
         Thread.__init__(self)
         pass
 
