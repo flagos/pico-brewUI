@@ -49,7 +49,7 @@ class HotTankTest(unittest.TestCase):
         """Test that the system waits for temperature"""
         orders = [15]
         temperatures = [53, 54, 55, 53, 54, 55, 54, 55]
-        expected     = [10, 10, 11, 11, 11, 12, 12, 13]
+        expected     = [10, 11, 11, 11, 11, 12, 12, 13]
         self.run_test(orders, temperatures, expected)
 
 
