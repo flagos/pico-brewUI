@@ -58,11 +58,17 @@ class HotTankTest(unittest.TestCase):
 
     def test_pop_volume(self):
         """Test a volume to pop."""
-        orders       = [15,  0,  0,  0,  0,  0,  0, -2]   
+        orders       = [15,  0,  0,  0,  0,  0,  0, -2]
         temperatures = [55, 55, 55, 55, 55, 55, 55, 55]
         expected     = [10, 11, 12, 13, 14, 15, 15, 13]
         self.run_test(orders, temperatures, expected)
 
+    def test_pop_volume_under_10liter(self):
+        """Test to pop a volume under ten 10 liter to see the refill."""
+        orders       = [15,  0,  0,  0,  0,  0,  0, -9]
+        temperatures = [55, 55, 55, 55, 55, 55, 55, 55]
+        expected     = [10, 11, 12, 13, 14, 15, 15, 10]
+        self.run_test(orders, temperatures, expected)
 
 
 

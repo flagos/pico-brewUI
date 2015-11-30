@@ -22,6 +22,8 @@ class HotTank(Thread):
     def pop_volume(self, vol):
         self.current_volume -= vol
         self.target_volume  -= vol
+        if(self.target_volume < 10):
+            self.push_volume(10 - self.target_volume)
         pass
 
     def add_liters(self, vol):
@@ -44,8 +46,8 @@ class HotTank(Thread):
         while 1:
             temperature = self.read_temperature()
             if (self.current_volume < self.target_volume):
-                if (self.current_volume == 0):
-                    self.add_liters(10)
+                if (self.current_volume < 10):
+                    self.add_liters(10 - self.current_volume)
                 else:
                     if(temperature>=self.temperature_order - 1):
                         if (self.current_volume < self.saturation):
