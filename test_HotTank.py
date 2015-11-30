@@ -14,7 +14,11 @@ class HotTankTest(unittest.TestCase):
     def run_test(self, orders, temperatures, expected):
         while(expected):
             if orders:
-                self.hottank.push_volume(orders.pop(0))
+                volume = orders.pop(0)
+                if volume >=0:
+                    self.hottank.push_volume(volume)
+                else:
+                    self.hottank.pop_volume(-volume)
 
             if temperatures:
                 self.input_queue.put(temperatures.pop(0))
@@ -48,9 +52,11 @@ class HotTankTest(unittest.TestCase):
     def test_temperature_delay(self):
         """Test that the system waits for temperature"""
         orders = [15]
-        temperatures = [53, 54, 55, 53, 54, 55, 54, 55]
-        expected     = [10, 11, 11, 11, 11, 12, 12, 13]
+        temperatures = [53, 54, 55, 53, 54, 55, 53, 55]
+        expected     = [10, 11, 12, 12, 13, 14, 14, 15]
         self.run_test(orders, temperatures, expected)
+
+
 
 
     def tearDown(self):
