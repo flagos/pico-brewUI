@@ -96,6 +96,12 @@ class MashTankTest(unittest.TestCase):
         time.sleep(0.1)  # wait for concurrency
         self.assertTrue(self.mashtank.tank_in_use==False)
 
+    def test_two_recipe(self):
+        self.test_recipe_with_one_step()
+        while (self.mashtank.tank_in_use):
+            pass
+        self.test_recipe_with_three_step()
+        pass
 
 
     def tearDown(self):

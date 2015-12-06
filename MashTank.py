@@ -11,9 +11,6 @@ class MashTank(Thread):
         self.testing_queue_output = testing_queue_output
 
         self.mash_steps = []
-        self.start_time=0
-        self.stop_time=0
-        self.tank_in_use = False
 
         Thread.__init__(self)
         pass
@@ -27,31 +24,37 @@ class MashTank(Thread):
 
 
     def run(self):
-        while (not self.tank_in_use):
-            time.sleep(self.period)
 
-        while self.mash_steps:
-            mash_step = self.mash_steps.pop(0)
+        while 1:
+            self.start_time=0
+            self.stop_time=0
+            self.tank_in_use = False
 
-            if(mash_step['water_volume']):
-                self.hottank.pop_volume(mash_step['water_volume'])
-
-            self.set_consign(mash_step['temperature'])
-
-            while (self.read_temperature() < mash_step['temperature'] - 1): # wait for temperature
+            while (not self.tank_in_use):
                 time.sleep(self.period)
 
-            self.start_time = time.time()
-            while (time.time() < self.start_time + mash_step['duration']):
+            while self.mash_steps:
+                mash_step = self.mash_steps.pop(0)
+
+                if(mash_step['water_volume']):
+                    self.hottank.pop_volume(mash_step['water_volume'])
+
+                self.set_consign(mash_step['temperature'])
+
+                while (self.read_temperature() < mash_step['temperature'] - 1): # wait for temperature
+                    time.sleep(self.period)
+
+                self.start_time = time.time()
+                while (time.time() < self.start_time + mash_step['duration']):
+                    time.sleep(self.period)
+                pass
+
+            self.stop_time = time.time()
+            while not self.boiltank.is_ready():
                 time.sleep(self.period)
+
+            self.dump_tank()
             pass
-
-        self.stop_time = time.time()
-        while not self.boiltank.is_ready():
-            time.sleep(self.period)
-
-        self.dump_tank()
-        self.tank_in_use = False
         pass
 
     def is_tank_in_use(self):
