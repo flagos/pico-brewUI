@@ -44,12 +44,13 @@ class MashTank(Thread):
             self.start_time = time.time()
             while (time.time() < self.start_time + mash_step['duration']):
                 time.sleep(self.period)
-            self.stop_time = time.time()
             pass
+
+        self.stop_time = time.time()
         while not self.boiltank.is_ready():
             time.sleep(self.period)
 
-        dump_tank()
+        self.dump_tank()
         self.tank_in_use = False
         pass
 
@@ -64,3 +65,6 @@ class MashTank(Thread):
             return self.testing_queue_input.get()
         else:
             return 55
+
+    def dump_tank(self):
+        pass
