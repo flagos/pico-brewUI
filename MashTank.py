@@ -9,6 +9,7 @@ class MashTank(Thread):
         self.boiltank = boiltank
         self.testing_queue_input = testing_queue_input
         self.testing_queue_output = testing_queue_output
+        self.need_cleaning = False
 
         self.mash_steps = []
 
