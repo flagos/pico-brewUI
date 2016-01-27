@@ -47,10 +47,14 @@ class BoilTank(Thread):
                     time.sleep(self.period)
 
                 pass
-            self.stop_time = time.time()
-            self.start_boil_queue.task_done()
 
             self.start_chiller()
+
+            self.stop_time = time.time()
+
+            # wait for clean....
+
+            self.start_boil_queue.task_done()
             pass
         pass
 

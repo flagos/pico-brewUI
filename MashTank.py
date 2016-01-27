@@ -54,6 +54,7 @@ class MashTank(Thread):
                 time.sleep(self.period)
 
             self.dump_tank()
+            self.tank_in_use = False
             pass
         pass
 

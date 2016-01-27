@@ -17,7 +17,8 @@ class Recipe:
 
     def add_steps(self):
         mash_steps = self.json["recipe_mash_steps"]
-        #pprint.pprint (mash_steps)
+        self.boil_size = float(self.json["boil_size"]) # supose it is in liters
+        #pprint.pprint (boil_size)
         for step in mash_steps:
             temperature = int(step["target_temperature"])
             if(not step["target_temperature_is_metric"]):
