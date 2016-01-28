@@ -9,7 +9,8 @@ class MashTank(Thread):
         self.boiltank = boiltank
         self.testing_queue_input = testing_queue_input
         self.testing_queue_output = testing_queue_output
-        self.need_cleaning = False
+        self.need_cleaning = True
+        self.stop_time = 0
 
         self.mash_steps = []
 
@@ -30,6 +31,10 @@ class MashTank(Thread):
             self.start_time=0
             self.stop_time=0
             self.tank_in_use = False
+
+            self.need_cleaning = True
+            while self.need_cleaning is True:
+                time.sleep(self.period)
 
             while (not self.tank_in_use):
                 time.sleep(self.period)
@@ -55,6 +60,7 @@ class MashTank(Thread):
                 time.sleep(self.period)
 
             self.dump_tank()
+
             self.tank_in_use = False
             pass
         pass
