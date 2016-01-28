@@ -17,13 +17,9 @@ class Fake_HotTank:
 
 class Fake_BoilTank:
     """Fake class to test MashTank """
-    def __init__(self, input_queue):
-        self.input_queue = input_queue
-
-    def is_ready(self):
-        return self.input_queue.get()
-
-
+    def __init__(self, start_heat_queue, start_boil_queue):
+        self.start_heat_queue = start_heat_queue
+        self.start_boil_queue = start_boil_queue
 
 
 class MashTankTest(unittest.TestCase):
@@ -32,16 +28,23 @@ class MashTankTest(unittest.TestCase):
         self.input_queue  = Queue.Queue()
         self.output_queue = Queue.Queue()
         self.volume_queue = Queue.Queue()
-        self.boil_queue   = Queue.Queue()
-        self.mashtank = MashTank.MashTank(Fake_HotTank(self.volume_queue), Fake_BoilTank(self.boil_queue), 0.01, self.input_queue, self.output_queue)
+        self.start_boil_queue   = Queue.Queue()
+        self.start_heat_queue   = Queue.Queue()
+        self.start_mash_queue = Queue.Queue()
+        self.need_cleaning_queue = Queue.Queue()
+        self.mashtank = MashTank.MashTank(Fake_HotTank(self.volume_queue), Fake_BoilTank(self.start_heat_queue, self.start_boil_queue), self.start_mash_queue, self.need_cleaning_queue, 0.01, self.input_queue, self.output_queue)
         self.mashtank.start()
 
 
     def test_recipe_with_one_step(self):
         self.assertTrue(self.mashtank.stop_time == 0)
         self.mashtank.add_mash_step(68, 0.1, "saccharification", 20)
-        self.mashtank.need_cleaning = False
-        self.mashtank.start_mash()
+
+        self.need_cleaning_queue.get()
+        self.need_cleaning_queue.task_done()
+
+
+        self.start_mash_queue.put(None)
 
         self.assertEqual(self.volume_queue.get(), 20) # ok for volume
 
@@ -52,19 +55,19 @@ class MashTankTest(unittest.TestCase):
         time.sleep(0.1)
         self.assertTrue(start < self.mashtank.start_time) # start at the rigth moment
 
-        time.sleep(0.1 + 0.01) # wait for step to be completed
-        self.assertTrue(self.mashtank.stop_time < time.time())
-        self.assertTrue(self.mashtank.stop_time > start + 0.1)
+        self.start_mash_queue.join()
 
-        self.boil_queue.put(True)
 
     def test_recipe_with_three_step(self):
         self.assertTrue(self.mashtank.stop_time == 0)
         self.mashtank.add_mash_step(68, 0.1, "saccharification", 20)
         self.mashtank.add_mash_step(78, 0.1, "mashout", 0)
         self.mashtank.add_mash_step(68, 0.1, "second_run", 10)
-        self.mashtank.need_cleaning = False
-        self.mashtank.start_mash()
+
+        self.need_cleaning_queue.get()
+        self.need_cleaning_queue.task_done()
+
+        self.start_mash_queue.put(None)
 
         self.assertEqual(self.volume_queue.get(), 20) # ok for volume
 
@@ -88,23 +91,19 @@ class MashTankTest(unittest.TestCase):
         self.assertTrue(self.mashtank.stop_time==0)
         self.input_queue.put(69)
 
-        time.sleep(0.1 + 0.01) # wait for step to be completed
-        self.assertTrue(self.mashtank.stop_time < time.time())
+        self.start_mash_queue.join()
 
-        self.boil_queue.put(False)
-        self.boil_queue.put(False)
-        self.assertTrue(self.mashtank.tank_in_use==True)
-        self.boil_queue.put(True)
-        time.sleep(0.1)  # wait for concurrency
-        self.assertTrue(self.mashtank.tank_in_use==False)
+
 
     def test_two_recipe(self):
         self.test_recipe_with_one_step()
-        while (self.mashtank.tank_in_use):
-            pass
         self.test_recipe_with_three_step()
         pass
 
+
+    def test_withdumps(self):
+        # TBD
+        pass
 
     def tearDown(self):
         self.mashtank._Thread__stop()

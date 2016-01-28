@@ -3,13 +3,14 @@ import time
 
 class MashTank(Thread):
 
-    def __init__(self,hottank, boiltank,  period=1,  testing_queue_input=None, testing_queue_output=None):
+    def __init__(self,hottank, boiltank, start_mash_queue, need_cleaning_queue,  period=1,  testing_queue_input=None, testing_queue_output=None):
         self.period = period
         self.hottank = hottank
         self.boiltank = boiltank
+        self.start_mash_queue = start_mash_queue
+        self.need_cleaning_queue = need_cleaning_queue
         self.testing_queue_input = testing_queue_input
         self.testing_queue_output = testing_queue_output
-        self.need_cleaning = True
         self.stop_time = 0
 
         self.mash_steps = []
@@ -21,8 +22,6 @@ class MashTank(Thread):
         self.mash_steps.append({'temperature': temperature, 'duration':duration, 'name':name, 'water_volume':water_volume, 'dump':dump})
         pass
 
-    def start_mash(self):
-        self.tank_in_use = True
 
 
     def run(self):
@@ -30,15 +29,12 @@ class MashTank(Thread):
         while 1:
             self.start_time=0
             self.stop_time=0
-            self.tank_in_use = False
             self.boiltank_start_heating = False
 
-            self.need_cleaning = True
-            while self.need_cleaning is True:
-                time.sleep(self.period)
+            self.need_cleaning_queue.put(None)
+            self.need_cleaning_queue.join()
 
-            while (not self.tank_in_use):
-                time.sleep(self.period)
+            self.start_mash_queue.get() # wait for start
 
             while self.mash_steps:
                 mash_step = self.mash_steps.pop(0)
@@ -56,21 +52,18 @@ class MashTank(Thread):
                     time.sleep(self.period)
 
                 if(mash_step['dump'] is True):
+                    if self.boiltank_start_heating is False:
+                        self.boiltank.start_heat_queue.put(None)
+                        self.boiltank.start_heat_queue.join()    # wait for boil tank to be ready
                     self.dump_tank()
                     self.boiltank_start_heating = True
-                    self.boiltank.start_heat_queue.put(None)
                 pass
 
             self.stop_time = time.time()
-            while not self.boiltank.is_ready():
-                time.sleep(self.period)
 
-            self.tank_in_use = False
+            self.start_mash_queue.task_done()
             pass
         pass
-
-    def is_tank_in_use(self):
-        return self.tank_in_use
 
     def set_consign(self, temperature):
         pass
