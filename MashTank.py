@@ -17,8 +17,8 @@ class MashTank(Thread):
         Thread.__init__(self)
         pass
 
-    def add_mash_step(self, temperature=None, duration=None, name=None, water_volume=None):
-        self.mash_steps.append({'temperature': temperature, 'duration':duration, 'name':name, 'water_volume':water_volume})
+    def add_mash_step(self, temperature=None, duration=None, name=None, water_volume=None, dump=False):
+        self.mash_steps.append({'temperature': temperature, 'duration':duration, 'name':name, 'water_volume':water_volume, 'dump':dump})
         pass
 
     def start_mash(self):
@@ -31,6 +31,7 @@ class MashTank(Thread):
             self.start_time=0
             self.stop_time=0
             self.tank_in_use = False
+            self.boiltank_start_heating = False
 
             self.need_cleaning = True
             while self.need_cleaning is True:
@@ -53,13 +54,16 @@ class MashTank(Thread):
                 self.start_time = time.time()
                 while (time.time() < self.start_time + mash_step['duration']):
                     time.sleep(self.period)
+
+                if(mash_step['dump'] is True):
+                    self.dump_tank()
+                    self.boiltank_start_heating = True
+                    self.boiltank.start_heat_queue.put(None)
                 pass
 
             self.stop_time = time.time()
             while not self.boiltank.is_ready():
                 time.sleep(self.period)
-
-            self.dump_tank()
 
             self.tank_in_use = False
             pass
