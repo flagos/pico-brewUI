@@ -33,9 +33,7 @@ class BoilTank(Thread):
         while self.need_cleaning is True:
             time.sleep(self.period)
 
-
         while 1:
-            self.need_cleaning = True
 
             self.start_heat_queue.get() # wait for enough water to boil
             self.set_consign(self.boil_steps[0]['temperature'])
@@ -60,6 +58,8 @@ class BoilTank(Thread):
 
             self.stop_time = time.time()
 
+
+            self.need_cleaning = True
             while self.need_cleaning is True:
                 time.sleep(self.period)
 

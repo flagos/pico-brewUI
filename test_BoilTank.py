@@ -42,6 +42,9 @@ class HotBoilTest(unittest.TestCase):
         time.sleep(bk.period)      # time to update start_time variable
         self.assertNotEqual(bk.start_time, 0)
 
+        while bk.need_cleaning is False:
+            time.sleep(bk.period)
+
         bk.need_cleaning = False
 
         self.start_boil_queue.join() # blocking
@@ -64,10 +67,12 @@ class HotBoilTest(unittest.TestCase):
         time.sleep(bk.period*5)
         assert self.start_heat_queue.empty() is False  # we are not heating
 
+
         bk.need_cleaning = False
 
         self.start_heat_queue.join() # blocking -- heat should be started
         self.assertEqual(bk.consign, 95) # heating ok
+
 
         for i in [80, 85, 90, 92]:
             self.input_test_queue.put(i)
@@ -82,7 +87,7 @@ class HotBoilTest(unittest.TestCase):
         time.sleep(bk.period)      # time to update start_time variable
         self.assertNotEqual(bk.start_time, 0)
 
-        time.sleep(bk.period*5)
+        time.sleep(1) # wait for all steps to be completed
         assert self.start_boil_queue.unfinished_tasks != 0  # we have to wait for cleaning
 
         bk.need_cleaning = False
