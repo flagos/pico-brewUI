@@ -59,8 +59,6 @@ class MashTank(Thread):
                     self.boiltank_start_heating = True
                 pass
 
-            self.stop_time = time.time()
-
             self.start_mash_queue.task_done()
             pass
         pass
