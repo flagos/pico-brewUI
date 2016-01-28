@@ -9,8 +9,9 @@ class HotBoilTest(unittest.TestCase):
     def setUp(self, saturation=50):
         self.start_heat_queue  = Queue.Queue()
         self.start_boil_queue = Queue.Queue()
+        self.need_cleaning_queue = Queue.Queue()
         self.input_test_queue = Queue.Queue()
-        self.boiltank = BoilTank.BoilTank(self.start_heat_queue, self.start_boil_queue, 0.01, self.input_test_queue)
+        self.boiltank = BoilTank.BoilTank(self.start_heat_queue, self.start_boil_queue, self.need_cleaning_queue, .01, self.input_test_queue)
         self.boiltank.start()
 
         pass
@@ -19,11 +20,14 @@ class HotBoilTest(unittest.TestCase):
         bk = self.boiltank
         self.assertTrue(bk.consign is None)
 
-        time.sleep(bk.period*5)
-        bk.need_cleaning = False
+        bk.need_cleaning_queue.get()
+        bk.need_cleaning_queue.task_done()
 
         bk.add_boil_step(95, 0.2)
+        bk.boiltank_programmed()
         self.assertTrue(bk.consign is None) # not heating
+
+
 
         self.start_heat_queue.put(None)  # start heating
         self.start_heat_queue.join() # blocking -- heat should be started
@@ -42,10 +46,9 @@ class HotBoilTest(unittest.TestCase):
         time.sleep(bk.period)      # time to update start_time variable
         self.assertNotEqual(bk.start_time, 0)
 
-        while bk.need_cleaning is False:
-            time.sleep(bk.period)
+        bk.need_cleaning_queue.get()
+        bk.need_cleaning_queue.task_done()
 
-        bk.need_cleaning = False
 
         self.start_boil_queue.join() # blocking
         self.assertTrue(bk.stop_time - bk.start_time > 0.2)
@@ -58,6 +61,8 @@ class HotBoilTest(unittest.TestCase):
         self.assertTrue(bk.consign is None)
 
         bk.add_boil_step(95, 0.2)
+        bk.boiltank_programmed()
+
         self.assertTrue(bk.consign is None) # not heating
 
 
@@ -68,7 +73,8 @@ class HotBoilTest(unittest.TestCase):
         assert self.start_heat_queue.empty() is False  # we are not heating
 
 
-        bk.need_cleaning = False
+        bk.need_cleaning_queue.get()
+        bk.need_cleaning_queue.task_done()
 
         self.start_heat_queue.join() # blocking -- heat should be started
         self.assertEqual(bk.consign, 95) # heating ok
@@ -90,7 +96,8 @@ class HotBoilTest(unittest.TestCase):
         time.sleep(1) # wait for all steps to be completed
         assert self.start_boil_queue.unfinished_tasks != 0  # we have to wait for cleaning
 
-        bk.need_cleaning = False
+        bk.need_cleaning_queue.get()
+        bk.need_cleaning_queue.task_done()
 
         self.start_boil_queue.join() # blocking
         self.assertTrue(bk.stop_time - bk.start_time > 0.2)
