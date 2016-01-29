@@ -109,4 +109,5 @@ class MashTankTest(unittest.TestCase):
         self.mashtank._Thread__stop()
 
 
-unittest.main()
+if __name__ == '__main__':
+    unittest.main()

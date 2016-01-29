@@ -108,4 +108,5 @@ class HotBoilTest(unittest.TestCase):
     def tearDown(self):
         self.boiltank._Thread__stop()
 
-unittest.main()
+if __name__ == '__main__':
+    unittest.main()
