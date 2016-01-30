@@ -52,11 +52,12 @@ class MashTank(Thread):
                     time.sleep(self.period)
 
                 if(mash_step['dump'] is True):
+                    self.set_consign(None)
                     if self.boiltank_start_heating is False:
                         self.boiltank.start_heat_queue.put(None)
-                        self.boiltank.start_heat_queue.join()    # wait for boil tank to be ready
+                        self.boiltank.start_heat_queue.join()    # wait for boil tank to be heating
+                        self.boiltank_start_heating = True
                     self.dump_tank()
-                    self.boiltank_start_heating = True
                 pass
 
             self.start_mash_queue.task_done()
