@@ -60,6 +60,7 @@ class MashTank(Thread):
                     self.dump_tank()
                 pass
 
+            self.boiltank.start_counting_queue.put(None)
             self.start_mash_queue.task_done()
             pass
         pass

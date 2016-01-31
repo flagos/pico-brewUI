@@ -17,22 +17,22 @@ class Fake_HotTank:
 
 class Fake_BoilTank:
     """Fake class to test MashTank """
-    def __init__(self, start_heat_queue, start_boil_queue):
-        self.start_heat_queue = start_heat_queue
-        self.start_boil_queue = start_boil_queue
+    def __init__(self, start_heat_queue, start_counting_queue):
+        self.start_heat_queue     = start_heat_queue
+        self.start_counting_queue = start_counting_queue
 
 
 class MashTankTest(unittest.TestCase):
 
     def setUp(self):
-        self.input_queue  = Queue.Queue()
-        self.output_queue = Queue.Queue()
-        self.volume_queue = Queue.Queue()
-        self.start_boil_queue   = Queue.Queue()
-        self.start_heat_queue   = Queue.Queue()
-        self.start_mash_queue = Queue.Queue()
-        self.need_cleaning_queue = Queue.Queue()
-        self.mashtank = MashTank.MashTank(Fake_HotTank(self.volume_queue), Fake_BoilTank(self.start_heat_queue, self.start_boil_queue), self.start_mash_queue, self.need_cleaning_queue, 0.01, self.input_queue, self.output_queue)
+        self.input_queue          = Queue.Queue()
+        self.output_queue         = Queue.Queue()
+        self.volume_queue         = Queue.Queue()
+        self.start_counting_queue = Queue.Queue()
+        self.start_heat_queue     = Queue.Queue()
+        self.start_mash_queue     = Queue.Queue()
+        self.need_cleaning_queue  = Queue.Queue()
+        self.mashtank = MashTank.MashTank(Fake_HotTank(self.volume_queue), Fake_BoilTank(self.start_heat_queue, self.start_counting_queue), self.start_mash_queue, self.need_cleaning_queue, 0.01, self.input_queue, self.output_queue)
         self.mashtank.start()
 
 
@@ -54,6 +54,8 @@ class MashTankTest(unittest.TestCase):
         self.input_queue.put(67)
         time.sleep(0.1)
         self.assertTrue(start < self.mashtank.start_time) # start at the rigth moment
+
+        self.start_counting_queue.get() # launch boil counting
 
         self.start_mash_queue.join()
 
@@ -90,6 +92,8 @@ class MashTankTest(unittest.TestCase):
         self.input_queue.put(66)
         self.assertTrue(self.mashtank.stop_time==0)
         self.input_queue.put(69)
+
+        self.start_counting_queue.get()
 
         self.start_mash_queue.join()
 
