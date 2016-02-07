@@ -37,7 +37,6 @@ class MashTankTest(unittest.TestCase):
 
 
     def test_recipe_with_one_step(self):
-        self.assertTrue(self.mashtank.stop_time == 0)
         self.mashtank.add_mash_step(68, 0.1, "saccharification", 20)
 
         self.need_cleaning_queue.get()
@@ -61,7 +60,6 @@ class MashTankTest(unittest.TestCase):
 
 
     def test_recipe_with_three_step(self):
-        self.assertTrue(self.mashtank.stop_time == 0)
         self.mashtank.add_mash_step(68, 0.1, "saccharification", 20)
         self.mashtank.add_mash_step(78, 0.1, "mashout", 0, True)
         self.mashtank.add_mash_step(68, 0.1, "second_run", 10, True)
@@ -92,8 +90,10 @@ class MashTankTest(unittest.TestCase):
         self.assertEqual(self.volume_queue.get(), 10) # ok for volume
         self.input_queue.put(66)
         self.input_queue.put(66)
-        self.assertTrue(self.mashtank.stop_time==0)
         self.input_queue.put(69)
+
+        # self.start_heat_queue.get()
+        # self.start_heat_queue.task_done()
 
         self.start_counting_queue.get()
 

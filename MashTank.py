@@ -11,7 +11,6 @@ class MashTank(Thread):
         self.need_cleaning_queue = need_cleaning_queue
         self.testing_queue_input = testing_queue_input
         self.testing_queue_output = testing_queue_output
-        self.stop_time = 0
 
         self.mash_steps = []
 
@@ -28,7 +27,6 @@ class MashTank(Thread):
 
         while 1:
             self.start_time=0
-            self.stop_time=0
             self.boiltank_start_heating = False
 
             self.need_cleaning_queue.put(None)
