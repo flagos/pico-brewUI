@@ -58,9 +58,9 @@ class PicoTest(unittest.TestCase):
         recipe_e = {
             "url": "https://www.brewtoad.com/recipes/geronimo-3",
             "mash_steps": [
-                {"temperature": 68, "duration":90},
-                {"temperature": 78, "duration":10},
-                {"temperature": 78, "duration":10}
+                {"temperature": 68, "duration":90, "dump":False},
+                {"temperature": 78, "duration":10, "dump":True},
+                {"temperature": 78, "duration":10, "dump":True}
                 ],
             "boil_steps": [
                 {"duration":60, "temperature":98}
@@ -77,6 +77,7 @@ class PicoTest(unittest.TestCase):
             out = self.push_mash_steps_queue.get()
             assert out["temperature"] == step["temperature"]
             assert out["duration"]    == step["duration"]
+            assert out["dump"]        == step["dump"]
 
 
         for step in recipe_e["boil_steps"]:
@@ -96,9 +97,9 @@ class PicoTest(unittest.TestCase):
             "url": "https://www.brewtoad.com/recipes/geronimo-3",
             "volume": 18.93,
             "mash_steps": [
-                {"temperature": 68, "duration":90},
-                {"temperature": 78, "duration":10},
-                {"temperature": 78, "duration":10}
+                {"temperature": 68, "duration":90, "dump":False},
+                {"temperature": 78, "duration":10, "dump":True},
+                {"temperature": 78, "duration":10, "dump":True}
                 ],
             "boil_steps": [
                 {"duration":60, "temperature":98}
@@ -109,9 +110,9 @@ class PicoTest(unittest.TestCase):
             "url": "https://www.brewtoad.com/recipes/squirrels-brewery",
             "volume": 18.93,
             "mash_steps": [
-                {"temperature": 68, "duration":60},
-                {"temperature": 78, "duration":10},
-                {"temperature": 78, "duration":10}
+                {"temperature": 68, "duration":60, "dump":False},
+                {"temperature": 78, "duration":10, "dump":True},
+                {"temperature": 78, "duration":10, "dump":True}
                 ],
             "boil_steps": [
                 {"duration":60, "temperature":98}
@@ -136,7 +137,7 @@ class PicoTest(unittest.TestCase):
             out = self.push_mash_steps_queue.get()
             assert out["temperature"] == step["temperature"]
             assert out["duration"]    == step["duration"]
-
+            assert out["dump"]        == step["dump"]
 
         for step in recipe_e["boil_steps"]:
             out = self.push_boil_steps_queue.get()
@@ -158,6 +159,7 @@ class PicoTest(unittest.TestCase):
             out = self.push_mash_steps_queue.get()
             assert out["temperature"] == step["temperature"]
             assert out["duration"]    == step["duration"]
+            assert out["dump"]        == step["dump"]
 
         assert self.push_boil_steps_queue.empty() is True
         self.start_boil_queue.task_done()

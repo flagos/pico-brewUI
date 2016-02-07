@@ -25,6 +25,7 @@ class Recipe:
                 temperature = int((temperature- 32)/1.8) # target is in celcuis
             step['duration']    = step["time"]
             step['temperature'] = temperature
+            step['dump']        = False
 
             self.mash_steps.append(step)
             #print "Add mash step "+ str(step["time"])+" min at "+str(temperature)+" C"
@@ -37,12 +38,15 @@ class Recipe:
         self.malt_amount = malt_amount
         self.mash_steps[0]["water_volume"] = 2.75 * self.malt_amount
 
+        self.mash_steps[-1]["dump"] = True
+
         # Add sparge
         spargenumber = 1
         for s in range(spargenumber):
             sparge = {"temperature" : 78,
                       "water_volume": (self.batch_size - self.mash_steps[0]["water_volume"])/spargenumber,
-                      "duration": 10}
+                      "duration": 10,
+                      "dump":True}
             self.mash_steps.append(sparge)
 
         self.boil_time = self.json["boil_time"]
