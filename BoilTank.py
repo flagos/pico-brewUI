@@ -16,9 +16,9 @@ class BoilTank(Thread):
         self.period = period
         self.start_heat_queue     = start_heat_queue
         self.start_counting_queue = start_counting_queue
-        self.start_boil_queue    = start_boil_queue
-        self.need_cleaning_queue = need_cleaning_queue
-        self.testing_queue_input = testing_queue_input
+        self.start_boil_queue     = start_boil_queue
+        self.need_cleaning_queue  = need_cleaning_queue
+        self.testing_queue_input  = testing_queue_input
         self.boil_steps = []
         self.start_time = 0
         self.stop_time = 0
