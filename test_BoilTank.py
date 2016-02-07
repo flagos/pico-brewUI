@@ -114,4 +114,4 @@ class HotBoilTest(unittest.TestCase):
         self.boiltank._Thread__stop()
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main()  # pragma: no cover

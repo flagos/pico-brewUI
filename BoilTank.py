@@ -82,7 +82,7 @@ class BoilTank(Thread):
             self.testing_queue_input.task_done()
             return t
         else:
-            return 55
+            return 55  # pragma: no cover
             pass
         pass
 
