@@ -92,11 +92,9 @@ class MashTankTest(unittest.TestCase):
         self.input_queue.put(66)
         self.input_queue.put(69)
 
-        # self.start_heat_queue.get()
-        # self.start_heat_queue.task_done()
+        assert self.start_heat_queue.empty() is True
 
         self.start_counting_queue.get()
-
         self.start_mash_queue.join()
 
 
