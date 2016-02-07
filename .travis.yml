@@ -1,11 +1,11 @@
 language: python
 python:
-  - "2.7.6"
+  - "2.7"
 
 # command to install dependencies
 install:
 # command to run tests
-script: python run_testsuite.py
+script: python tests.py
 
 before_install:
   - pip install codecov
