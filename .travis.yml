@@ -6,3 +6,8 @@ python:
 install:
 # command to run tests
 script: python run_testsuite.py
+
+before_install:
+  - pip install codecov
+after_success:
+  - codecov
