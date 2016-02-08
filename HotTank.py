@@ -61,4 +61,3 @@ class HotTank(Thread):
                 self.testing_queue_output.put(self.current_volume)
             time.sleep(self.period)
             pass
-        pass

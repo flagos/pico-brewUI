@@ -70,7 +70,6 @@ class BoilTank(Thread):
             self.start_counting_queue.task_done()
             self.start_boil_queue.task_done()
             pass
-        pass
 
     def start_chiller(self):
         pass
@@ -83,8 +82,6 @@ class BoilTank(Thread):
             return t
         else:
             return 55  # pragma: no cover
-            pass
-        pass
 
     def set_consign(self, arg):
         self.consign = arg

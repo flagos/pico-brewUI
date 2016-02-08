@@ -56,12 +56,10 @@ class MashTank(Thread):
                         self.boiltank.start_heat_queue.join()    # wait for boil tank to be heating
                         self.boiltank_start_heating = True
                     self.dump_tank()
-                pass
 
             self.boiltank.start_counting_queue.put(None)
             self.start_mash_queue.task_done()
             pass
-        pass
 
     def set_consign(self, temperature):
         pass
