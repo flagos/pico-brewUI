@@ -14,8 +14,6 @@
 
 function createCallbackforTank(tank) {
     return function(data) {
-      console.log(data)
-      console.log(tank);
 
       var Data = {
         labels : data["history"][0],
