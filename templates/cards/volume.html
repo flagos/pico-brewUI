@@ -1,0 +1,81 @@
+<!-- Volumes card -->
+<div class="col s8">
+  <div class="card ">
+    <div class="card-content">
+
+
+      <span class="card-title">Tank volumes</span>
+    </div>
+    <div class="card-volume"> <span id="hot-volume"> hot: 50L </span><span id="malt-volume"> malt: 30L </span><span id="boil-volume"> boil: 20L </span></div>
+    <div class="card-volume-chart">
+      <canvas id="volume-canvas" width="1100" height="480"></canvas>
+    </div>
+    <div class="card-action">
+      <!-- Modal Trigger -->
+      <a class="waves-effect waves-light btn modal-trigger  action-verb" href="#modal-tank">Define</a>
+
+      <!-- Modal Structure -->
+      <div id="modal-tank" class="modal">
+        <div class="modal-content volume-form">
+          <h4 class="modal-tank-title">Define tank volumes</h4>
+            <div class="col s12">
+              Please measure the volume in the tank and report it
+            </div>
+          <div class=" input-field col s4">
+              <select name="hot" >
+                <option value="0" selected>0 Liter</option>
+                <option value="5">5 Liters</option>
+                <option value="10">10 Liters</option>
+                <option value="15">15 Liters</option>
+                <option value="20">20 Liter</option>
+                <option value="25">25 Liters</option>
+                <option value="30">30 Liters</option>
+                <option value="35">35 Liters</option>
+                <option value="40">40 Liter</option>
+                <option value="45">45 Liters</option>
+                <option value="50">50 Liters</option>
+              </select>
+            <label>Hot tank</label>
+          </div>
+          <div class=" input-field col s4">
+              <select name="malt" >
+                <option value="0" selected>0 Liter</option>
+                <option value="5">5 Liters</option>
+                <option value="10">10 Liters</option>
+                <option value="15">15 Liters</option>
+                <option value="20">20 Liter</option>
+                <option value="25">25 Liters</option>
+                <option value="30">30 Liters</option>
+                <option value="35">35 Liters</option>
+                <option value="40">40 Liter</option>
+                <option value="45">45 Liters</option>
+                <option value="50">50 Liters</option>
+              </select>
+            <label>Malt tank</label>
+          </div>
+          <div class=" input-field col s4">
+              <select name="boil" >
+                <option value="0" selected>0 Liter</option>
+                <option value="5">5 Liters</option>
+                <option value="10">10 Liters</option>
+                <option value="15">15 Liters</option>
+                <option value="20">20 Liter</option>
+                <option value="25">25 Liters</option>
+                <option value="30">30 Liters</option>
+                <option value="35">35 Liters</option>
+                <option value="40">40 Liter</option>
+                <option value="45">45 Liters</option>
+                <option value="50">50 Liters</option>
+              </select>
+            <label>Boil tank</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn waves-effect waves-light modal-close modal-action" type="submit" name="action">Submit
+            <i class="material-icons right">send</i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

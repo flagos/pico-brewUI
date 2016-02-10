@@ -1,0 +1,69 @@
+<!-- Next steps card -->
+<div class="col s4">
+  <div class="card task">
+    <div class="card-content">
+      <span class="card-title">Next steps</span>
+    </div>
+    <form action="#">
+      <p>
+        <input type="checkbox" class="filled-in" id="check0" checked="checked" />
+        <label for="check0" class="done">Fill in malt for Dark IPA</label>
+      </p>
+      <p>
+        <input type="checkbox" class="filled-in" id="check1" />
+        <label for="check1" class="waiting">Fill in malt for Bitter</label>
+      </p>
+      <p>
+        <input type="checkbox" id="check2" disabled="disabled" />
+        <label for="check2" class="unavailable">Chill out Dark IPA</label>
+      </p>
+      <p>
+        <input type="checkbox" id="check3" disabled="disabled" />
+        <label for="check3" class="unavailable">Fill in Stout</label>
+      </p>
+    </form>
+    <div class="add-task">
+      <a class="btn-floating btn-large waves-effect waves-light red modal-trigger" href="#modal-add-task"><i class="material-icons" style="font-style: normal;">+</i></a>
+
+      <div id="modal-add-task" class="modal">
+        <div class="modal-content">
+          <h4>Add a task</h4>
+          <p>Define a task</p>
+
+          <div class="row input-task">
+            <form class="col s12">
+              <div class="row">
+                <div class="s3 col">
+                  <select name="boil" >
+                    <option value="0" selected>0 min</option>
+                    <option value="5">5 min</option>
+                    <option value="10">10 min</option>
+                    <option value="15">15 min</option>
+                    <option value="20">20 min</option>
+                    <option value="25">25 min</option>
+                    <option value="30">30 min</option>
+                    <option value="35">35 min</option>
+                    <option value="40">40 min</option>
+                    <option value="45">45 min</option>
+                    <option value="50">50 min</option>
+                  </select>
+                <label>Boil tank</label>
+                </div>
+                <div class="input-field col s9">
+                  <textarea id="textarea1" class="materialize-textarea"></textarea>
+                  <label for="textarea1">Define your task</label>
+                </div>
+              </div>
+            </form>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</div>
