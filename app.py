@@ -12,14 +12,20 @@ def main():
 
 @app.route("/temperature/<tank>.json")
 def temperature(tank):
-    data = []
-    data.append( ["16:00","16:05","16:10","16:15","16:20","16:25"])
+    history = []
+    data = {}
+    history.append( ["16:00","16:05","16:10","16:15","16:20","16:25"])
     if (tank == "hot"):
-        data.append([68,68,68,72,78,78])
+        data["value"]   = 78
+        history.append([68,68,68,72,78,98])
     elif (tank == "mash"):
-        data.append([68,68,68,72,78,79])
+        data["value"]   = 83
+        history.append([68,68,68,72,78,79])
     else:
-        data.append([68,68,68,72,78,80])
+        data["value"]   = 98
+        history.append([68,68,68,72,78,80])
+
+    data["history"] = history
 
     return json.dumps(data)
 
