@@ -1,3 +1,10 @@
+// custon
+if (!Array.prototype.last){
+    Array.prototype.last = function(){
+        return this[this.length - 1];
+    };
+};
+
 
   function chart_fill(canvas_id, chart_data) {
 
@@ -38,37 +45,46 @@ function createCallbackforTank(tank) {
   $.getJSON( "/temperature/mash.json", createCallbackforTank('mash'))
   $.getJSON( "/temperature/boil.json", createCallbackforTank('boil'))
 
+  var callbackforvolume = function(data) {
 
-  Data = {
-    labels : ["16:00","16:05","16:10","16:15","16:20","16:25"],
-    datasets : [
-      {
-        label: "Hot tank",
-        fillColor : "#b3e5fc",
-  			strokeColor : "#01579b",
-  			pointColor : "#fff",
-  			pointStrokeColor : "#01579b",
-        data : [50,45,42,44,48,50]
-      },
-      {
-        label: "Malt tank",
-        fillColor : "#ffecb3",
-  			strokeColor : "#ff6f00",
-  			pointColor : "#fff",
-  			pointStrokeColor : "#ff6f00",
-        data: [20, 25, 30, 30, 30, 30, 30]
-      },
-      {
-        label: "Boil tank",
-        fillColor : "#ffcdd2",
-        strokeColor : "#b71c1c",
-        pointColor : "#fff",
-        pointStrokeColor : "#b71c1c",
-        data: [0, 0, 7, 12, 20, 20, 20]
-      }
-    ]
+    Data = {
+      labels : data["label"],
+      datasets : [
+        {
+          label: "Hot tank",
+          fillColor : "#b3e5fc",
+    			strokeColor : "#01579b",
+    			pointColor : "#fff",
+    			pointStrokeColor : "#01579b",
+          data: data["hot"]
+        },
+        {
+          label: "Malt tank",
+          fillColor : "#ffecb3",
+    			strokeColor : "#ff6f00",
+    			pointColor : "#fff",
+    			pointStrokeColor : "#ff6f00",
+          data: data["mash"]
+        },
+        {
+          label: "Boil tank",
+          fillColor : "#ffcdd2",
+          strokeColor : "#b71c1c",
+          pointColor : "#fff",
+          pointStrokeColor : "#b71c1c",
+          data: data["boil"]
+        }
+      ]
+    }
+    chart_fill('volume-canvas', Data);
+
+    $('#hot-volume').html( 'hot: ' + data["hot"].last() + " L")
+    $('#malt-volume').html( 'mash: ' + data["mash"].last() + " L")
+    $('#boil-volume').html( 'boil: ' + data["boil"].last() + " L")
   }
-  chart_fill('volume-canvas', Data);
+
+  $.getJSON( "/volume.json", callbackforvolume)
+
 
   Data = {
     labels : ["16:00","16:05","16:10","16:15","16:20","16:25"],
