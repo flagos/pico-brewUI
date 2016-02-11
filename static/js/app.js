@@ -41,10 +41,6 @@ function createCallbackforTank(tank) {
     }
   }
 
-  $.getJSON( "/temperature/hot.json" , createCallbackforTank('hot'))
-  $.getJSON( "/temperature/mash.json", createCallbackforTank('mash'))
-  $.getJSON( "/temperature/boil.json", createCallbackforTank('boil'))
-
   function createCallbackforcard(card) {
 
   return function(data) {
@@ -80,14 +76,20 @@ function createCallbackforTank(tank) {
     }
     chart_fill(card+'-canvas', Data);
 
-    $('#hot-'+card).html( 'hot: ' + data["hot"].last() + " L")
-    $('#malt-'+card).html( 'mash: ' + data["mash"].last() + " L")
-    $('#boil-'+card).html( 'boil: ' + data["boil"].last() + " L")
+    $('#hot-'+card).html( 'hot: ' + data["hot"].last() + (card=='volume'?" L":" W"))
+    $('#malt-'+card).html( 'mash: ' + data["mash"].last() + (card=='volume'?" L":" W"))
+    $('#boil-'+card).html( 'boil: ' + data["boil"].last() + (card=='volume'?" L":" W"))
   }
 }
 
-  $.getJSON( "/volume.json", createCallbackforcard('volume'))
-  $.getJSON( "/power.json", createCallbackforcard('power'))
+$.getJSON( "/temperature/hot.json" , createCallbackforTank('hot'))
+$.getJSON( "/temperature/mash.json", createCallbackforTank('mash'))
+$.getJSON( "/temperature/boil.json", createCallbackforTank('boil'))
+$.getJSON( "/volume.json", createCallbackforcard('volume'))
+$.getJSON( "/power.json", createCallbackforcard('power'))
+
+
+
 
 
   $(document).ready(function(){
