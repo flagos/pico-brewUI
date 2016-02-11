@@ -45,7 +45,9 @@ function createCallbackforTank(tank) {
   $.getJSON( "/temperature/mash.json", createCallbackforTank('mash'))
   $.getJSON( "/temperature/boil.json", createCallbackforTank('boil'))
 
-  var callbackforvolume = function(data) {
+  function createCallbackforcard(card) {
+
+  return function(data) {
 
     Data = {
       labels : data["label"],
@@ -76,47 +78,17 @@ function createCallbackforTank(tank) {
         }
       ]
     }
-    chart_fill('volume-canvas', Data);
+    chart_fill(card+'-canvas', Data);
 
-    $('#hot-volume').html( 'hot: ' + data["hot"].last() + " L")
-    $('#malt-volume').html( 'mash: ' + data["mash"].last() + " L")
-    $('#boil-volume').html( 'boil: ' + data["boil"].last() + " L")
+    $('#hot-'+card).html( 'hot: ' + data["hot"].last() + " L")
+    $('#malt-'+card).html( 'mash: ' + data["mash"].last() + " L")
+    $('#boil-'+card).html( 'boil: ' + data["boil"].last() + " L")
   }
+}
 
-  $.getJSON( "/volume.json", callbackforvolume)
+  $.getJSON( "/volume.json", createCallbackforcard('volume'))
+  $.getJSON( "/power.json", createCallbackforcard('power'))
 
-
-  Data = {
-    labels : ["16:00","16:05","16:10","16:15","16:20","16:25"],
-    datasets : [
-      {
-        label: "Malt Power",
-        //fillColor : "#ffecb3",
-        fillColor : "transparent",
-  			strokeColor : "#ff6f00",
-  			pointColor : "#fff",
-  			pointStrokeColor : "#ff6f00",
-        data: [1100, 1200, 1300, 1640, 1480, 1400, 1520]
-      },
-      {
-        label: "Hot Power",
-        fillColor : "transparent",
-  			strokeColor : "#01579b",
-  			pointColor : "#fff",
-  			pointStrokeColor : "#01579b",
-        data : [600,520,550,480,450,500]
-      },
-      {
-        label: "Boil Power",
-        fillColor : "transparent",
-        strokeColor : "#b71c1c",
-        pointColor : "#fff",
-        pointStrokeColor : "#b71c1c",
-        data: [600, 400, 1000, 600, 500, 900, 800]
-      }
-    ]
-  }
-  chart_fill('power-canvas', Data);
 
   $(document).ready(function(){
 
