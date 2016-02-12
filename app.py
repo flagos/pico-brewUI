@@ -51,6 +51,33 @@ def power():
 
     return json.dumps(data)
 
+
+@app.route("/task.json")
+def task():
+    data = {}
+    data["task"] = []
+    data["task"].append ({
+     "task name": "Fill in malt for Dark IPA",
+     "status": "done"
+     })
+
+    data["task"].append ({
+     "task name": "Fill in malt for bitter",
+     "status": "waiting"
+    })
+    data["task"].append ({
+     "task name": "Dump Dark IPA",
+     "status": "unavailable"
+    })
+    data["task"].append ({
+     "task name": "Fill in malt for Stout",
+     "status": "unavalaible"
+    })
+
+    return json.dumps(data)
+
+
+
 app.debug = True
 if __name__ == "__main__":
     app.run()

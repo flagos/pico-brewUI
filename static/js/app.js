@@ -82,12 +82,44 @@ function createCallbackforTank(tank) {
   }
 }
 
+var callbackfortask = function(data) {
+  var count = data["task"].length
+
+  var html_data = ""
+
+  for(var i=0; i<count; i++) {
+    var task = data["task"][i];
+
+    if (task["status"] == "done") {
+      html_data += "<p> \
+        <input type='checkbox' class='filled-in' id='check0' checked='checked' /> \
+        <label for='check0' class='done'>"+ task["task name"]+"</label> \
+      </p>"
+    } else if (task["status"] == "waiting") {
+      html_data += "<p> \
+        <input type='checkbox' class='filled-in' id='check1' /> \
+        <label for='check1' class='waiting'>"+ task["task name"]+"</label> \
+      </p>"
+    } else {
+      html_data += "<p> \
+        <input type='checkbox' id='check2' disabled='disabled' /> \
+        <label for='check2' class='unavailable'>"+ task["task name"]+"</label> \
+      </p> "
+    }
+
+  }
+
+   $('#task-form').append(html_data)
+
+}
+
 $.getJSON( "/temperature/hot.json" , createCallbackforTank('hot'))
 $.getJSON( "/temperature/mash.json", createCallbackforTank('mash'))
 $.getJSON( "/temperature/boil.json", createCallbackforTank('boil'))
 $.getJSON( "/volume.json", createCallbackforcard('volume'))
 $.getJSON( "/power.json", createCallbackforcard('power'))
 
+$.getJSON( "/task.json", callbackfortask)
 
 
 
