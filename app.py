@@ -76,6 +76,34 @@ def task():
 
     return json.dumps(data)
 
+@app.route("/recipe.json")
+def recipe():
+    data = {}
+    data["recipes"] = []
+    data["recipes"].append({
+    "recipe_name" : "Dark IPA",
+    "step"        : "Boil",
+    "time"        : "25m 10s",
+    "status"      : "active"
+    })
+
+    data["recipes"].append({
+    "recipe_name" : "Bitter",
+    "step"        : "Mash",
+    "time"        : "15m 56s",
+    "status"      : "active"
+    })
+
+    data["recipes"].append({
+    "recipe_name" : "Stout",
+    "step"        : "",
+    "time"        : "",
+    "status"      : "pending"
+    })
+
+    return json.dumps(data)
+
+
 
 
 app.debug = True

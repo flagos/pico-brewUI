@@ -113,6 +113,32 @@ var callbackfortask = function(data) {
 
 }
 
+var callbackforrecipe = function(data) {
+  var count = data["recipes"].length
+
+  var html_data = ""
+  html_data = "<tbody>"
+
+  for(var i=0; i<count; i++) {
+    var recipe = data["recipes"][i];
+
+    html_data += "<tr class='recipe'> \
+      <td class='td-delete'> <i class='material-icons delete-button'>delete</i></td> \
+      <td class='recipe-name'>" + recipe["recipe_name"] + "</td> \
+      <td class='recipe-step'>"+ recipe["step"] + "</td> \
+      <td class='recipe-time'>"+recipe["time"]+"</td>"
+      if (recipe["status"] != "pending")
+        html_data += "<td> <i class='small material-icons'>pause</i></td>"
+    html_data += "</tr> "
+
+  }
+  html_data += "</tbody>"
+
+   $('#recipe-table').append(html_data)
+
+}
+
+
 $.getJSON( "/temperature/hot.json" , createCallbackforTank('hot'))
 $.getJSON( "/temperature/mash.json", createCallbackforTank('mash'))
 $.getJSON( "/temperature/boil.json", createCallbackforTank('boil'))
@@ -120,6 +146,7 @@ $.getJSON( "/volume.json", createCallbackforcard('volume'))
 $.getJSON( "/power.json", createCallbackforcard('power'))
 
 $.getJSON( "/task.json", callbackfortask)
+$.getJSON( "/recipe.json", callbackforrecipe)
 
 
 
