@@ -19,7 +19,7 @@ if (!Array.prototype.last){
 
   }
 
-function createCallbackforTank(tank) {
+function createCallbackforTemperature(tank) {
     return function(data) {
 
       var Data = {
@@ -139,9 +139,10 @@ var callbackforrecipe = function(data) {
 }
 
 
-$.getJSON( "/temperature/hot.json" , createCallbackforTank('hot'))
-$.getJSON( "/temperature/mash.json", createCallbackforTank('mash'))
-$.getJSON( "/temperature/boil.json", createCallbackforTank('boil'))
+
+$.getJSON( "/temperature/hot.json" , createCallbackforTemperature('hot'))
+$.getJSON( "/temperature/mash.json", createCallbackforTemperature('mash'))
+$.getJSON( "/temperature/boil.json", createCallbackforTemperature('boil'))
 $.getJSON( "/volume.json", createCallbackforcard('volume'))
 $.getJSON( "/power.json", createCallbackforcard('power'))
 
