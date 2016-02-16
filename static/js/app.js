@@ -109,7 +109,7 @@ var callbackfortask = function(data) {
 
   }
 
-   $('#task-form').append(html_data)
+   $('#task-form').html(html_data)
 
 }
 
@@ -134,7 +134,7 @@ var callbackforrecipe = function(data) {
   }
   html_data += "</tbody>"
 
-   $('#recipe-table').append(html_data)
+   $('#recipe-table').html(html_data)
 
 }
 
@@ -148,20 +148,21 @@ var createCallbackforswitch = function(data) {
 
 
 
+function LoadElements()
+{
+  $.getJSON( "/temperature/hot.json" , createCallbackforTemperature('hot'))
+  $.getJSON( "/temperature/mash.json", createCallbackforTemperature('mash'))
+  $.getJSON( "/temperature/boil.json", createCallbackforTemperature('boil'))
+  $.getJSON( "/volume.json", createCallbackforcard('volume'))
+  $.getJSON( "/power.json", createCallbackforcard('power'))
 
-$.getJSON( "/temperature/hot.json" , createCallbackforTemperature('hot'))
-$.getJSON( "/temperature/mash.json", createCallbackforTemperature('mash'))
-$.getJSON( "/temperature/boil.json", createCallbackforTemperature('boil'))
-$.getJSON( "/volume.json", createCallbackforcard('volume'))
-$.getJSON( "/power.json", createCallbackforcard('power'))
+  $.getJSON( "/task.json", callbackfortask)
+  $.getJSON( "/recipe.json", callbackforrecipe)
 
-$.getJSON( "/task.json", callbackfortask)
-$.getJSON( "/recipe.json", callbackforrecipe)
-
-$.getJSON( "/valve.json", createCallbackforswitch)
-$.getJSON( "/resistor.json", createCallbackforswitch)
-$.getJSON( "/pump.json", createCallbackforswitch)
-
+  $.getJSON( "/valve.json", createCallbackforswitch)
+  $.getJSON( "/resistor.json", createCallbackforswitch)
+  $.getJSON( "/pump.json", createCallbackforswitch)
+}
 
 
 
@@ -177,4 +178,7 @@ $.getJSON( "/pump.json", createCallbackforswitch)
     // trigger for textarea
     $('#textarea1').trigger('autoresize');
 
+    LoadElements();
+    Chart.defaults.global["animation"] = false;
+    setInterval( LoadElements, 1000 );
   });
