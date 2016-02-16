@@ -104,6 +104,62 @@ def recipe():
     return json.dumps(data)
 
 
+@app.route("/valve.json")
+def valve():
+    data = {}
+    data["switchs"] = []
+
+    data["switchs"].append({
+    "name"   :"valve-hot",
+    "checked":True
+    })
+    data["switchs"].append({
+    "name"   :"valve-mash",
+    "checked":True
+    })
+    data["switchs"].append({
+    "name"   :"valve-boil",
+    "checked":True
+    })
+
+    return json.dumps(data)
+
+
+
+@app.route("/resistor.json")
+def resistor():
+    data = {}
+    data["switchs"] = []
+
+    data["switchs"].append({
+    "name"   :"resistor-hot",
+    "checked":True
+    })
+    data["switchs"].append({
+    "name"   :"resistor-mash",
+    "checked":True
+    })
+    data["switchs"].append({
+    "name"   :"resistor-boil",
+    "checked":True
+    })
+
+    return json.dumps(data)
+
+
+@app.route("/pump.json")
+def pump():
+    data = {}
+    data["switchs"] = []
+
+    data["switchs"].append({
+    "name"   :"pump",
+    "checked":True
+    })
+
+    return json.dumps(data)
+
+
 
 
 app.debug = True

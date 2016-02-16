@@ -138,6 +138,15 @@ var callbackforrecipe = function(data) {
 
 }
 
+var createCallbackforswitch = function(data) {
+  var length = data["switchs"].length
+
+  for (var i=0; i<length; i++){
+    $('#switch-'+data["switchs"][i]["name"]).prop("checked", data["switchs"][i]["checked"])
+}
+}
+
+
 
 
 $.getJSON( "/temperature/hot.json" , createCallbackforTemperature('hot'))
@@ -148,6 +157,11 @@ $.getJSON( "/power.json", createCallbackforcard('power'))
 
 $.getJSON( "/task.json", callbackfortask)
 $.getJSON( "/recipe.json", callbackforrecipe)
+
+$.getJSON( "/valve.json", createCallbackforswitch)
+$.getJSON( "/resistor.json", createCallbackforswitch)
+$.getJSON( "/pump.json", createCallbackforswitch)
+
 
 
 
