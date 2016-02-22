@@ -1,4 +1,6 @@
 from threading import Thread
+import Temperature
+
 import Queue
 import time
 
