@@ -46,6 +46,7 @@ class PID:
 
         self.clear()
 
+
     def clear(self):
         """Clears PID computations and coefficients"""
         self.SetPoint = 0.0

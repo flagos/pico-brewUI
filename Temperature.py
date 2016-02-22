@@ -23,8 +23,6 @@ class History(Thread):
         self.temperatures = List_max(10)
         self.powers       = List_max(10)
 
-        self.running = True
-
         Thread.__init__(self)
         pass
 

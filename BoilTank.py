@@ -27,6 +27,9 @@ class BoilTank(Thread):
         self.period = period
         self.set_consign(None)
 
+        self.running = True
+
+
         Thread.__init__(self)
         pass
 
@@ -39,7 +42,7 @@ class BoilTank(Thread):
         self.need_cleaning_queue.put(None)
         self.need_cleaning_queue.join()
 
-        while True:
+        while (self.running):
 
             self.start_boil_queue.get() # boiltank has recipe
 
