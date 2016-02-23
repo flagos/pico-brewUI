@@ -1,20 +1,21 @@
-from threading import Thread
+import threading 
 import time
 
-class List_max(List):
+class List_max():
 
     def __init__(self, max_size):
         self.max_size = max_size
+        self.array    = []
 
     def append(self, obj):
-        if (self.length() >= self.max_size):
-            self.remove(0)
+        if (len(self.array) >= self.max_size):
+            self.array.remove(0)
 
-        super.append(obj)
+        self.array.append(obj)
 
 
 
-class History(Thread):
+class History():
     """This class is made to manage temperature/power history"""
 
 
@@ -22,21 +23,22 @@ class History(Thread):
     def __init__(self):
         self.temperatures = List_max(10)
         self.powers       = List_max(10)
+        
+        t = threading.Timer(2, self.run)
+        t.start()
 
-        Thread.__init__(self)
         pass
 
 
-        def run(self):
+    def run(self):
+            
+        print("ok")
 
-            while(self.running):
-                start_time = time.time()
-                duration   = datetime(minutes=5)
+        #self.temperatures.append(5)
+        #self.powers.append(0)
 
-                while(time.time() < start_time + duration):
-                    time.sleep(3)
 
-                self.temperatures.append(self.read_temperature())
-                self.power.append(0)
 
-            pass
+if __name__ == '__main__':
+    h = History()
+    time.sleep(20)
