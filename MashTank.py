@@ -65,7 +65,7 @@ class MashTank(Thread):
         if self.testing_queue_input is not None:
             return self.testing_queue_input.get()
         else:
-            return 55  # pragma: no cover
+            return self.feedback_value  # pragma: no cover
 
     def dump_tank(self):
         pass

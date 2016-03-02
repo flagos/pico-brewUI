@@ -68,3 +68,7 @@ class Pico:
         self.t2 = threading.Thread(target=self.FillBoilTankThread, args=[])
         self.t1.start()
         self.t2.start()
+
+    # keep this thread launching separated from start_thread for unit testing
+    def launch_regulation(self):
+        self.regul = Regulation(self.hottank, self.mashtank, self.boiltank)

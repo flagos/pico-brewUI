@@ -60,7 +60,8 @@ class PID:
         self.int_error = 0.0
         self.windup_guard = 20.0
 
-        self.output = 0.0
+        self.output     = 0.0
+        self.last_value = 0.0
 
     def update(self, feedback_value):
         """Calculates PID value for given reference feedback
@@ -75,6 +76,7 @@ class PID:
 
         """
         error = self.SetPoint - feedback_value
+        self.last_value = feedback_value
 
         self.current_time = time.time()
         delta_time = self.current_time - self.last_time

@@ -6,10 +6,10 @@ class Regulation:
 
 
     def __init__(self, hot, mash, boil):
-        self.hot = hot
+        self.hot  = hot
         self.mash = mash
         self.boil = boil
-        self.lld = LLD()
+        self.lld  = LLD()
 
         self.sample_time = 5
         hot.setSampleTime(self.sample_time)
