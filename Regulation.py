@@ -1,4 +1,6 @@
 import LLD
+import time
+from threading import Timer
 
 class Regulation:
 
@@ -7,32 +9,35 @@ class Regulation:
         self.hot = hot
         self.mash = mash
         self.boil = boil
-        self.lld = LLD.new()
+        self.lld = LLD()
+        Timer(5, self.update_pid, ()).start()
 
     def update_pid(self):
-        self.hot.update_pid()
-        self.mash.update_pid()
-        self.boil.update_pid()
-
-        max_duty = 1
-
         hot  = self.hot
         mash = self.mash
         boil = self.boil
 
-        if (self.mash.output >= max_duty):
-            self.lld.duty(mash, max_duty)
-            self.lld.duty(boil, 0)
-            self.lld.duty(hot,  0)
-        elif (self.mash.output + self.boil.output >= max_duty):
-            self.lld.duty(mash, self.mash.output)
-            self.lld.duty(boil, max_duty - self.mash.output)
-            self.lld.duty(hot,  0)
-        elif (self.mash.output + self.boil.output + self.hot.output >= max_duty):
-            self.lld.duty(mash, self.mash.output)
-            self.lld.duty(boil, self.boil.output)
-            self.lld.duty(hot,  self.hot.output)
+        lld = self.lld
+
+        hot.update_pid(lld.get_temperature(hot))
+        mash.update_pid(lld.get_temperature(mash))
+        boil.update_pid(lld.get_temperature(boil))
+
+        max_duty = 1
+
+        if (mash.output >= max_duty):
+            lld.set_duty(mash, max_duty)
+            lld.set_duty(boil, 0)
+            lld.set_duty(hot,  0)
+        elif (mash.output + boil.output >= max_duty):
+            lld.set_duty(mash, mash.output)
+            lld.set_duty(boil, max_duty - mash.output)
+            lld.set_duty(hot,  0)
+        elif (mash.output + boil.output + hot.output >= max_duty):
+            lld.set_duty(mash, mash.output)
+            lld.set_duty(boil, boil.output)
+            lld.set_duty(hot,  max_duty - mash.output - boil.output)
         else:
-            self.lld.duty(mash, self.mash.output)
-            self.lld.duty(boil, self.boil.output)
-            self.lld.duty(hot,  self.hot.output)
+            lld.set_duty(mash, mash.output)
+            lld.set_duty(boil, boil.output)
+            lld.set_duty(hot,  hot.output)
