@@ -87,7 +87,3 @@ class BoilTank(Thread):
             return t
         else:
             return 55  # pragma: no cover
-
-    def set_consign(self, arg):
-        self.consign = arg
-        pass

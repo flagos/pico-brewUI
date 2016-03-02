@@ -32,9 +32,6 @@ class HotTank(Thread):
         #print "add "+str(vol)+" L current_volume: "+str(self.current_volume)
         pass
 
-    def set_consign(self, temperature):
-        pass
-
 
     def read_temperature(self):
         if self.testing_queue_input is not None:

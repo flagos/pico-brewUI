@@ -61,9 +61,6 @@ class MashTank(Thread):
             self.start_mash_queue.task_done()
             pass
 
-    def set_consign(self, temperature):
-        pass
-
     def read_temperature(self):
         if self.testing_queue_input is not None:
             return self.testing_queue_input.get()
