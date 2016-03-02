@@ -10,7 +10,12 @@ class Regulation:
         self.mash = mash
         self.boil = boil
         self.lld = LLD()
-        Timer(5, self.update_pid, ()).start()
+
+        self.sample_time = 5
+        hot.setSampleTime(self.sample_time)
+        mash.setSampleTime(self.sample_time)
+        boil.setSampleTime(self.sample_time)
+        Timer(self.sample_time, self.update_pid, ()).start()
 
     def update_pid(self):
         hot  = self.hot
