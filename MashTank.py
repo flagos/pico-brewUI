@@ -30,6 +30,7 @@ class MashTank(Thread, Tank):
         while 1:
             self.start_time=0
             self.boiltank_start_heating = False
+            self.set_consign(None)
 
             self.need_cleaning_queue.put(None)
             self.need_cleaning_queue.join()
@@ -57,6 +58,7 @@ class MashTank(Thread, Tank):
                         self.boiltank.start_heat_queue.put(None)
                         self.boiltank.start_heat_queue.join()    # wait for boil tank to be heating
                         self.boiltank_start_heating = True
+                    self.set_consign(None)
                     self.dump_tank()
 
             self.boiltank.start_counting_queue.put(None)

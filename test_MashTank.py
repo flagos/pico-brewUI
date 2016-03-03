@@ -42,6 +42,7 @@ class MashTankTest(unittest.TestCase):
         self.need_cleaning_queue.get()
         self.need_cleaning_queue.task_done()
 
+        self.assertTrue(self.mashtank.SetPoint is None)
 
         self.start_mash_queue.put(None)
 
@@ -57,6 +58,7 @@ class MashTankTest(unittest.TestCase):
         self.start_counting_queue.get() # launch boil counting
 
         self.start_mash_queue.join()
+        self.assertTrue(self.mashtank.SetPoint is None)
 
 
     def test_recipe_with_three_step(self):

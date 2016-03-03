@@ -59,6 +59,9 @@ class HotBoilTest(unittest.TestCase):
 
         self.start_counting_queue.join() # blocking
         self.start_boil_queue.join() # blocking
+
+        self.assertTrue(bk.SetPoint is None)
+
         self.assertTrue(bk.stop_time - bk.start_time > 0.2)
         self.assertTrue(bk.stop_time - bk.start_time < 0.2 + bk.period)
         pass
