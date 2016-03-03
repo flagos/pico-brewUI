@@ -5,6 +5,7 @@ import time
 class HotTank(Thread, Tank):
 
     def __init__(self, saturation = 50, period=1, testing_queue_input=None, testing_queue_output=None):
+        self.tank_name = "Hot"
         self.current_volume = 0
         self.target_volume = 0
         self.period = period

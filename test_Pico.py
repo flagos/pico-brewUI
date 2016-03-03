@@ -51,7 +51,8 @@ class PicoTest(unittest.TestCase):
         self.pico = Pico.Pico()
         self.pico.real_init(Fake_HotTank(self.push_volume_queue),
                             Fake_MashTank(self.start_mash_queue, self.push_mash_steps_queue),
-                            Fake_BoilTank(self.start_boil_queue, self.push_boil_steps_queue))
+                            Fake_BoilTank(self.start_boil_queue, self.push_boil_steps_queue),
+                            None)
         pass
 
     def test_one_recipe(self):

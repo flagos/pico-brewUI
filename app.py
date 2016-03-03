@@ -4,6 +4,7 @@ from flask import render_template
 import json
 import Pico
 import HotTank, MashTank, BoilTank
+import Regulation
 
 import Queue
 
@@ -186,5 +187,6 @@ if __name__ == "__main__":
 
     mash = MashTank.MashTank(hot, boil, start_mash_queue, need_cleaning_queue)
 
-    pico.real_init(hot, mash, boil)
+    regule = Regulation.Regulation(hot, mash, boil)
+    pico.real_init(hot, mash, boil, regule)
     app.run()

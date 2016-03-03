@@ -1,4 +1,5 @@
 import time
+from datetime import timedelta
 from PID import PID
 
 
@@ -29,7 +30,7 @@ class Tank(PID):
 
     def update_pid(self, value):
         now = time.time()
-        if(now - self.last_fill > timedelta(minutes=5)):
+        if(now - self.last_fill > timedelta(minutes=5).seconds):
             self.last_fill = now
             self.temperatures.append(value)
 

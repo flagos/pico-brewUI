@@ -10,18 +10,11 @@ class LLD:
         self.setting["Hot"]  = False
         self.setting["Mash"] = False
         self.setting["Boil"] = False
-
-
-        self.setting["Hot"]  = True
-        self.setting["Mash"] = True
-        self.setting["Boil"] = True
-
-
         pass
 
 
     def set_duty(self, tank, cycle):
-        if (self.setting[tank.name] is True):
+        if (self.setting[tank.tank_name] is True):
             #do something
             print tank.name + ": " + cycle
             pass
@@ -29,6 +22,9 @@ class LLD:
 
     def switch(self, tank, setting):
         if (setting is False):
-            self.setting[tank.name] = False
+            self.setting[tank.tank_name] = False
         else:
-            self.setting[tank.name] = True
+            self.setting[tank.tank_name] = True
+
+    def get_temperature(self, tank):
+        pass

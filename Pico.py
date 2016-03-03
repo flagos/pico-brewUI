@@ -1,9 +1,8 @@
 import threading
 import time
 import Queue
-import Regulation
 
-from Recipe import Recipe
+import Recipe
 
 
 class Pico:
@@ -12,7 +11,7 @@ class Pico:
         pass
 
 
-    def real_init( self, hottank, mashtank, boiltank, period=1):
+    def real_init( self, hottank, mashtank, boiltank, regulation, period=1):
         self.recipes = []
         self.PID     = []
         self.steps   = []
@@ -31,7 +30,7 @@ class Pico:
         self.boil_index = 0
         self.run_thread = True
 
-        self.regule = Regulation.Regulation(hottank, mashtank, boiltank)
+        self.regule = regulation
 
 
     def fetch_recipe(self, url_recipe):

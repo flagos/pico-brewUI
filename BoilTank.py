@@ -15,6 +15,8 @@ class BoilTank(Thread, Tank):
     """
 
     def __init__(self, start_heat_queue, start_boil_queue, start_counting_queue, need_cleaning_queue, period=1, testing_queue_input=None):
+
+        self.tank_name = "Boil"
         self.period = period
         self.start_heat_queue     = start_heat_queue
         self.start_counting_queue = start_counting_queue

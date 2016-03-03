@@ -5,6 +5,7 @@ from Tank import Tank
 class MashTank(Thread, Tank):
 
     def __init__(self,hottank, boiltank, start_mash_queue, need_cleaning_queue,  period=1,  testing_queue_input=None, testing_queue_output=None):
+        self.tank_name = "Mash"
         self.period = period
         self.hottank = hottank
         self.boiltank = boiltank
