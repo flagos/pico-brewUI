@@ -44,7 +44,6 @@ class HotTank(Thread, Tank):
     def run(self):
         while 1:
             temperature = self.read_temperature()
-            self.set_consign(None)
             if (self.current_volume < self.target_volume):
                 if (self.current_volume < 10):
                     self.add_liters(10 - self.current_volume)
