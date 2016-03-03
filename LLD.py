@@ -4,7 +4,7 @@ import serial
 class LLD:
 
     def __init__(self):
-        self.arduino = serial.Serial('/dev/tty.usbserial', 115000)
+        #self.arduino = serial.Serial('/dev/tty.usbserial', 115000)
         self.setting = {}
 
         self.setting["Hot"]  = False

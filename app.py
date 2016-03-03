@@ -2,8 +2,14 @@ from flask import Flask
 from flask import render_template
 
 import json
+import Pico
+import HotTank, MashTank, BoilTank
+
+import Queue
+
 
 app = Flask(__name__)
+pico = Pico.Pico()
 
 @app.route("/")
 def main():
@@ -164,4 +170,21 @@ def pump():
 
 app.debug = True
 if __name__ == "__main__":
+
+    hot =  HotTank.HotTank(saturation=50, period=1)
+
+    start_boil_queue      = Queue.Queue()
+    start_heat_queue      = Queue.Queue()
+
+    start_counting_queue = Queue.Queue()
+    need_cleaning_queue  = Queue.Queue()
+
+    boil = BoilTank.BoilTank(start_heat_queue, start_boil_queue, start_counting_queue, need_cleaning_queue)
+
+    start_mash_queue    = Queue.Queue()
+    need_cleaning_queue = Queue.Queue()
+
+    mash = MashTank.MashTank(hot, boil, start_mash_queue, need_cleaning_queue)
+
+    pico.real_init(hot, mash, boil)
     app.run()
