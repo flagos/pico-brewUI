@@ -1,7 +1,8 @@
 from threading import Thread
 import time
+from Tank import Tank
 
-class MashTank(Thread):
+class MashTank(Thread, Tank):
 
     def __init__(self,hottank, boiltank, start_mash_queue, need_cleaning_queue,  period=1,  testing_queue_input=None, testing_queue_output=None):
         self.period = period
@@ -15,6 +16,7 @@ class MashTank(Thread):
         self.mash_steps = []
 
         Thread.__init__(self)
+        Tank.__init__(self)
         pass
 
     def add_mash_step(self, temperature=None, duration=None, name=None, water_volume=None, dump=False):

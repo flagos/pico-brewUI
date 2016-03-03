@@ -43,13 +43,14 @@ class PID:
         self.sample_time = 0.00
         self.current_time = time.time()
         self.last_time = self.current_time
+        self.last_value = 0.0
 
         self.clear()
 
 
     def clear(self):
         """Clears PID computations and coefficients"""
-        self.SetPoint = 0.0
+        self.SetPoint = None
 
         self.PTerm = 0.0
         self.ITerm = 0.0
@@ -61,7 +62,6 @@ class PID:
         self.windup_guard = 20.0
 
         self.output     = 0.0
-        self.last_value = 0.0
 
     def update(self, feedback_value):
         """Calculates PID value for given reference feedback
@@ -75,8 +75,11 @@ class PID:
            Test PID with Kp=1.2, Ki=1, Kd=0.001 (test_pid.py)
 
         """
-        error = self.SetPoint - feedback_value
         self.last_value = feedback_value
+        if (self.SetPoint is None):
+            self.clear()
+            return
+        error = self.SetPoint - feedback_value
 
         self.current_time = time.time()
         delta_time = self.current_time - self.last_time
@@ -132,4 +135,5 @@ class PID:
         self.sample_time = sample_time
 
     def set_consign(self, value):
+        """Target of PID. Set to None to disable"""
         self.SetPoint = value

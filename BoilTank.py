@@ -1,10 +1,11 @@
 from threading import Thread
 import Temperature
+from Tank import Tank
 
 import Queue
 import time
 
-class BoilTank(Thread):
+class BoilTank(Thread, Tank):
     """ This class controls a BoilTank.
         This control is made with 3 Queues and 2 API
         - start heat will start heating even if there is not all liquid is the tank_in_use
@@ -31,6 +32,7 @@ class BoilTank(Thread):
 
 
         Thread.__init__(self)
+        Tank.__init__(self)
         pass
 
     def add_boil_step(self, temperature, duration):
@@ -65,6 +67,7 @@ class BoilTank(Thread):
 
                 pass
 
+            self.set_consign(None)
             self.start_chiller()
 
             self.stop_time = time.time()

@@ -1,7 +1,8 @@
 from threading import Thread
+from Tank import Tank
 import time
 
-class HotTank(Thread):
+class HotTank(Thread, Tank):
 
     def __init__(self, saturation = 50, period=1, testing_queue_input=None, testing_queue_output=None):
         self.current_volume = 0
@@ -12,6 +13,7 @@ class HotTank(Thread):
         self.saturation = saturation
         self.temperature_order = 55  # be safe
         Thread.__init__(self)
+        Tank.__init__(self)
         pass
 
     def push_volume(self, vol):
