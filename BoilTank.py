@@ -1,5 +1,4 @@
 from threading import Thread
-import Temperature
 from Tank import Tank
 
 import Queue

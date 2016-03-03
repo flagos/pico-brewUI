@@ -1,4 +1,4 @@
-import LLD
+from LLD import LLD
 import time
 from threading import Timer
 
