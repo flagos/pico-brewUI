@@ -27,4 +27,11 @@ class LLD:
             self.setting[tank.tank_name] = True
 
     def get_temperature(self, tank):
+
+        if tank.tank_name == "Hot":
+            return 56
+        elif tank.tank_name == "Mash":
+            return 70
+        elif tank.tank_name == "Boil":
+            return 80
         pass

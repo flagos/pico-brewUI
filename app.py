@@ -5,6 +5,7 @@ import json
 import Pico
 import HotTank, MashTank, BoilTank
 import Regulation
+import time
 
 import Queue
 
@@ -23,14 +24,14 @@ def temperature(tank):
     data = {}
     history.append( ["16:00","16:05","16:10","16:15","16:20","16:25"])
     if (tank == "hot"):
-        data["value"]   = 78
-        history.append([68,68,68,72,78,98])
+        data["value"]   = pico.hottank.last_value
+        history.append(pico.hottank.temperatures.array)
     elif (tank == "mash"):
-        data["value"]   = 83
-        history.append([68,68,68,72,78,79])
+        data["value"]   = pico.mashtank.last_value
+        history.append(pico.mashtank.temperatures.array)
     else:
-        data["value"]   = 98
-        history.append([68,68,68,72,78,80])
+        data["value"]   = pico.boiltank.last_value
+        history.append(pico.boiltank.temperatures.array)
 
     data["history"] = history
 

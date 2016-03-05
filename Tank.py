@@ -7,11 +7,11 @@ class List_max():
 
     def __init__(self, max_size):
         self.max_size = max_size
-        self.array    = []
+        self.array    = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
     def append(self, obj):
         if (len(self.array) >= self.max_size):
-            self.array.remove(0)
+            self.array.pop(0)
 
         self.array.append(obj)
 

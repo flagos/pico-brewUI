@@ -1,6 +1,6 @@
 from LLD import LLD
 import time
-from threading import Timer
+import threading
 
 class Regulation:
 
@@ -15,7 +15,10 @@ class Regulation:
         hot.setSampleTime(self.sample_time)
         mash.setSampleTime(self.sample_time)
         boil.setSampleTime(self.sample_time)
-        Timer(self.sample_time, self.update_pid, ()).start()
+        thread = threading.Thread(target=self.update_pid, args=())
+        thread.daemon = True                            # Daemonize thread
+        thread.start()                                  # Start the execution
+
 
     def update_pid(self):
         hot  = self.hot
@@ -24,25 +27,29 @@ class Regulation:
 
         lld = self.lld
 
-        hot.update_pid(lld.get_temperature(hot))
-        mash.update_pid(lld.get_temperature(mash))
-        boil.update_pid(lld.get_temperature(boil))
+        while True:
 
-        max_duty = 1
+            hot.update_pid(lld.get_temperature(hot))
+            mash.update_pid(lld.get_temperature(mash))
+            boil.update_pid(lld.get_temperature(boil))
 
-        if (mash.output >= max_duty):
-            lld.set_duty(mash, max_duty)
-            lld.set_duty(boil, 0)
-            lld.set_duty(hot,  0)
-        elif (mash.output + boil.output >= max_duty):
-            lld.set_duty(mash, mash.output)
-            lld.set_duty(boil, max_duty - mash.output)
-            lld.set_duty(hot,  0)
-        elif (mash.output + boil.output + hot.output >= max_duty):
-            lld.set_duty(mash, mash.output)
-            lld.set_duty(boil, boil.output)
-            lld.set_duty(hot,  max_duty - mash.output - boil.output)
-        else:
-            lld.set_duty(mash, mash.output)
-            lld.set_duty(boil, boil.output)
-            lld.set_duty(hot,  hot.output)
+            max_duty = 1
+
+            if (mash.output >= max_duty):
+                lld.set_duty(mash, max_duty)
+                lld.set_duty(boil, 0)
+                lld.set_duty(hot,  0)
+            elif (mash.output + boil.output >= max_duty):
+                lld.set_duty(mash, mash.output)
+                lld.set_duty(boil, max_duty - mash.output)
+                lld.set_duty(hot,  0)
+            elif (mash.output + boil.output + hot.output >= max_duty):
+                lld.set_duty(mash, mash.output)
+                lld.set_duty(boil, boil.output)
+                lld.set_duty(hot,  max_duty - mash.output - boil.output)
+            else:
+                lld.set_duty(mash, mash.output)
+                lld.set_duty(boil, boil.output)
+                lld.set_duty(hot,  hot.output)
+
+            time.sleep(self.sample_time)
