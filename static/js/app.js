@@ -147,6 +147,27 @@ var createCallbackforswitch = function(data) {
 }
 
 
+function Callbackforswitch_click(switch_name) {
+  $('#switch-' + switch_name).click(function(){
+    var isChecked      = $('#switch-' + switch_name).prop("checked") ? 'True':'False';
+    var display_status = $('#switch-' + switch_name).prop("checked") ? 'ON':'OFF';
+      $.ajax({
+        url : 'resistor',
+        type : 'GET',
+        data : switch_name + '=' + isChecked,
+        dataType : 'html',
+        success : function(data, status){
+          Materialize.toast(switch_name + ' set '+display_status , 4000)
+        },
+        error : function(data, status, error){
+          Materialize.toast('Error occured while ' + switch_name + ' setting '+display_status , 20000)
+        },
+      });
+      LoadElements();
+  });
+
+}
+
 
 function LoadElements()
 {
@@ -181,4 +202,9 @@ function LoadElements()
     LoadElements();
     Chart.defaults.global["animation"] = false;
     setInterval( LoadElements, 1000 );
+
+    Callbackforswitch_click('resistor-hot');
+    Callbackforswitch_click('resistor-mash');
+    Callbackforswitch_click('resistor-boil');
+
   });

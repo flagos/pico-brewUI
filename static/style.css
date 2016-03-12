@@ -147,3 +147,10 @@ label.waiting {
   font-size: 18px;
   margin-right: 200px;
 }
+
+/*toast*/
+#toast-container {
+  top: inherit !important;
+  bottom: 20px !important;
+  left: 0px !important;
+}

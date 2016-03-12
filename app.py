@@ -1,5 +1,4 @@
-from flask import Flask
-from flask import render_template
+from flask import Flask, request, render_template
 
 import json
 import Pico
@@ -9,6 +8,7 @@ import time
 
 import Queue
 
+import pprint
 
 app = Flask(__name__)
 pico = Pico.Pico()
@@ -134,26 +134,43 @@ def valve():
 
 
 
-@app.route("/resistor.json")
-def resistor():
+@app.route("/resistor.json", methods=['GET'])
+def resistor_get():
     data = {}
     data["switchs"] = []
 
     data["switchs"].append({
     "name"   :"resistor-hot",
-    "checked":True
+    "checked": pico.regule.lld.setting["Hot"]
     })
     data["switchs"].append({
     "name"   :"resistor-mash",
-    "checked":True
+    "checked":pico.regule.lld.setting["Mash"]
     })
     data["switchs"].append({
     "name"   :"resistor-boil",
-    "checked":True
+    "checked":pico.regule.lld.setting["Boil"]
     })
 
     return json.dumps(data)
 
+@app.route("/resistor", methods=['GET'])
+def resistor():
+
+    error = False
+    if (request.args.get('resistor-hot') is not None):
+        pico.regule.lld.setting["Hot"] = True if (request.args.get('resistor-hot') == 'True') else False
+
+    if (request.args.get('resistor-mash') is not None):
+        pico.regule.lld.setting["Mash"] = True if (request.args.get('resistor-mash') == 'True') else False
+
+    if (request.args.get('resistor-boil') is not None):
+        pico.regule.lld.setting["Boil"] = True if (request.args.get('resistor-boil') == 'True') else False
+
+    if error is True:
+        return json.dumps({ "error": error }), 500
+    else:
+        return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
 
 @app.route("/pump.json")
 def pump():
