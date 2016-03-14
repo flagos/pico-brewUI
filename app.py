@@ -119,15 +119,15 @@ def valve():
 
     data["switchs"].append({
     "name"   :"valve-hot",
-    "checked":True
+    "checked":pico.regule.lld.valve_setting["Hot"]
     })
     data["switchs"].append({
     "name"   :"valve-mash",
-    "checked":True
+    "checked":pico.regule.lld.valve_setting["Mash"]
     })
     data["switchs"].append({
     "name"   :"valve-boil",
-    "checked":True
+    "checked":pico.regule.lld.valve_setting["Boil"]
     })
 
     return json.dumps(data)
@@ -154,18 +154,31 @@ def resistor_get():
 
     return json.dumps(data)
 
-@app.route("/resistor", methods=['GET'])
-def resistor():
+@app.route("/switch")
+def switch():
 
     error = False
     if (request.args.get('resistor-hot') is not None):
-        pico.regule.lld.setting["Hot"] = True if (request.args.get('resistor-hot') == 'True') else False
+        pico.regule.lld.resistor_switch( pico.hottank, True if (request.args.get('resistor-hot') == 'True') else False)
 
-    if (request.args.get('resistor-mash') is not None):
-        pico.regule.lld.setting["Mash"] = True if (request.args.get('resistor-mash') == 'True') else False
+    elif (request.args.get('resistor-mash') is not None):
+        pico.regule.lld.resistor_switch( pico.mashtank, True if (request.args.get('resistor-mash') == 'True') else False)
 
-    if (request.args.get('resistor-boil') is not None):
-        pico.regule.lld.setting["Boil"] = True if (request.args.get('resistor-boil') == 'True') else False
+    elif (request.args.get('resistor-boil') is not None):
+        pico.regule.lld.resistor_switch( pico.boiltank, True if (request.args.get('resistor-boil') == 'True') else False)
+
+    elif (request.args.get('valve-hot') is not None):
+        pico.regule.lld.valve_switch( pico.hottank, True if (request.args.get('valve-hot') == 'True') else False)
+
+    elif (request.args.get('valve-mash') is not None):
+        pico.regule.lld.valve_switch( pico.mashtank, True if (request.args.get('valve-mash') == 'True') else False)
+
+    elif (request.args.get('valve-boil') is not None):
+        pico.regule.lld.valve_switch( pico.boiltank, True if (request.args.get('valve-boil') == 'True') else False)
+
+    elif (request.args.get('pump') is not None):
+        pico.regule.lld.pump_switch( True if (request.args.get('pump') == 'True') else False)
+        #pico.regule.lld.pump_switch( False )
 
     if error is True:
         return json.dumps({ "error": error }), 500
@@ -179,7 +192,7 @@ def pump():
 
     data["switchs"].append({
     "name"   :"pump",
-    "checked":True
+    "checked":pico.regule.lld.pump_setting
     })
 
     return json.dumps(data)

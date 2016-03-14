@@ -152,7 +152,7 @@ function Callbackforswitch_click(switch_name) {
     var isChecked      = $('#switch-' + switch_name).prop("checked") ? 'True':'False';
     var display_status = $('#switch-' + switch_name).prop("checked") ? 'ON':'OFF';
       $.ajax({
-        url : 'resistor',
+        url : 'switch',
         type : 'GET',
         data : switch_name + '=' + isChecked,
         dataType : 'html',
@@ -207,4 +207,9 @@ function LoadElements()
     Callbackforswitch_click('resistor-mash');
     Callbackforswitch_click('resistor-boil');
 
+    Callbackforswitch_click('valve-hot');
+    Callbackforswitch_click('valve-mash');
+    Callbackforswitch_click('valve-boil');
+
+    Callbackforswitch_click('pump');
   });
