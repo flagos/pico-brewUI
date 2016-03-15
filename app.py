@@ -133,6 +133,14 @@ def valve():
     return json.dumps(data)
 
 
+@app.route("/lock.json")
+def lock():
+    data = {}
+    data["valve"] = False
+
+    return json.dumps(data)
+
+
 
 @app.route("/resistor.json", methods=['GET'])
 def resistor_get():

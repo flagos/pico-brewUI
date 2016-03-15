@@ -168,6 +168,16 @@ function Callbackforswitch_click(switch_name) {
 
 }
 
+function callbackforlock(data) {
+  if (data["valve"] == true) {
+    $('.lock').html('lock_open')
+    $('.lock').prop('lock', true);
+  } else {
+    $('.lock').html('lock_outline')
+    $('.lock').prop('lock', false);
+  }
+
+}
 
 function LoadElements()
 {
@@ -183,6 +193,8 @@ function LoadElements()
   $.getJSON( "/valve.json", createCallbackforswitch)
   $.getJSON( "/resistor.json", createCallbackforswitch)
   $.getJSON( "/pump.json", createCallbackforswitch)
+
+  $.getJSON("/lock.json", callbackforlock)
 }
 
 
@@ -212,4 +224,5 @@ function LoadElements()
     Callbackforswitch_click('valve-boil');
 
     Callbackforswitch_click('pump');
+
   });
