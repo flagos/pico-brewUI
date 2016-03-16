@@ -207,7 +207,28 @@ function LoadElements()
   $.getJSON("/lock.json", callbackforlock)
 }
 
+  function createCallbackforlock(card) {
+    return function () {
 
+      $.ajax(
+        {
+          url : 'lock',
+          type : 'GET',
+          data : card,
+          dataType : 'html',
+          success : function(data, status){
+            LoadElements();
+          },
+          error : function(data, status, error){
+            Materialize.toast('Error occured while setting ' + lock, 20000)
+            LoadElements();
+          },
+        }
+
+      );
+
+    };
+  };
 
 
   $(document).ready(function(){
@@ -234,5 +255,10 @@ function LoadElements()
     Callbackforswitch_click('valve-boil');
 
     Callbackforswitch_click('pump');
+
+
+    $('#valve-lock').click(createCallbackforlock('valve'));
+    $('#card-resistor .lock').click(createCallbackforlock('resistor'));
+    $('#card-pump .lock').click(createCallbackforlock('pump'));
 
   });

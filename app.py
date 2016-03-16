@@ -138,6 +138,23 @@ def lock():
     data = pico.lock
     return json.dumps(data)
 
+@app.route("/lock")
+def set_lock():
+    error = False
+
+    if (request.args.get('valve') is not None):
+        pico.lock["valve"] = not pico.lock["valve"]
+
+    if (request.args.get('resistor') is not None):
+        pico.lock["resistor"] = not pico.lock["resistor"]
+
+    if (request.args.get('pump') is not None):
+        pico.lock["pump"] = not pico.lock["pump"]
+
+    if error is True:
+        return json.dumps({ "error": error }), 500
+    else:
+        return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
 
 
 @app.route("/resistor.json", methods=['GET'])
