@@ -158,24 +158,34 @@ function Callbackforswitch_click(switch_name) {
         dataType : 'html',
         success : function(data, status){
           Materialize.toast(switch_name + ' set '+display_status , 4000)
+          LoadElements();
         },
         error : function(data, status, error){
           Materialize.toast('Error occured while ' + switch_name + ' setting '+display_status , 20000)
+          LoadElements();
         },
       });
-      LoadElements();
   });
 
 }
 
-function callbackforlock(data) {
-  if (data["valve"] == true) {
-    $('.lock').html('lock_open')
-    $('.lock').prop('lock', true);
+function lock(card, bool) {
+
+  if (! bool ) {
+    $('#card-'+card +' .lock').html('lock_open');
+    $('#card-'+card +' .lock').prop('lock', true);
   } else {
-    $('.lock').html('lock_outline')
-    $('.lock').prop('lock', false);
+    $('#card-'+card +' .lock').html('lock_outline');
+    $('#card-'+card +' .lock').prop('lock', false);
   }
+
+}
+
+function callbackforlock(data) {
+
+  lock("valve", data["valve"]);
+  lock("resistor", data["resistor"]);
+  lock("pump", data["pump"]);
 
 }
 

@@ -32,6 +32,11 @@ class Pico:
 
         self.regule = regulation
 
+        self.lock = {}
+        self.lock["valve"]    = True
+        self.lock["resistor"] = True
+        self.lock["pump"]     = True
+
 
     def fetch_recipe(self, url_recipe):
         recipe = Recipe.Recipe(url_recipe)

@@ -135,9 +135,7 @@ def valve():
 
 @app.route("/lock.json")
 def lock():
-    data = {}
-    data["valve"] = False
-
+    data = pico.lock
     return json.dumps(data)
 
 
