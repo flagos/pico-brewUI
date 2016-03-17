@@ -16,36 +16,61 @@ class LLD:
         self.valve_setting["Mash"] = False
         self.valve_setting["Boil"] = False
 
+        self.lock = {}
+        self.lock["valve"]    = True
+        self.lock["resistor"] = True
+        self.lock["pump"]     = True
+
         self.pump_setting = False
         pass
 
 
-    def set_duty(self, tank, cycle):
+    def _resistor_duty(self, tank, cycle):
+        pass
+
+    def _valve(self, tank, setting):
+        pass
+
+    def _pump(self, setting):
+        pass
+
+    def set_resistor_duty(self, tank, cycle):
         if (self.setting[tank.tank_name] is True):
-            #do something
-            print tank.name + ": " + cycle
-            pass
+            self._resistor_duty(tank, cycle)
+
+
+    def set_valve(self, setting):
+        if (self.lock['valve'] is True):
+            self._valve(tank, setting)
+
+    def set_pump(self, setting):
+        if (self.lock['pump'] is True):
+            self._pump(setting)
 
 
     def resistor_switch(self, tank, setting):
-        if (setting is False):
-            self.setting[tank.tank_name] = False
-        else:
-            self.setting[tank.tank_name] = True
+        if (self.lock['resistor'] is False):
+            if (setting is False):
+                self.setting[tank.tank_name] = False
+                return self._resistor_duty(tank, 0)
+            else:
+                self.setting[tank.tank_name] = True
 
 
     def valve_switch(self, tank, setting):
-        if (setting is False):
-            self.valve_setting[tank.tank_name] = False
-        else:
-            self.valve_setting[tank.tank_name] = True
+        if (self.lock['valve'] is False):
+            if (setting is False):
+                self.valve_setting[tank.tank_name] = False
+            else:
+                self.valve_setting[tank.tank_name] = True
 
 
     def pump_switch(self, setting):
-        if setting is False:
-            self.pump_setting  = False
-        else:
-            self.pump_setting = True
+        if (self.lock['pump'] is False):
+            if setting is False:
+                self.pump_setting  = False
+            else:
+                self.pump_setting = True
 
 
     def get_temperature(self, tank):

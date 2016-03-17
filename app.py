@@ -135,7 +135,7 @@ def valve():
 
 @app.route("/lock.json")
 def lock():
-    data = pico.lock
+    data = pico.regule.lld.lock
     return json.dumps(data)
 
 @app.route("/lock")
@@ -143,13 +143,13 @@ def set_lock():
     error = False
 
     if (request.args.get('valve') is not None):
-        pico.lock["valve"] = not pico.lock["valve"]
+        pico.regule.lld.lock["valve"] = not pico.regule.lld.lock["valve"]
 
     if (request.args.get('resistor') is not None):
-        pico.lock["resistor"] = not pico.lock["resistor"]
+        pico.regule.lld.lock["resistor"] = not pico.regule.lld.lock["resistor"]
 
     if (request.args.get('pump') is not None):
-        pico.lock["pump"] = not pico.lock["pump"]
+        pico.regule.lld.lock["pump"] = not pico.regule.lld.lock["pump"]
 
     if error is True:
         return json.dumps({ "error": error }), 500
