@@ -34,6 +34,12 @@ class LLD:
     def _pump(self, setting):
         pass
 
+    def _update_temperature(self):
+        pass
+
+    def _ping_arduino(self):
+        pass
+
     def set_resistor_duty(self, tank, cycle):
         if (self.setting[tank.tank_name] is True):
             self._resistor_duty(tank, cycle)
