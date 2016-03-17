@@ -173,10 +173,10 @@ function lock(card, bool) {
 
   if (! bool ) {
     $('#card-'+card +' .lock').html('lock_open');
-    $('#card-'+card +' .lock').prop('lock', true);
+    $('#card-'+card+' :checkbox').removeAttr("disabled");
   } else {
     $('#card-'+card +' .lock').html('lock_outline');
-    $('#card-'+card +' .lock').prop('lock', false);
+    $('#card-'+card+' :checkbox').attr("disabled", true);
   }
 
 }
@@ -257,8 +257,8 @@ function LoadElements()
     Callbackforswitch_click('pump');
 
 
-    $('#valve-lock').click(createCallbackforlock('valve'));
-    $('#card-resistor .lock').click(createCallbackforlock('resistor'));
-    $('#card-pump .lock').click(createCallbackforlock('pump'));
+    $('#valve-lock').on('click', createCallbackforlock('valve'));
+    $('#card-resistor .lock').on('click',createCallbackforlock('resistor'));
+    $('#card-pump .lock').on('click',createCallbackforlock('pump'));
 
   });
