@@ -1,10 +1,12 @@
 import serial
 
+from MessengerController import Messengercontroller
 
-class LLD:
+class LLD(MessengerController):
 
     def __init__(self):
         #self.arduino = serial.Serial('/dev/tty.usbserial', 115000)
+
         self.setting = {}
         self.valve_setting = {}
 
@@ -22,6 +24,8 @@ class LLD:
         self.lock["pump"]     = True
 
         self.pump_setting = False
+
+        MessengerController.__init__(self)
         pass
 
 
@@ -88,3 +92,12 @@ class LLD:
         elif tank.tank_name == "Boil":
             return 80
         pass
+
+
+
+
+
+
+if __name__ == "__main__":
+    lld = LLD()
+    lld._
