@@ -19,8 +19,12 @@ class MessengerController(object):
         self.baud = 115200
         self.commands = ['acknowledge',
                          'error',
-                         'float_addition',
-                         'float_addition_result',
+                         'ping',
+                         'SetPin',
+                         'PwmPin'              ,
+                         'ReadTemperature'     ,
+                         'DumpInWater'         ,
+                         'DumpInWater_reached'
                          ]
 
         try:
@@ -33,13 +37,13 @@ class MessengerController(object):
             self.messenger = CmdMessenger(self.serial_port)
             # attach callbacks
             self.messenger.attach(func=self.on_error, msgid=self.commands.index('error'))
-            self.messenger.attach(func=self.on_float_addition_result,
-                                  msgid=self.commands.index('float_addition_result'))
+            #self.messenger.attach(func=self.on_float_addition_result,
+            #                      msgid=self.commands.index('float_addition_result'))
 
             # send a command that the arduino will acknowledge
             self.messenger.send_cmd(self.commands.index('acknowledge'))
             # Wait until the arduino sends and acknowledgement back
-            #self.messenger.wait_for_ack(ackid=self.commands.index('acknowledge'))
+            self.messenger.wait_for_ack(ackid=self.commands.index('acknowledge'))
 
     def list_usb_ports(self):
         """ Use the grep generator to get a list of all USB ports.
@@ -52,12 +56,6 @@ class MessengerController(object):
         """
         print('Error:', args[0][0])
 
-    def on_float_addition_result(self, received_command, *args, **kwargs):
-        """Callback to handle the float addition response
-        """
-        print('Addition Result:', args[0][0])
-        print('Subtraction Result:', args[0][1])
-        print()
 
     def stop(self):
         self.running = False
@@ -65,30 +63,22 @@ class MessengerController(object):
     def run(self):
         """Main loop to send and receive data from the Arduino
         """
-        self.running = True
-        timeout = 0.01
-        t0 = time.time()
-        pass
-        while self.running:
-            # Send two random integers to be added/subtracted every 2 seconds
-            if time.time() - t0 > timeout:
-                t0 = time.time()
-                a = random.randint(0, 10)
-                b = random.randint(0, 10)
-                #print('Sending: {}, {}'.format(a, b))
-                #self.messenger.send_cmd(self.commands.index('float_addition'), a, b)
 
-            # Check to see if any data has been received
-            self.messenger.feed_in_data()
+        self.messenger.send_cmd(self.commands.index('ping'))
+
+        self.messenger.wait_for_ack(ackid=self.commands.index('acknowledge'))
+
+        # Check to see if any data has been received
+        #self.messenger.feed_in_data()
 
 
 if __name__ == '__main__':
-    send_and_receive_args = SendAndReceiveArguments()
+    msg = MessengerController()
 
     try:
         print('Press Ctrl+C to exit...')
         print()
-        send_and_receive_args.run()
+        msg.run()
     except KeyboardInterrupt:
-        send_and_receive_args.stop()
+        msg.stop()
         print('Exiting...')
