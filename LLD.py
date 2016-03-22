@@ -41,6 +41,12 @@ class LLD(MessengerController):
     def _update_temperature(self):
         pass
 
+    def _dose_liters(self, tank, liters):
+        pass
+
+    def _wait_for_dosage(self, tank):
+        pass
+
     def _ping_arduino(self):
         pass
 
@@ -93,7 +99,9 @@ class LLD(MessengerController):
             return 80
         pass
 
-
+    def dose_water_blocking(self, tank, liters):
+        self._dose_liters(tank, liters)
+        self._wait_for_dosage(liters)
 
 
 

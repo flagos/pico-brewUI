@@ -28,7 +28,7 @@ class MashTank(Thread, Tank):
 
     def run(self):
 
-        while 1:
+        while True:
             self.start_time=0
             self.boiltank_start_heating = False
             self.set_consign(None)
