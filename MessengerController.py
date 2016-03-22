@@ -11,7 +11,7 @@ from cmdmessenger import CmdMessenger
 from serial.tools import list_ports
 
 
-class Messengercontroller(object):
+class MessengerController(object):
 
     def __init__(self):
         # make sure this baudrate matches the baudrate on the Arduino
@@ -25,26 +25,21 @@ class Messengercontroller(object):
 
         try:
             # try to open the first available usb port
-            self.port_name = self.list_usb_ports()[0][0]
+            self.port_name = '/dev/ttyUSB0'
             self.serial_port = serial.Serial(self.port_name, self.baud, timeout=0, rtscts=True)
         except (serial.SerialException, IndexError):
             raise SystemExit('Could not open serial port.')
         else:
-            print('Serial port sucessfully opened.')
             self.messenger = CmdMessenger(self.serial_port)
-            print('messenger instanciated')
             # attach callbacks
             self.messenger.attach(func=self.on_error, msgid=self.commands.index('error'))
             self.messenger.attach(func=self.on_float_addition_result,
                                   msgid=self.commands.index('float_addition_result'))
-            print('callback attached')
 
             # send a command that the arduino will acknowledge
             self.messenger.send_cmd(self.commands.index('acknowledge'))
-            print('Send ACK cmd')
             # Wait until the arduino sends and acknowledgement back
-            self.messenger.wait_for_ack(ackid=self.commands.index('acknowledge'))
-            print('Arduino Ready')
+            #self.messenger.wait_for_ack(ackid=self.commands.index('acknowledge'))
 
     def list_usb_ports(self):
         """ Use the grep generator to get a list of all USB ports.

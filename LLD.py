@@ -1,6 +1,6 @@
 import serial
 
-from MessengerController import Messengercontroller
+from MessengerController import MessengerController
 
 class LLD(MessengerController):
 
@@ -102,10 +102,3 @@ class LLD(MessengerController):
     def dose_water_blocking(self, tank, liters):
         self._dose_liters(tank, liters)
         self._wait_for_dosage(liters)
-
-
-
-
-if __name__ == "__main__":
-    lld = LLD()
-    lld._
