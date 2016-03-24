@@ -2,6 +2,14 @@ import serial
 
 from MessengerController import MessengerController
 
+
+HOTPIN  = 0
+MASHPIN = 1
+BOILPIN = 2
+
+HOT_VALVE = 4
+MASH_VALVE = 5
+
 class LLD(MessengerController):
 
     def __init__(self):
@@ -26,14 +34,23 @@ class LLD(MessengerController):
         self.pump_setting = False
 
         MessengerController.__init__(self)
-        pass
 
 
     def _resistor_duty(self, tank, cycle):
-        pass
+        if(tank.tank_name == "Hot"):
+            self.set_pwm_pin(HOTPIN, cycle)
+        elif (tank.tank_name == "Mash"):
+            self.set_pwm_pin(MASHPIN, cycle)
+        elif (tank.tank_name == "Boil"):
+            self.set_pwm_pin(BOILPIN, cycle)
+
 
     def _valve(self, tank, setting):
-        pass
+        if(tank.tank_name == "Hot"):
+            self.set_pin(HOT_VALVE, setting)
+        elif (tank.tank_name == "Mash"):
+            self.set_pin(MASHPIN, setting)
+
 
     def _pump(self, setting):
         pass
