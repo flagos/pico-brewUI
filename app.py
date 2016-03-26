@@ -221,9 +221,6 @@ def pump():
     return json.dumps(data)
 
 
-
-
-app.debug = True
 if __name__ == "__main__":
 
     hot =  HotTank.HotTank(saturation=50, period=1)

@@ -10,7 +10,7 @@ BOILPIN = 2
 HOT_VALVE = 4
 MASH_VALVE = 5
 
-class LLD():
+class LLD(MessengerController):
 
     def __init__(self):
         #self.arduino = serial.Serial('/dev/tty.usbserial', 115000)
@@ -33,8 +33,7 @@ class LLD():
 
         self.pump_setting = False
 
-        #MessengerController.__init__(self)
-        msg = MessengerController()
+        MessengerController.__init__(self)
 
 
     def _resistor_duty(self, tank, cycle):

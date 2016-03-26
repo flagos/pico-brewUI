@@ -40,19 +40,12 @@ class MessengerController(object):
         try:
             # try to open the first available usb port
             self.port_name = self.list_usb_ports()[0][0]
-            self.serial_port = serial.Serial(self.port_name, self.baud, timeout=0)
+            self.serial_port = serial.Serial(self.port_name, self.baud, timeout=0, rtscts=True)
         except (serial.SerialException, IndexError):
             raise SystemExit('Could not open serial port.')
         else:
             time.sleep(3)
             self.messenger = CmdMessenger(self.serial_port)
-
-            # attach callbacks
-            self.messenger.attach(func=self.on_error, msgid=self.commands.index('error'))
-            self.messenger.attach(func=self.on_read_temperature,
-                                  msgid=self.commands.index('ReadTemperature'))
-            self.messenger.attach(func=self.on_dump_in_reached,
-                                  msgid=self.commands.index('DumpInWater_reached'))
 
             # send a command that the arduino will acknowledge
             self.messenger.send_cmd(self.commands.index('acknowledge'))
@@ -63,6 +56,14 @@ class MessengerController(object):
                 sys.exit(255)
             else:
                 print('arduino ok')
+
+            # attach callbacks
+            self.messenger.attach(func=self.on_error, msgid=self.commands.index('error'))
+            self.messenger.attach(func=self.on_read_temperature,
+                                  msgid=self.commands.index('ReadTemperature'))
+            self.messenger.attach(func=self.on_dump_in_reached,
+                                  msgid=self.commands.index('DumpInWater_reached'))
+
 
             thread = threading.Thread(target=self.run, args=())
             thread.daemon = True                            # Daemonize thread
