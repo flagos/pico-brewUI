@@ -44,7 +44,7 @@ class MessengerController(object):
         except (serial.SerialException, IndexError):
             raise SystemExit('Could not open serial port.')
         else:
-            time.sleep(3)
+            time.sleep(2)
             self.messenger = CmdMessenger(self.serial_port)
 
             # send a command that the arduino will acknowledge
@@ -54,8 +54,6 @@ class MessengerController(object):
             if (status is None):
                 print('Arduino timeout')
                 sys.exit(255)
-            else:
-                print('arduino ok')
 
             # attach callbacks
             self.messenger.attach(func=self.on_error, msgid=self.commands.index('error'))
