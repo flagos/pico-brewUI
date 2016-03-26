@@ -6,9 +6,13 @@ import random
 import sys
 import serial
 import time
+import threading
+
 
 from cmdmessenger import CmdMessenger
 from serial.tools import list_ports
+
+
 
 
 class MessengerController(object):
@@ -16,8 +20,12 @@ class MessengerController(object):
     def __init__(self):
         # make sure this baudrate matches the baudrate on the Arduino
         self.running = False
-        self.baud = 115200
+        self.baud = 9600
         self.temperature = {}
+        self.temperature["Hot"]  = 100
+        self.temperature["Mash"] = 100
+        self.temperature["Boil"] = 100
+
         self.valve_status = []
         self.commands = ['acknowledge',
                          'error',
@@ -31,12 +39,14 @@ class MessengerController(object):
 
         try:
             # try to open the first available usb port
-            self.port_name = '/dev/ttyUSB0'
-            self.serial_port = serial.Serial(self.port_name, self.baud, timeout=0, rtscts=True)
+            self.port_name = self.list_usb_ports()[0][0]
+            self.serial_port = serial.Serial(self.port_name, self.baud, timeout=0)
         except (serial.SerialException, IndexError):
             raise SystemExit('Could not open serial port.')
         else:
+            time.sleep(3)
             self.messenger = CmdMessenger(self.serial_port)
+
             # attach callbacks
             self.messenger.attach(func=self.on_error, msgid=self.commands.index('error'))
             self.messenger.attach(func=self.on_read_temperature,
@@ -47,7 +57,18 @@ class MessengerController(object):
             # send a command that the arduino will acknowledge
             self.messenger.send_cmd(self.commands.index('acknowledge'))
             # Wait until the arduino sends and acknowledgement back
-            self.messenger.wait_for_ack(ackid=self.commands.index('acknowledge'))
+            status = self.messenger.wait_for_ack(ackid=self.commands.index('acknowledge'), timeout=5)
+            if (status is None):
+                print('Arduino timeout')
+                sys.exit(255)
+            else:
+                print('arduino ok')
+
+            thread = threading.Thread(target=self.run, args=())
+            thread.daemon = True                            # Daemonize thread
+            thread.start()                                  # Start the execution
+
+
 
     def list_usb_ports(self):
         """ Use the grep generator to get a list of all USB ports.
@@ -63,6 +84,7 @@ class MessengerController(object):
     def on_read_temperature(self,  received_command, *args, **kwargs):
         """ Callback on temperature """
 
+        print('temperature update')
         self.temperature["Hot"]  = args[0][0]
         self.temperature["Mash"] = args[0][1]
         self.temperature["Boil"] = args[0][2]
@@ -109,13 +131,8 @@ class MessengerController(object):
     def run(self):
         """Main loop to send and receive data from the Arduino
         """
-
-        self.messenger.send_cmd(self.commands.index('ping'))
-
-        self.messenger.wait_for_ack(ackid=self.commands.index('acknowledge'))
-
-        # Check to see if any data has been received
-        #self.messenger.feed_in_data()
+        while (True):
+            self.messenger.feed_in_data()
 
 
 if __name__ == '__main__':
@@ -124,7 +141,7 @@ if __name__ == '__main__':
     try:
         print('Press Ctrl+C to exit...')
         print()
-        msg.run()
+        #msg.run()
     except KeyboardInterrupt:
         msg.stop()
         print('Exiting...')

@@ -9,6 +9,8 @@
 // - Call a function periodically
 
 #include "CmdMessenger.h"  // CmdMessenger
+#include "TimerOne.h"
+#include <avr/wdt.h>
 
 // Blinking led variables 
 unsigned long previousToggleLed = 0;   // Last time the led was toggled
@@ -41,6 +43,7 @@ void attachCommandCallbacks()
 {
   // Attach callback methods
   cmdMessenger.attach(OnUnknownCommand);
+  cmdMessenger.attach(kAcknowledge, OnAcknowledge);
   cmdMessenger.attach(kPing       , OnPing);
   cmdMessenger.attach(kSetPin     , OnSetPin);
   cmdMessenger.attach(kPwmPin     , OnPwmPin);
@@ -53,6 +56,12 @@ void attachCommandCallbacks()
 void OnUnknownCommand()
 {
   cmdMessenger.sendCmd(kError,"Command without attached callback");
+}
+
+// Callback function that responds on ack
+void OnAcknowledge()
+{
+  cmdMessenger.sendCmd(kAcknowledge,"Arduino ACK");
 }
 
 // Callback function that responds that Arduino is ready (has booted up)
@@ -108,7 +117,9 @@ void OnDumpIn()
 void setup() 
 {
   // Listen on serial connection for messages from the pc
-  Serial.begin(115200); 
+  Serial.begin(9600); 
+
+  //while(!Serial);
 
   // Adds newline to every command
   cmdMessenger.printLfCr();   
@@ -121,6 +132,24 @@ void setup()
 
   // set pin for blink LED
   pinMode(kBlinkLed, OUTPUT);
+  
+  //Timer1.initialize(1000000);
+  //Timer1.attachInterrupt(callback_1second); 
+  
+  
+  // enable Watchdog (2 second)
+  wdt_enable(WDTO_2S);
+}
+
+void callback_1second(void) {
+
+  //cmdMessenger.sendCmd(kAcknowledge,"Arduino has timer");
+  
+//  cmdMessenger.sendCmdStart(kReadTemperature);
+//  cmdMessenger.sendCmdArg<uint16_t>((uint16_t) 100);
+//  cmdMessenger.sendCmdArg<uint16_t>((uint16_t)98);
+//  cmdMessenger.sendCmdArg<uint16_t>((uint16_t)96);
+//  cmdMessenger.sendCmdEnd ();
 }
 
 // Returns if it has been more than interval (in ms) ago. Used for periodic actions
@@ -135,8 +164,10 @@ bool hasExpired(unsigned long &prevTime, unsigned long interval) {
 // Loop function
 void loop() 
 {
+  
   // Process incoming serial data, and perform callbacks
-  cmdMessenger.feedinSerialData();
+  //if(Serial.available()) 
+    cmdMessenger.feedinSerialData();
 
   // Toggle LED periodically. If the LED does not toggle every 2000 ms, 
   // this means that cmdMessenger are taking a longer time than this  
@@ -144,6 +175,10 @@ void loop()
   {
     toggleLed();  
   } 
+  
+  // reset watchdog
+  wdt_reset();
+
 }
 
 // Toggle led state 

@@ -10,7 +10,7 @@ BOILPIN = 2
 HOT_VALVE = 4
 MASH_VALVE = 5
 
-class LLD(MessengerController):
+class LLD():
 
     def __init__(self):
         #self.arduino = serial.Serial('/dev/tty.usbserial', 115000)
@@ -33,7 +33,8 @@ class LLD(MessengerController):
 
         self.pump_setting = False
 
-        MessengerController.__init__(self)
+        #MessengerController.__init__(self)
+        msg = MessengerController()
 
 
     def _resistor_duty(self, tank, cycle):
@@ -53,9 +54,6 @@ class LLD(MessengerController):
 
 
     def _pump(self, setting):
-        pass
-
-    def _update_temperature(self):
         pass
 
     def _dose_liters(self, tank, liters):
@@ -109,12 +107,11 @@ class LLD(MessengerController):
     def get_temperature(self, tank):
 
         if tank.tank_name == "Hot":
-            return 56
+            return self.temperature["Hot"]
         elif tank.tank_name == "Mash":
-            return 70
+            return self.temperature["Mash"]
         elif tank.tank_name == "Boil":
-            return 80
-        pass
+            return self.temperature["Boil"]
 
     def dose_water_blocking(self, tank, liters):
         self._dose_liters(tank, liters)
