@@ -43,6 +43,7 @@ class MashTank(Thread, Tank):
 
                 if(mash_step['water_volume']):
                     self.hottank.pop_volume(mash_step['water_volume'])
+                    self.current_volume = mash_step['water_volume']
 
                 self.set_consign(mash_step['temperature'])
 
@@ -73,4 +74,5 @@ class MashTank(Thread, Tank):
             return self.feedback_value  # pragma: no cover
 
     def dump_tank(self):
+        self.current_volume = 0
         pass

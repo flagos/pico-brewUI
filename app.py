@@ -45,7 +45,7 @@ def temperature(tank):
 def volume():
 
     data = {}
-    data["label"] = ["16:00","16:05","16:10","16:15","16:20","16:25"]
+    data["label"] = pico.hottank.timing.array
     data["hot"]   = [50,45,42,44,48,50]
     data["mash"]  = [20, 25, 30, 30, 30, 30, 30]
     data["boil"]  = [0, 0, 7, 12, 20, 20, 20]
