@@ -83,7 +83,6 @@ class MessengerController(object):
     def on_read_temperature(self,  received_command, *args, **kwargs):
         """ Callback on temperature """
 
-        print('temperature update')
         self.temperature["Hot"]  = args[0][0]
         self.temperature["Mash"] = args[0][1]
         self.temperature["Boil"] = args[0][2]

@@ -22,15 +22,18 @@ def main():
 def temperature(tank):
     history = []
     data = {}
-    history.append( ["16:00","16:05","16:10","16:15","16:20","16:25"])
+    #history.append( ["16:00","16:05","16:10","16:15","16:20","16:25"])
     if (tank == "hot"):
         data["value"]   = pico.hottank.last_value
+        history.append( pico.hottank.timing.array)
         history.append(pico.hottank.temperatures.array)
     elif (tank == "mash"):
         data["value"]   = pico.mashtank.last_value
+        history.append( pico.mashtank.timing.array)
         history.append(pico.mashtank.temperatures.array)
     else:
         data["value"]   = pico.boiltank.last_value
+        history.append( pico.boiltank.timing.array)
         history.append(pico.boiltank.temperatures.array)
 
     data["history"] = history
