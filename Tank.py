@@ -8,7 +8,8 @@ class List_max():
 
     def __init__(self, max_size):
         self.max_size = max_size
-        self.array    = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        self.array    = []
+
 
     def append(self, obj):
         if (len(self.array) >= self.max_size):
