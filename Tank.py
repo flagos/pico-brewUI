@@ -2,6 +2,7 @@ import time
 from datetime import timedelta, datetime
 from PID import PID
 
+SAMPLE_HISTORY = 10
 
 class List_max():
 
@@ -22,9 +23,9 @@ class Tank(PID):
         self.temperature_samples = []
         self.last_fill = 0
 
-        self.temperatures = List_max(10)
-        self.powers       = List_max(10)
-        self.timing       = List_max(10)
+        self.temperatures = List_max(SAMPLE_HISTORY)
+        self.powers       = List_max(SAMPLE_HISTORY)
+        self.timing       = List_max(SAMPLE_HISTORY)
 
 
         PID.__init__(self)
