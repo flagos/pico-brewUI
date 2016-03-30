@@ -87,6 +87,18 @@ def task():
 
     return json.dumps(data)
 
+@app.route("/add/recipe")
+def add_recipe():
+
+    if (request.args.get('url') is None):
+        return json.dumps({ "error": error }), 500
+
+    url = request.args.get('url')
+    recipe = pico.fetch_recipe(url)
+    pico.add_recipe(recipe)
+
+    return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
+
 @app.route("/recipe.json")
 def recipe():
     data = {}

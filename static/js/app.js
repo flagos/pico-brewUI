@@ -231,6 +231,27 @@ function LoadElements()
   };
 
 
+var callback_submit_url = function() {
+
+var url      = $('#input-url').val();
+ $.ajax(
+    {
+      url : 'add/recipe',
+      type : 'GET',
+      data : "url?"+url,
+      dataType : 'html',
+      success : function(data, status){
+        LoadElements();
+      },
+      error : function(data, status, error){
+        Materialize.toast('Error occured while adding recipe ', 20000)
+        LoadElements();
+      },
+    })
+
+
+  }
+
   $(document).ready(function(){
 
     // initialiaze selectors
@@ -260,5 +281,7 @@ function LoadElements()
     $('#valve-lock').on('click', createCallbackforlock('valve'));
     $('#card-resistor .lock').on('click',createCallbackforlock('resistor'));
     $('#card-pump .lock').on('click',createCallbackforlock('pump'));
+
+    $('#submit-url').on('click',callback_submit_url);
 
   });
