@@ -7,34 +7,45 @@
         </div>
         <table class="responsive-table" id="recipe-table">
           <tbody>
-            <!-- <tr class="recipe">
-              <td class="td-delete"> <i class="material-icons delete-button">delete</i></td>
-              <td class="recipe-name">Dark IPA</td>
-              <td class="recipe-step">Boil</td>
-              <td class="recipe-time">25m 10s</td>
-              <td> <i class="small material-icons">pause</i></td>
-            </tr>
-            <tr class="recipe">
-              <td class="td-delete"> <i class="material-icons delete-button">delete</i></td>
-              <td class="recipe-name">Bitter</td>
-              <td class="recipe-step">Malt - first</td>
-              <td class="recipe-time">30m 45s</td>
-              <td> <i class="small material-icons">pause</i></td>
-            </tr>
-            <tr class="recipe">
-              <td class="td-delete"> <i class="material-icons delete-button">delete</i></td>
-              <td class="recipe-name">Stout</td>
-              <td class="recipe-step">Hot</td>
-              <td class="recipe-time">NA</td>
-              <td> <i class="small material-icons">pause</i></td>
-            </tr> -->
           </tbody>
         </table>
         <span class="edit">
-          <a href="#"><img src="static/icons/edit.png" width=28px/></a>
+          <a class="modal-trigger" href="#modal-edit-recipes"><img src="static/icons/edit.png" width=28px/></a>
         </span>
         <span class="add-task">
-          <a class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons" style="font-style: normal;">+</i></a>
+          <a class="btn-floating btn-large waves-effect waves-light red  modal-trigger"  href="#modal-add-recipe"><i class="material-icons" style="font-style: normal;">+</i></a>
         </span>
+
+        <!-- Modal add recipe -->
+        <div id="modal-add-recipe" class="modal">
+          <div class="modal-content">
+            <h4>Add a recipe</h4>
+              <form class="col">
+
+                <div class="input-field col s12">
+                  <input id="last_name" type="text" class="validate">
+                  <label for="url">Brewtoad URL</label>
+                </div>
+              </form>
+          </div>
+          <div class="modal-footer">
+            <button class="btn waves-effect waves-light modal-close modal-action" type="submit" name="action">Submit
+              <i class="material-icons right">send</i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Modal edit recipes -->
+        <div id="modal-edit-recipes" class="modal bottom-sheet">
+          <div class="modal-content">
+            <h4>Modal Header</h4>
+            <p>A bunch of text</p>
+          </div>
+          <div class="modal-footer">
+            <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+          </div>
+        </div>
+
+
       </div>
     </div>
