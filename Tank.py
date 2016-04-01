@@ -35,9 +35,9 @@ class Chrono():
             return False
         else:
             if (time.time() < self.start_chrono + self.duration):
-                return True
-            else:
                 return False
+            else:
+                return True
 
     def pause(self):
         if (self.is_over()):
@@ -48,7 +48,7 @@ class Chrono():
 
     def resume(self):
         now = time.time()
-        pause_duration = self.start_pause - now
+        pause_duration = now - self.start_pause
 
         self.start_chrono += pause_duration
 
