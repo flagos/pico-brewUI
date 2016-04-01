@@ -62,8 +62,8 @@ class BoilTank(Thread, Tank):
                 while self.read_temperature() + 2 < boil_step['temperature']:
                     time.sleep(self.period)
 
-                self.start_time = time.time()
-                while time.time() < self.start_time + boil_step['duration']:
+                self.launch_chrono(boil_step["duration"])
+                while self.is_over() is False:
                     time.sleep(self.period)
 
                 pass

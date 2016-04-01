@@ -51,7 +51,7 @@ class HotBoilTest(unittest.TestCase):
         self.input_test_queue.put(94)
         self.input_test_queue.join() # blocking
         time.sleep(bk.period)      # time to update start_time variable
-        self.assertNotEqual(bk.start_time, 0)
+        self.assertFalse(bk.is_over())
 
         bk.need_cleaning_queue.get()
         bk.need_cleaning_queue.task_done()
@@ -62,8 +62,8 @@ class HotBoilTest(unittest.TestCase):
 
         self.assertTrue(bk.SetPoint is None)
 
-        self.assertTrue(bk.stop_time - bk.start_time > 0.2)
-        self.assertTrue(bk.stop_time - bk.start_time < 0.2 + bk.period)
+        self.assertTrue(bk.stop_time - bk.start_chrono > 0.2)
+        self.assertTrue(bk.stop_time - bk.start_chrono < 0.2 + bk.period)
         pass
 
 
@@ -93,12 +93,11 @@ class HotBoilTest(unittest.TestCase):
         self.start_counting_queue.put(None) # launching steps
 
         self.input_test_queue.join() # blocking
-        self.assertEqual(bk.start_time, 0)
+        self.assertTrue(bk.is_over())
 
         self.input_test_queue.put(94)
         self.input_test_queue.join() # blocking
-        time.sleep(bk.period)      # time to update start_time variable
-        self.assertNotEqual(bk.start_time, 0)
+        self.assertFalse(bk.is_over())
 
         time.sleep(1) # wait for all steps to be completed
         assert self.start_boil_queue.unfinished_tasks != 0  # we have to wait for cleaning
@@ -108,8 +107,8 @@ class HotBoilTest(unittest.TestCase):
 
         self.start_counting_queue.join() # blocking
         self.start_boil_queue.join() # blocking
-        self.assertTrue(bk.stop_time - bk.start_time > 0.2)
-        self.assertTrue(bk.stop_time - bk.start_time < 0.2 + bk.period)
+        self.assertTrue(bk.stop_time - bk.start_chrono > 0.2)
+        self.assertTrue(bk.stop_time - bk.start_chrono < 0.2 + bk.period)
 
         pass
 

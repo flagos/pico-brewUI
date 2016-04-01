@@ -33,6 +33,8 @@ class Chrono():
     def is_over(self):
         if (self.start_pause is not None):
             return False
+        elif(self.start_chrono is None):
+            return True
         else:
             if (time.time() < self.start_chrono + self.duration):
                 return False
@@ -56,7 +58,10 @@ class Chrono():
         # do not write here !
 
     def lasting(self):
-        return
+        if (self.start_pause is not None):
+            return self.lasting
+        now = time.time()
+        return now - self.start_chrono
 
 
 class Tank(PID, Chrono):
