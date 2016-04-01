@@ -17,8 +17,49 @@ class List_max():
 
         self.array.append(obj)
 
+class Chrono():
 
-class Tank(PID):
+    def __init__(self):
+        self.start_chrono = None
+        self.start_pause  = None
+
+
+
+    def launch_chrono(self, duration):
+        self.start_chrono = time.time()
+        self.duration     = duration
+
+
+    def is_over(self):
+        if (self.start_pause is not None):
+            return False
+        else:
+            if (time.time() < self.start_chrono + self.duration):
+                return True
+            else:
+                return False
+
+    def pause(self):
+        if (self.is_over()):
+            return
+        now              = time.time()
+        self.start_pause = now
+        self.lasting     = self.duration - (now - self.start_chrono)
+
+    def resume(self):
+        now = time.time()
+        pause_duration = self.start_pause - now
+
+        self.start_chrono += pause_duration
+
+        self.start_pause = None # keep this line last !
+        # do not write here !
+
+    def lasting(self):
+        return
+
+
+class Tank(PID, Chrono):
 
     def __init__(self):
         self.temperature_samples = []
@@ -32,7 +73,7 @@ class Tank(PID):
 
 
         PID.__init__(self)
-
+        Chrono.__init__(self)
 
     def update_pid(self, value):
         now  = time.time()
