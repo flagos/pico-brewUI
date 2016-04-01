@@ -50,8 +50,9 @@ class MashTank(Thread, Tank):
                 while (self.read_temperature() < mash_step['temperature'] - 1): # wait for temperature
                     time.sleep(self.period)
 
-                self.start_time = time.time()
-                while (time.time() < self.start_time + mash_step['duration']):
+
+                self.launch_chrono(mash_step["duration"])
+                while self.is_over() is False:
                     time.sleep(self.period)
 
                 if(mash_step['dump'] is True):

@@ -53,7 +53,7 @@ class MashTankTest(unittest.TestCase):
         start = time.time()
         self.input_queue.put(67)
         time.sleep(0.1)
-        self.assertTrue(start < self.mashtank.start_time) # start at the rigth moment
+        self.assertFalse(self.mashtank.is_over()) # start at the rigth moment
 
         self.start_counting_queue.get() # launch boil counting
 
@@ -79,7 +79,7 @@ class MashTankTest(unittest.TestCase):
         start = time.time()
         self.input_queue.put(69)
         time.sleep(0.1)
-        self.assertTrue(start < self.mashtank.start_time) # start at the rigth moment
+        self.assertFalse(self.mashtank.is_over()) # start at the rigth moment
 
         # second step
         self.input_queue.put(76)
