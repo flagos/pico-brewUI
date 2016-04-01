@@ -7,13 +7,20 @@ class Recipe:
         self.url = url
         self.mash_steps = []
 
+        # var for status display
+        self.playing  = True
+        self.step     = None
+        self.rem_time = None
+
 
     def fetch_recipe(self):
         # get recipe from brewtoad
         response = urllib.urlopen(self.url+".json")
         self.json = json.load(response)
         self.add_steps()
-        #pprint.pprint (self.json)
+        pp = pprint.PrettyPrinter(indent=4)
+        #pp.pprint (self.json["slug"])
+        self.name = self.json["slug"]
 
     def add_steps(self):
         mashsteps = self.json["recipe_mash_steps"]
@@ -52,3 +59,9 @@ class Recipe:
         self.boil_time = self.json["boil_time"]
         #print "Boil time: " + str(self.boil_time)
         pass
+
+
+if __name__ == "__main__":
+
+    recipe = Recipe("https://www.brewtoad.com/recipes/houblon-chouffe-aka-hopchewy")
+    recipe.fetch_recipe()
