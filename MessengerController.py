@@ -31,9 +31,9 @@ class MessengerController(object):
                          'error',
                          'ping',
                          'SetPin',
-                         'PwmPin'              ,
-                         'ReadTemperature'     ,
-                         'DumpInWater'         ,
+                         'PwmPin',
+                         'ReadTemperature',
+                         'DumpInWater',
                          'DumpInWater_reached'
                          ]
 
