@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/flagos/pico-brewUI.png?label=ready&title=Ready)](https://waffle.io/flagos/pico-brewUI)
 # pico-brewUI
 
 A webserver for pico brewery automation. The hardware is described here: https://www.logre.eu/wiki/Pico-Brasserie
