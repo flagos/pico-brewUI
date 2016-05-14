@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template
 
-import json
+import json, sys
 from globals import MyGlobals
 import Pico
 import HotTank, MashTank, BoilTank
@@ -92,13 +92,17 @@ def task():
 @app.route("/add/recipe")
 def add_recipe():
 
-    if (request.args.get('url') is None):
-        return json.dumps({ "error": error }), 500
+    if (request.args['url'] is None):
+        return json.dumps({ "error": "url not defined" }), 500
 
-    url = request.args.get('url')
-    recipe = pico.fetch_recipe(url)
-    pico.add_recipe(recipe)
-
+    url = request.args['url']
+    try:
+        recipe = pico.fetch_recipe(url)
+        pico.add_recipe(recipe)
+    except:
+        print "Unexpected error:", sys.exc_info()[0]
+        return json.dumps({ "error": "error when processing url" }), 500
+    
     return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
 
 @app.route("/recipe.json")
@@ -231,8 +235,8 @@ def pump():
     data["switchs"] = []
 
     data["switchs"].append({
-    "name"   :"pump",
-    "checked":pico.regule.lld.pump_setting
+        "name" : "pump",
+        "checked" : pico.regule.lld.pump_setting
     })
 
     return json.dumps(data)

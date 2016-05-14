@@ -135,6 +135,10 @@ label.waiting {
   color: grey;
 }
 
+#modal-add-recipe input#input-url {
+    color: black;
+} 
+
 /*valve*/
 .valve-name {
   font-size: 18px;

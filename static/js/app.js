@@ -238,9 +238,10 @@ var url      = $('#input-url').val();
     {
       url : 'add/recipe',
       type : 'GET',
-      data : "url?"+url,
+      data : "url="+url,
       dataType : 'html',
       success : function(data, status){
+        Materialize.toast('Recipe added',  4000)
         LoadElements();
       },
       error : function(data, status, error){
