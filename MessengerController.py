@@ -8,7 +8,7 @@ import serial
 import time
 import threading
 
-
+from globals import MyGlobals
 from cmdmessenger import CmdMessenger
 from serial.tools import list_ports
 
@@ -18,6 +18,7 @@ from serial.tools import list_ports
 class MessengerController(object):
 
     def __init__(self):
+
         # make sure this baudrate matches the baudrate on the Arduino
         self.running = False
         self.baud = 9600
@@ -37,15 +38,16 @@ class MessengerController(object):
                          'DumpInWater_reached'
                          ]
 
-        try:
-            # try to open the first available usb port
-            self.port_name = self.list_usb_ports()[0][0]
-            self.serial_port = serial.Serial(self.port_name, self.baud, timeout=0, rtscts=True)
-        except (serial.SerialException, IndexError):
-            raise SystemExit('Could not open serial port.')
-        else:
-            time.sleep(2)
-            self.messenger = CmdMessenger(self.serial_port)
+        if (MyGlobals.args['hardware_disconnected'] is True):
+            try:
+                # try to open the first available usb port
+                self.port_name = self.list_usb_ports()[0][0]
+                self.serial_port = serial.Serial(self.port_name, self.baud, timeout=0, rtscts=True)
+            except (serial.SerialException, IndexError):
+                raise SystemExit('Could not open serial port.')
+            else:
+                time.sleep(2)
+                self.messenger = CmdMessenger(self.serial_port)
 
             # send a command that the arduino will acknowledge
             self.messenger.send_cmd(self.commands.index('acknowledge'))

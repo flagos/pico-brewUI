@@ -1,14 +1,16 @@
 from flask import Flask, request, render_template
 
 import json
+from globals import MyGlobals
 import Pico
 import HotTank, MashTank, BoilTank
 import Regulation
 import time
+import argparse
 
 import Queue
-
 import pprint
+
 
 app = Flask(__name__)
 pico = Pico.Pico()
@@ -237,8 +239,11 @@ def pump():
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Brewery software for 3 tanks RIMS setup')
+    parser.add_argument('--hardware_disconnected', action='store_false', help='set this switch if you have no arduino wired')
+    MyGlobals.args = vars(parser.parse_args())
 
-    hot =  HotTank.HotTank(saturation=50, period=1)
+    hot = HotTank.HotTank(saturation=50, period=1)
 
     start_boil_queue      = Queue.Queue()
     start_heat_queue      = Queue.Queue()
