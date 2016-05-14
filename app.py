@@ -109,26 +109,8 @@ def add_recipe():
 def recipe():
     data = {}
     data["recipes"] = []
-    data["recipes"].append({
-    "recipe_name" : "Dark IPA",
-    "step"        : "Boil",
-    "time"        : "25m 10s",
-    "status"      : "active"
-    })
-
-    data["recipes"].append({
-    "recipe_name" : "Bitter",
-    "step"        : "Mash",
-    "time"        : "15m 56s",
-    "status"      : "active"
-    })
-
-    data["recipes"].append({
-    "recipe_name" : "Stout",
-    "step"        : "",
-    "time"        : "",
-    "status"      : "pending"
-    })
+    for r in pico.recipes:
+        data["recipes"].append(r.export)
 
     return json.dumps(data)
 

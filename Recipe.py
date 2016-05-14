@@ -9,8 +9,8 @@ class Recipe:
 
         # var for status display
         self.playing  = True
-        self.step     = None
-        self.rem_time = None
+        self.step     = ""
+        self.rem_time = ""
 
 
     def fetch_recipe(self):
@@ -59,6 +59,15 @@ class Recipe:
         self.boil_time = self.json["boil_time"]
         #print "Boil time: " + str(self.boil_time)
         pass
+
+    def export(self):
+        export_hash = {
+            "recipe_name": self.name,
+            "step": self.step,
+            "time": self.rem_time,
+            "status": "active" if self.playing is True else "pending"
+        }
+        return export_hash
 
 
 if __name__ == "__main__":
