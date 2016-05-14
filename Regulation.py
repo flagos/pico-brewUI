@@ -38,18 +38,18 @@ class Regulation:
             if (mash.output >= max_duty):
                 lld.set_resistor_duty(mash, max_duty)
                 lld.set_resistor_duty(boil, 0)
-                lld.set_resistor_duty(hot,  0)
+                lld.set_resistor_duty(hot, 0)
             elif (mash.output + boil.output >= max_duty):
                 lld.set_resistor_duty(mash, mash.output)
                 lld.set_resistor_duty(boil, max_duty - mash.output)
-                lld.set_resistor_duty(hot,  0)
+                lld.set_resistor_duty(hot, 0)
             elif (mash.output + boil.output + hot.output >= max_duty):
                 lld.set_resistor_duty(mash, mash.output)
                 lld.set_resistor_duty(boil, boil.output)
-                lld.set_resistor_duty(hot,  max_duty - mash.output - boil.output)
+                lld.set_resistor_duty(hot, max_duty - mash.output - boil.output)
             else:
                 lld.set_resistor_duty(mash, mash.output)
                 lld.set_resistor_duty(boil, boil.output)
-                lld.set_resistor_duty(hot,  hot.output)
+                lld.set_resistor_duty(hot, hot.output)
 
             time.sleep(self.sample_time)
