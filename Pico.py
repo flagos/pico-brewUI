@@ -49,22 +49,22 @@ class Pico:
             if self.mash_index < len(self.recipes):
                 for step in self.recipes[self.mash_index].mash_steps:
                     self.mashtank.push_steps(step)
-                self.start_mash_queue.put(None) # go next recipe
-                self.start_mash_queue.join() # blocking -- waiting to push next recipe
+                self.start_mash_queue.put(None)  # go next recipe
+                self.start_mash_queue.join()  # blocking -- waiting to push next recipe
                 self.mash_index += 1
             else:
-                time.sleep(0.05) # waiting for a new recipe from user
+                time.sleep(0.05)  # waiting for a new recipe from user
 
     def FillBoilTankThread(self):
         while self.run_thread:
             if self.boil_index < len(self.recipes):
                 #for step in self.recipes[self.boil_index].boil_steps:
-                self.boiltank.push_steps({'temperature':98, 'duration':self.recipes[self.boil_index].boil_time}) # only one step considered -- no hop droper
-                self.start_boil_queue.put(None) # go next recipe
-                self.start_boil_queue.join() # blocking -- waiting to push next recipe
+                self.boiltank.push_steps({'temperature':98, 'duration':self.recipes[self.boil_index].boil_time})  # only one step considered -- no hop droper
+                self.start_boil_queue.put(None)  # go next recipe
+                self.start_boil_queue.join()  # blocking -- waiting to push next recipe
                 self.boil_index += 1
             else:
-                time.sleep(0.05) # waiting for a new recipe from user
+                time.sleep(0.05)  # waiting for a new recipe from user
 
     def start_threads(self):
         self.t1 = threading.Thread(target=self.FillMashTankThread, args=[])
