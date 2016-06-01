@@ -17,6 +17,7 @@ import pprint
 
 app = Flask(__name__)
 pico = Pico.Pico()
+MyGlobals.pico = pico
 
 @app.route("/")
 def main():

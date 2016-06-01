@@ -1,5 +1,6 @@
 from threading import Thread
 import time
+from globals import MyGlobals
 from Tank import Tank
 
 class MashTank(Thread, Tank):
@@ -24,13 +25,14 @@ class MashTank(Thread, Tank):
         self.mash_steps.append({'temperature': temperature, 'duration':duration, 'name':name, 'water_volume':water_volume, 'dump':dump})
         pass
 
-    def information(self, state, time):
-        if pico is not None:
-            if state is not None:
-                pico.recipes[pico.mash_index]["state"] = "mashing " + str(step)
+    def information(self, step, time):
+        if MyGlobals.pico is not None:
+            pico = MyGlobals.pico
+            if step is not None:
+                pico.recipes[pico.mash_index].step = "mashing " + str(step)
                 
             if time is not None:
-                pico.recipes[pico.mash_index]["time"] = str(time)
+                pico.recipes[pico.mash_index].rem_time = str(time)
         
 
     def run(self):
@@ -53,7 +55,7 @@ class MashTank(Thread, Tank):
                 mash_step = self.mash_steps.pop(0)
 
                 if(mash_step['water_volume']):
-                    self.information(None, "adding "+ str((mash_step['water_volume']) + "mL")
+                    self.information(None, "adding "+ str(mash_step['water_volume']) + "mL")
                     self.hottank.pop_volume(mash_step['water_volume'])
                     self.current_volume = mash_step['water_volume']
 

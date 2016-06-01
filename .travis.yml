@@ -5,7 +5,7 @@ python:
 
 # command to install dependencies
 before_install:
-  - pip install codecov pyserial
+  - pip install codecov pyserial flask future
 
 install:
 # command to run tests
