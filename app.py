@@ -113,7 +113,7 @@ def recipe():
     data = {}
     data["recipes"] = []
     for r in pico.recipes:
-        data["recipes"].append(r.export)
+        data["recipes"].append(r.export())
 
     return json.dumps(data)
 
