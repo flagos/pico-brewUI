@@ -24,7 +24,14 @@ class MashTank(Thread, Tank):
         self.mash_steps.append({'temperature': temperature, 'duration':duration, 'name':name, 'water_volume':water_volume, 'dump':dump})
         pass
 
-
+    def information(self, state, time):
+        if pico is not None:
+            if state is not None:
+                pico.recipes[pico.mash_index]["state"] = "mashing " + str(step)
+                
+            if time is not None:
+                pico.recipes[pico.mash_index]["time"] = str(time)
+        
 
     def run(self):
 
@@ -38,10 +45,15 @@ class MashTank(Thread, Tank):
 
             self.start_mash_queue.get() # wait for start
 
+            step_number = 0
+            
             while self.mash_steps:
+                self.information("mashing " + str(step_number), "Not started")
+
                 mash_step = self.mash_steps.pop(0)
 
                 if(mash_step['water_volume']):
+                    self.information(None, "adding "+ str((mash_step['water_volume']) + "mL")
                     self.hottank.pop_volume(mash_step['water_volume'])
                     self.current_volume = mash_step['water_volume']
 
@@ -49,13 +61,15 @@ class MashTank(Thread, Tank):
 
                 while (self.read_temperature() < mash_step['temperature'] - 1): # wait for temperature
                     time.sleep(self.period)
-
+                    self.information(None, "waiting for temp")
 
                 self.launch_chrono(mash_step["duration"])
                 while self.is_over() is False:
                     time.sleep(self.period)
-
+                    self.information(None, str(self.lasting()))
+                    
                 if(mash_step['dump'] is True):
+                    self.information("Dumping #" + str(step_number), None)
                     self.set_consign(None)
                     if self.boiltank_start_heating is False:
                         self.boiltank.start_heat_queue.put(None)
@@ -63,6 +77,8 @@ class MashTank(Thread, Tank):
                         self.boiltank_start_heating = True
                     self.set_consign(None)
                     self.dump_tank()
+                    
+                step_number += 1
 
             self.boiltank.start_counting_queue.put(None)
             self.start_mash_queue.task_done()

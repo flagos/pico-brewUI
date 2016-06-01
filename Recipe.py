@@ -15,7 +15,7 @@ class Recipe(object):
 
         # var for status display
         self.playing  = True
-        self.step     = ""
+        self.step     = {"state" => "waiting", time => ""}
         self.rem_time = ""
 
 
