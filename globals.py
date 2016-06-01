@@ -1,3 +1,4 @@
+from builtins import object
 
 class MyGlobals(object):
     '''Dedicated class for global variables'''

@@ -1,10 +1,13 @@
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
 import unittest
 import MashTank
-import Queue
+import queue
 import time
 
 
-class Fake_HotTank:
+class Fake_HotTank(object):
     """Fake class to test MashTank """
 
     def __init__(self, pop_volume_queue):
@@ -15,7 +18,7 @@ class Fake_HotTank:
         self.pop_volume_queue.put(vol)
         pass
 
-class Fake_BoilTank:
+class Fake_BoilTank(object):
     """Fake class to test MashTank """
     def __init__(self, start_heat_queue, start_counting_queue):
         self.start_heat_queue     = start_heat_queue
@@ -25,13 +28,13 @@ class Fake_BoilTank:
 class MashTankTest(unittest.TestCase):
 
     def setUp(self):
-        self.input_queue          = Queue.Queue()
-        self.output_queue         = Queue.Queue()
-        self.volume_queue         = Queue.Queue()
-        self.start_counting_queue = Queue.Queue()
-        self.start_heat_queue     = Queue.Queue()
-        self.start_mash_queue     = Queue.Queue()
-        self.need_cleaning_queue  = Queue.Queue()
+        self.input_queue          = queue.Queue()
+        self.output_queue         = queue.Queue()
+        self.volume_queue         = queue.Queue()
+        self.start_counting_queue = queue.Queue()
+        self.start_heat_queue     = queue.Queue()
+        self.start_mash_queue     = queue.Queue()
+        self.need_cleaning_queue  = queue.Queue()
         self.mashtank = MashTank.MashTank(Fake_HotTank(self.volume_queue), Fake_BoilTank(self.start_heat_queue, self.start_counting_queue), self.start_mash_queue, self.need_cleaning_queue, 0.01, self.input_queue, self.output_queue)
         self.mashtank.start()
 
@@ -110,10 +113,6 @@ class MashTankTest(unittest.TestCase):
     def test_withdumps(self):
         # TBD
         pass
-
-    def tearDown(self):
-        self.mashtank._Thread__stop()
-
 
 if __name__ == '__main__':
     unittest.main()  # pragma: no cover

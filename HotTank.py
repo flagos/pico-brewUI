@@ -13,7 +13,7 @@ class HotTank(Thread, Tank):
         self.testing_queue_output = testing_queue_output
         self.saturation = saturation
         self.temperature_order = 55  # be safe
-        Thread.__init__(self)
+        Thread.__init__(self, daemon=True)
         Tank.__init__(self)
         pass
 

@@ -2,6 +2,10 @@
 # sendandreceivearguments.py
 # Author: Adrien Emery
 # Make sure the you have the SendAndReceiveArguments example loaded onto the Arduino
+from __future__ import print_function
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
 import random
 import sys
 import serial
@@ -80,7 +84,7 @@ class MessengerController(object):
     def on_error(self, received_command, *args, **kwargs):
         """Callback function to handle errors
         """
-        print('Error:', args[0][0])
+        print(('Error:', args[0][0]))
 
     def on_read_temperature(self,  received_command, *args, **kwargs):
         """ Callback on temperature """

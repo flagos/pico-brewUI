@@ -1,9 +1,12 @@
+from __future__ import print_function
+from builtins import input
+from builtins import object
 import unittest
 
 from LLD import LLD
 from Tank import Tank
 
-class FakeTank:
+class FakeTank(object):
 
     def __init__(self, name):
         self.tank_name = name
@@ -23,12 +26,12 @@ class LLDTest(unittest.TestCase):
         print("Set " + tank.tank_name + " at 20%")
         self.lld.set_resistor_duty(tank, 0.2)
 
-        assert(raw_input("Is tank " + tank.tank_name + " at 20 % ? [y/n]") == "y")
+        assert(input("Is tank " + tank.tank_name + " at 20 % ? [y/n]") == "y")
 
         print("Set " + tank.tank_name + " at 0%")
         self.lld.set_resistor_duty(tank, 0)
 
-        assert(raw_input("Is tank " + tank.tank_name + " at  0 % ? [y/n]") == "y")
+        assert(input("Is tank " + tank.tank_name + " at  0 % ? [y/n]") == "y")
 
 
     def test_resistor(self):
@@ -42,7 +45,7 @@ class LLDTest(unittest.TestCase):
     def check_one_temperature(self, tank):
 
         temp = self.lld.get_temperature(tank)
-        assert(raw_input("Is tank " + tank.tank_name + " at "+ temp +"C ? [y/n]") == "y")
+        assert(input("Is tank " + tank.tank_name + " at "+ temp +"C ? [y/n]") == "y")
 
 
     def test_temperature(self):
@@ -56,18 +59,18 @@ class LLDTest(unittest.TestCase):
         ''' Test pump '''
 
         self.lld.pump_switch(True)
-        assert(raw_input("Is pump ON ? [y/n]") == "y")
+        assert(input("Is pump ON ? [y/n]") == "y")
 
         self.lld.pump_switch(False)
-        assert(raw_input("Is pump OFF ? [y/n]") == "y")
+        assert(input("Is pump OFF ? [y/n]") == "y")
 
     def check_valve(self, tank):
 
         self.lld.valve_switch(tank, True)
-        assert(raw_input("Is valve "+ tank.tank_name +" OFF ? [y/n]") == "y")
+        assert(input("Is valve "+ tank.tank_name +" OFF ? [y/n]") == "y")
 
         self.lld.valve_switch(tank, True)
-        assert(raw_input("Is valve "+tank.tank_name+" ON ? [y/n]") == "y")
+        assert(input("Is valve "+tank.tank_name+" ON ? [y/n]") == "y")
 
 
     def test_valve(self):
@@ -82,13 +85,13 @@ class LLDTest(unittest.TestCase):
         print("No message should appear before job is done....")
 
         self.lld.dose_water_blocking(tank, 2)
-        assert(raw_input("Do you have 2 liters in "+tank.tank_name+" ? [y/n]") == "y")
+        assert(input("Do you have 2 liters in "+tank.tank_name+" ? [y/n]") == "y")
 
 
 
     def test_dosage(self):
 
-        assert(raw_input("This test will dose 2 liter per tank. Continue ? [y/n]") == "y")
+        assert(input("This test will dose 2 liter per tank. Continue ? [y/n]") == "y")
         self.check_one_dosage(self.hot)
         self.check_one_dosage(self.mash)
 

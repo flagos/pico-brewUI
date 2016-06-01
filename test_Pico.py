@@ -1,10 +1,13 @@
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
 import unittest
 import Pico
-import Queue
+import queue
 import time
 
 
-class Fake_HotTank:
+class Fake_HotTank(object):
     """Fake class to test MashTank """
 
     def __init__(self, push_volume_queue):
@@ -16,7 +19,7 @@ class Fake_HotTank:
         pass
 
 
-class Fake_MashTank:
+class Fake_MashTank(object):
     """Fake class to test pico"""
     def __init__(self, start_mash_queue, push_mash_steps_queue ):
         self.start_mash_queue      = start_mash_queue
@@ -28,7 +31,7 @@ class Fake_MashTank:
 
 
 
-class Fake_BoilTank:
+class Fake_BoilTank(object):
     """Fake class to test MashTank """
     def __init__(self, start_boil_queue, push_boil_steps_queue):
         self.start_boil_queue       = start_boil_queue
@@ -40,13 +43,13 @@ class Fake_BoilTank:
 class PicoTest(unittest.TestCase):
 
     def setUp(self, saturation=50):
-        self.push_volume_queue     = Queue.Queue()
+        self.push_volume_queue     = queue.Queue()
 
-        self.start_boil_queue      = Queue.Queue()
-        self.push_boil_steps_queue = Queue.Queue()
+        self.start_boil_queue      = queue.Queue()
+        self.push_boil_steps_queue = queue.Queue()
 
-        self.start_mash_queue      = Queue.Queue()
-        self.push_mash_steps_queue = Queue.Queue()
+        self.start_mash_queue      = queue.Queue()
+        self.push_mash_steps_queue = queue.Queue()
 
         self.pico = Pico.Pico()
         self.pico.real_init(Fake_HotTank(self.push_volume_queue),
@@ -177,12 +180,6 @@ class PicoTest(unittest.TestCase):
         self.start_boil_queue.get()
         self.start_boil_queue.task_done()
 
-
-
-
-
-    def tearDown(self):
-        self.pico.run_thread = False
 
 
 if __name__ == '__main__':

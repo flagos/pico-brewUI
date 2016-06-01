@@ -1,11 +1,14 @@
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
 import threading
 import time
-import Queue
+import queue
 
 import Recipe
 
 
-class Pico:
+class Pico(object):
 
     def __init__(self):
         pass
@@ -69,5 +72,7 @@ class Pico:
     def start_threads(self):
         self.t1 = threading.Thread(target=self.FillMashTankThread, args=[])
         self.t2 = threading.Thread(target=self.FillBoilTankThread, args=[])
+        self.t1.daemon = True
+        self.t2.daemon = True
         self.t1.start()
         self.t2.start()

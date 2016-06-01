@@ -1,10 +1,12 @@
+from builtins import str
+from builtins import object
 import time
 from datetime import timedelta, datetime
 from PID import PID
 
 SAMPLE_HISTORY = 10
 
-class List_max():
+class List_max(object):
 
     def __init__(self, max_size):
         self.max_size = max_size
@@ -17,7 +19,7 @@ class List_max():
 
         self.array.append(obj)
 
-class Chrono():
+class Chrono(object):
 
     def __init__(self):
         self.start_chrono = None

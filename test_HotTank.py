@@ -1,13 +1,15 @@
+from future import standard_library
+standard_library.install_aliases()
 import unittest
 import HotTank
-import Queue
+import queue
 
 
 class HotTankTest(unittest.TestCase):
 
     def setUp(self, saturation=50):
-        self.input_queue  = Queue.Queue()
-        self.output_queue = Queue.Queue()
+        self.input_queue  = queue.Queue()
+        self.output_queue = queue.Queue()
         self.hottank = HotTank.HotTank(saturation, 0.01, self.input_queue, self.output_queue)
         self.hottank.start()
 
@@ -69,13 +71,6 @@ class HotTankTest(unittest.TestCase):
         temperatures = [55, 55, 55, 55, 55, 55, 55, 55]
         expected     = [10, 11, 12, 13, 14, 15, 15, 10]
         self.run_test(orders, temperatures, expected)
-
-
-
-    def tearDown(self):
-        self.hottank._Thread__stop()
-
-
 
 
 if __name__ == '__main__':

@@ -1,3 +1,6 @@
+from __future__ import print_function
+from future import standard_library
+standard_library.install_aliases()
 from flask import Flask, request, render_template
 
 import json, sys
@@ -8,7 +11,7 @@ import Regulation
 import time
 import argparse
 
-import Queue
+import queue
 import pprint
 
 
@@ -100,7 +103,7 @@ def add_recipe():
         recipe = pico.fetch_recipe(url)
         pico.add_recipe(recipe)
     except:
-        print "Unexpected error:", sys.exc_info()[0]
+        print("Unexpected error:", sys.exc_info()[0])
         return json.dumps({ "error": "error when processing url" }), 500
     
     return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
@@ -231,16 +234,16 @@ if __name__ == "__main__":
 
     hot = HotTank.HotTank(saturation=50, period=1)
 
-    start_boil_queue      = Queue.Queue()
-    start_heat_queue      = Queue.Queue()
+    start_boil_queue      = queue.Queue()
+    start_heat_queue      = queue.Queue()
 
-    start_counting_queue = Queue.Queue()
-    need_cleaning_queue  = Queue.Queue()
+    start_counting_queue = queue.Queue()
+    need_cleaning_queue  = queue.Queue()
 
     boil = BoilTank.BoilTank(start_heat_queue, start_boil_queue, start_counting_queue, need_cleaning_queue)
 
-    start_mash_queue    = Queue.Queue()
-    need_cleaning_queue = Queue.Queue()
+    start_mash_queue    = queue.Queue()
+    need_cleaning_queue = queue.Queue()
 
     mash = MashTank.MashTank(hot, boil, start_mash_queue, need_cleaning_queue)
 

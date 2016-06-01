@@ -1,17 +1,19 @@
+from future import standard_library
+standard_library.install_aliases()
 import unittest
 import BoilTank
-import Queue
+import queue
 import time
 
 
 class HotBoilTest(unittest.TestCase):
 
     def setUp(self, saturation=50):
-        self.start_heat_queue     = Queue.Queue()
-        self.start_boil_queue     = Queue.Queue()
-        self.start_counting_queue = Queue.Queue()
-        self.need_cleaning_queue  = Queue.Queue()
-        self.input_test_queue     = Queue.Queue()
+        self.start_heat_queue     = queue.Queue()
+        self.start_boil_queue     = queue.Queue()
+        self.start_counting_queue = queue.Queue()
+        self.need_cleaning_queue  = queue.Queue()
+        self.input_test_queue     = queue.Queue()
 
         self.boiltank = BoilTank.BoilTank(self.start_heat_queue,
                                           self.start_boil_queue,
@@ -112,8 +114,6 @@ class HotBoilTest(unittest.TestCase):
 
         pass
 
-    def tearDown(self):
-        self.boiltank._Thread__stop()
 
 if __name__ == '__main__':
     unittest.main()  # pragma: no cover

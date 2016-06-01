@@ -1,7 +1,13 @@
-import urllib,json
+from __future__ import division
+from future import standard_library
+standard_library.install_aliases()
+from builtins import range
+from builtins import object
+from past.utils import old_div
+import urllib.request, urllib.parse, urllib.error,json
 import pprint
 
-class Recipe:
+class Recipe(object):
 
     def __init__(self, url):
         self.url = url
@@ -15,8 +21,10 @@ class Recipe:
 
     def fetch_recipe(self):
         # get recipe from brewtoad
-        response = urllib.urlopen(self.url+".json")
-        self.json = json.load(response)
+        response = urllib.request.urlopen(self.url+".json")
+        encoding = response.headers.get_content_charset()
+        str_response = response.read().decode(encoding)
+        self.json = json.loads(str_response)
         self.add_steps()
         pp = pprint.PrettyPrinter(indent=4)
         #pp.pprint (self.json["slug"])
@@ -29,7 +37,7 @@ class Recipe:
         for step in mashsteps:
             temperature = int(step["target_temperature"])
             if(not step["target_temperature_is_metric"]):
-                temperature = int((temperature- 32)/1.8) # target is in celcuis
+                temperature = int(old_div((temperature- 32),1.8)) # target is in celcuis
             step['duration']    = step["time"]
             step['temperature'] = temperature
             step['dump']        = False
@@ -51,7 +59,7 @@ class Recipe:
         spargenumber = 1
         for s in range(spargenumber):
             sparge = {"temperature" : 78,
-                      "water_volume": (self.batch_size - self.mash_steps[0]["water_volume"])/spargenumber,
+                      "water_volume": old_div((self.batch_size - self.mash_steps[0]["water_volume"]),spargenumber),
                       "duration": 10,
                       "dump":True}
             self.mash_steps.append(sparge)

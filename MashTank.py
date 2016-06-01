@@ -16,7 +16,7 @@ class MashTank(Thread, Tank):
 
         self.mash_steps = []
 
-        Thread.__init__(self)
+        Thread.__init__(self, daemon=True)
         Tank.__init__(self)
         pass
 

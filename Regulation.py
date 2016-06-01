@@ -1,8 +1,11 @@
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
 from LLD import LLD
 import time
 import threading
 
-class Regulation:
+class Regulation(object):
 
 
     def __init__(self, hot, mash, boil):

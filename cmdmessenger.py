@@ -1,3 +1,7 @@
+from builtins import bytes
+from builtins import str
+from builtins import range
+from builtins import object
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 

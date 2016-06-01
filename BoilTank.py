@@ -1,7 +1,9 @@
+from future import standard_library
+standard_library.install_aliases()
 from threading import Thread
 from Tank import Tank
 
-import Queue
+import queue
 import time
 
 class BoilTank(Thread, Tank):
@@ -32,7 +34,7 @@ class BoilTank(Thread, Tank):
         self.running = True
 
 
-        Thread.__init__(self)
+        Thread.__init__(self, daemon=True)
         Tank.__init__(self)
         pass
 
