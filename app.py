@@ -71,32 +71,13 @@ def power():
 
 @app.route("/task.json")
 def task():
-    data = {}
-    data["task"] = []
-    data["task"].append ({
-     "task name": "Fill in malt for Dark IPA",
-     "status": "done"
-     })
-
-    data["task"].append ({
-     "task name": "Fill in malt for bitter",
-     "status": "waiting"
-    })
-    data["task"].append ({
-     "task name": "Dump Dark IPA",
-     "status": "unavailable"
-    })
-    data["task"].append ({
-     "task name": "Fill in malt for Stout",
-     "status": "unavailable"
-    })
 
     data_export = {}
     data_export["task"] = []
 
     statuses = ["done", "waiting", "unavailable"]
     for status in statuses:
-        for d in data["task"]:
+        for d in pico.data["task"]:
             if d["status"] == status:
                 data_export["task"].append(d)
 

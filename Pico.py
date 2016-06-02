@@ -35,6 +35,38 @@ class Pico(object):
 
         self.regule = regulation
 
+        self.data = {}
+        self.data["task"] = []
+        self.data["task"].append({
+            "task name": "Fill in malt for Dark IPA",
+            "status": "done"
+        })
+        
+        self.data["task"].append({
+            "task name": "Fill in malt for bitter",
+            "status": "waiting"
+        })
+        self.data["task"].append({
+            "task name": "Dump Dark IPA",
+            "status": "unavailable"
+        })
+        self.data["task"].append({
+            "task name": "Fill in malt for Stout",
+            "status": "unavailable"
+        })
+        
+
+    def add_task(self, recipe_name, task_name, status):
+        '''Create a task, id in return'''
+        self.data["task"].append({
+            "recipe_name": recipe_name,
+            "task_name": task_name,
+            "status": status
+        })
+        return len(self.data["task"]) - 1
+
+    def update_task(self, task_id, status):
+        self.data["task"][task_id]["task_name"] = status
 
     def fetch_recipe(self, url_recipe):
         recipe = Recipe.Recipe(url_recipe)
@@ -43,14 +75,18 @@ class Pico(object):
 
     def add_recipe(self, recipe):
         self.hottank.push_volume(recipe.batch_size)
-
+        recipe.id_ = self.add_task(recipe.name, "Fill malt for "+ str(recipe.name), "unavailable")
         self.recipes.append(recipe)
 
 
     def FillMashTankThread(self):
         while self.run_thread:
             if self.mash_index < len(self.recipes):
-                for step in self.recipes[self.mash_index].mash_steps:
+                self.mashtank.need_cleaning_queue.get()
+                self.current_recipe = self.recipes[self.mash_index]
+                self.update_task(self.current_recipe.id_, "waiting")
+
+                for step in self.current_recipe.mash_steps:
                     self.mashtank.push_steps(step)
                 self.start_mash_queue.put(None)  # go next recipe
                 self.start_mash_queue.join()  # blocking -- waiting to push next recipe
