@@ -88,10 +88,22 @@ def task():
     })
     data["task"].append ({
      "task name": "Fill in malt for Stout",
-     "status": "unavalaible"
+     "status": "unavailable"
     })
 
-    return json.dumps(data)
+    data_export = {}
+    data_export["task"] = []
+
+    statuses = ["done", "waiting", "unavailable"]
+    for status in statuses:
+        for d in data["task"]:
+            if d["status"] == status:
+                data_export["task"].append(d)
+
+    
+
+
+    return json.dumps(data_export)
 
 @app.route("/add/recipe")
 def add_recipe():
