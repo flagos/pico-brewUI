@@ -83,6 +83,7 @@ class Pico(object):
         while self.run_thread:
             if self.mash_index < len(self.recipes):
                 self.mashtank.need_cleaning_queue.get()
+                self.mashtank.need_cleaning_queue.task_done()  # keep it for testing
                 self.current_recipe = self.recipes[self.mash_index]
                 self.update_task(self.current_recipe.id_, "waiting")
 

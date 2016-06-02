@@ -21,7 +21,8 @@ class Fake_HotTank(object):
 
 class Fake_MashTank(object):
     """Fake class to test pico"""
-    def __init__(self, start_mash_queue, push_mash_steps_queue ):
+    def __init__(self, need_cleaning_queue, start_mash_queue, push_mash_steps_queue ):
+        self.need_cleaning_queue   = need_cleaning_queue
         self.start_mash_queue      = start_mash_queue
         self.push_mash_steps_queue = push_mash_steps_queue
 
@@ -45,6 +46,7 @@ class PicoTest(unittest.TestCase):
     def setUp(self, saturation=50):
         self.push_volume_queue     = queue.Queue()
 
+        self.need_cleaning_queue   = queue.Queue()
         self.start_boil_queue      = queue.Queue()
         self.push_boil_steps_queue = queue.Queue()
 
@@ -53,7 +55,7 @@ class PicoTest(unittest.TestCase):
 
         self.pico = Pico.Pico()
         self.pico.real_init(Fake_HotTank(self.push_volume_queue),
-                            Fake_MashTank(self.start_mash_queue, self.push_mash_steps_queue),
+                            Fake_MashTank(self.need_cleaning_queue, self.start_mash_queue, self.push_mash_steps_queue),
                             Fake_BoilTank(self.start_boil_queue, self.push_boil_steps_queue),
                             None)
         pass
@@ -74,6 +76,9 @@ class PicoTest(unittest.TestCase):
         self.pico.start_threads()
         recipe = self.pico.fetch_recipe(recipe_e["url"])
         self.pico.add_recipe(recipe)
+        self.need_cleaning_queue.put(None)
+        self.need_cleaning_queue.join()
+        
         volume = self.push_volume_queue.get()
         assert volume == 1.2 * 18.93
 
@@ -128,6 +133,8 @@ class PicoTest(unittest.TestCase):
         recipe_e = recipe1_e
         recipe = self.pico.fetch_recipe(recipe_e["url"])
         self.pico.add_recipe(recipe)
+        self.need_cleaning_queue.put(None)
+        self.need_cleaning_queue.join()
         recipe_e = recipe2_e
         recipe = self.pico.fetch_recipe(recipe_e["url"])
         self.pico.add_recipe(recipe)
@@ -158,6 +165,10 @@ class PicoTest(unittest.TestCase):
 
         assert self.push_mash_steps_queue.empty() is True
         self.start_mash_queue.task_done()
+
+        self.need_cleaning_queue.put(None)
+        self.need_cleaning_queue.join()
+        
 
         for step in recipe_e["mash_steps"]:
             out = self.push_mash_steps_queue.get()
