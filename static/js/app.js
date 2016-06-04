@@ -83,34 +83,37 @@ function createCallbackforTemperature(tank) {
 }
 
 var callbackfortask = function(data) {
-  var count = data["task"].length
-
-  var html_data = ""
-
-  for(var i=0; i<count; i++) {
-    var task = data["task"][i];
-
-    if (task["status"] == "done") {
-      html_data += "<p> \
-        <input type='checkbox' class='filled-in' id='check0' checked='checked' /> \
-        <label for='check0' class='done'>"+ task["task name"]+"</label> \
-      </p>"
-    } else if (task["status"] == "waiting") {
-      html_data += "<p> \
-        <input type='checkbox' class='filled-in' id='check1' /> \
-        <label for='check1' class='waiting'>"+ task["task name"]+"</label> \
-      </p>"
-    } else {
-      html_data += "<p> \
-        <input type='checkbox' id='check2' disabled='disabled' /> \
+    var count = data["task"].length
+    
+    var html_data = ""
+    
+    for(var i=0; i<count; i++) {
+        var task    = data["task"][i];
+        var onclick = "onclick='callback_task_click(this, "+task["id"]+")' ";
+        
+        
+        if (task["status"] == "done") {
+            html_data += "<p > \
+<input type='checkbox' class='filled-in' id='check0' checked='checked'  disabled='disabled'/> \
+<label for='check0' class='done'>"+ task["task name"]+"</label> \
+</p>"
+        } else if (task["status"] == "waiting") {
+            html_data += "<p > \
+<input type='checkbox' class='filled-in' id='check1'  "+onclick+"/> \
+<label for='check1' class='waiting'>"+ task["task name"]+"</label> \
+</p>"
+        } else {
+            html_data += "<p > \
+<input type='checkbox' id='check2' disabled='disabled' /> \
         <label for='check2' class='unavailable'>"+ task["task name"]+"</label> \
-      </p> "
+</p> "
+        }
+        
     }
-
-  }
-
-   $('#task-form').html(html_data)
-
+    
+    $('#task-form').html(html_data)
+    
+      
 }
 
 var callbackforrecipe = function(data) {
@@ -189,6 +192,19 @@ function callbackforlock(data) {
 
 }
 
+function callback_task_click(element, id) {
+    //console.log(element, element.checked);
+    $.ajax({
+        url : '/update/task',
+        type : 'GET',
+        data: 'task_id='+id+'&task_status='+element.checked,
+        dataType : 'html',
+        success : function(data, status){
+            console.log('ouf');
+        },        
+    });
+}
+
 function LoadElements()
 {
   $.getJSON( "/temperature/hot.json" , createCallbackforTemperature('hot'))
@@ -255,34 +271,41 @@ var url      = $('#input-url').val();
 
   $(document).ready(function(){
 
-    // initialiaze selectors
-    $('select').material_select();
+      // initialiaze selectors
+      $('select').material_select();
+      
+      // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+      $('.modal-trigger').leanModal();
+      
+      // trigger for textarea
+      $('#textarea1').trigger('autoresize');
+      
+      LoadElements();
+      Chart.defaults.global["animation"] = false;
+      setInterval( LoadElements, 1000 );
+      
+      Callbackforswitch_click('resistor-hot');
+      Callbackforswitch_click('resistor-mash');
+      Callbackforswitch_click('resistor-boil');
+      
+      Callbackforswitch_click('valve-hot');
+      Callbackforswitch_click('valve-mash');
+      Callbackforswitch_click('valve-boil');
+      
+      Callbackforswitch_click('pump');
+      
+      
+      $('#valve-lock').on('click', createCallbackforlock('valve'));
+      $('#card-resistor .lock').on('click',createCallbackforlock('resistor'));
+      $('#card-pump .lock').on('click',createCallbackforlock('pump'));
+      
+      $('#submit-url').on('click',callback_submit_url);
+      
+      //$('#card-task').change(callback_task_click);
 
-    // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
-    $('.modal-trigger').leanModal();
 
-    // trigger for textarea
-    $('#textarea1').trigger('autoresize');
+      
 
-    LoadElements();
-    Chart.defaults.global["animation"] = false;
-    setInterval( LoadElements, 1000 );
-
-    Callbackforswitch_click('resistor-hot');
-    Callbackforswitch_click('resistor-mash');
-    Callbackforswitch_click('resistor-boil');
-
-    Callbackforswitch_click('valve-hot');
-    Callbackforswitch_click('valve-mash');
-    Callbackforswitch_click('valve-boil');
-
-    Callbackforswitch_click('pump');
-
-
-    $('#valve-lock').on('click', createCallbackforlock('valve'));
-    $('#card-resistor .lock').on('click',createCallbackforlock('resistor'));
-    $('#card-pump .lock').on('click',createCallbackforlock('pump'));
-
-    $('#submit-url').on('click',callback_submit_url);
-
+      console.log('finish loading');
+     
   });

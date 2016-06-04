@@ -81,10 +81,26 @@ def task():
             if d["status"] == status:
                 data_export["task"].append(d)
 
-    
-
-
     return json.dumps(data_export)
+
+
+@app.route("/update/task")
+def update_task():
+    
+    if (request.args['task_id'] is None):
+        return json.dumps({ "error": "task id not defined" }), 500
+    else:
+        task_id = request.args['task_id']
+    
+    if (request.args['task_status'] is None):
+        return json.dumps({ "error": "task status not defined" }), 500
+    else:
+        task_status = request.args['task_status']
+
+    pico.update_task(task_id, task_status)
+
+    return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
+    
 
 @app.route("/add/recipe")
 def add_recipe():

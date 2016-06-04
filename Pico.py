@@ -39,34 +39,40 @@ class Pico(object):
         self.data["task"] = []
         self.data["task"].append({
             "task name": "Fill in malt for Dark IPA",
-            "status": "done"
+            "status": "done",
+            "id": 0
         })
         
         self.data["task"].append({
             "task name": "Fill in malt for bitter",
-            "status": "waiting"
+            "status": "waiting",
+            "id": 1
         })
         self.data["task"].append({
             "task name": "Dump Dark IPA",
-            "status": "unavailable"
+            "status": "unavailable",
+            "id": 2
         })
         self.data["task"].append({
             "task name": "Fill in malt for Stout",
-            "status": "unavailable"
+            "status": "unavailable",
+            "id": 3
         })
         
 
     def add_task(self, recipe_name, task_name, status):
         '''Create a task, id in return'''
+        id_ = len(self.data["task"])
         self.data["task"].append({
             "recipe_name": recipe_name,
             "task_name": task_name,
-            "status": status
+            "status": status,
+            "id": id_
         })
-        return len(self.data["task"]) - 1
+        return id_
 
     def update_task(self, task_id, status):
-        self.data["task"][task_id]["status"] = status
+        self.data["task"][int(task_id)]["status"] = "done" if status=="true" else "waiting"
 
     def get_task_status(self, id_):
         return self.data["task"][id_]["status"]
