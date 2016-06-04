@@ -77,6 +77,9 @@ class PicoTest(unittest.TestCase):
         recipe = self.pico.fetch_recipe(recipe_e["url"])
         self.pico.add_recipe(recipe)
         self.need_cleaning_queue.put(None)
+
+        time.sleep(1)
+        self.pico.data["task"][-1]["status"] = "done"  # should be done by user on UI
         self.need_cleaning_queue.join()
         
         volume = self.push_volume_queue.get()
@@ -134,6 +137,7 @@ class PicoTest(unittest.TestCase):
         recipe = self.pico.fetch_recipe(recipe_e["url"])
         self.pico.add_recipe(recipe)
         self.need_cleaning_queue.put(None)
+        self.pico.data["task"][-1]["status"] = "done"  # should be done by user on UI
         self.need_cleaning_queue.join()
         recipe_e = recipe2_e
         recipe = self.pico.fetch_recipe(recipe_e["url"])
@@ -167,6 +171,7 @@ class PicoTest(unittest.TestCase):
         self.start_mash_queue.task_done()
 
         self.need_cleaning_queue.put(None)
+        self.pico.data["task"][-1]["status"] = "done"  # should be done by user on UI
         self.need_cleaning_queue.join()
         
 

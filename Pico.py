@@ -66,7 +66,10 @@ class Pico(object):
         return len(self.data["task"]) - 1
 
     def update_task(self, task_id, status):
-        self.data["task"][task_id]["task_name"] = status
+        self.data["task"][task_id]["status"] = status
+
+    def get_task_status(self, id_):
+        return self.data["task"][id_]["status"]
 
     def fetch_recipe(self, url_recipe):
         recipe = Recipe.Recipe(url_recipe)
@@ -82,9 +85,12 @@ class Pico(object):
     def FillMashTankThread(self):
         while self.run_thread:
             if self.mash_index < len(self.recipes):
-                self.mashtank.need_cleaning_queue.get()
-                self.mashtank.need_cleaning_queue.task_done()  # keep it for testing
                 self.current_recipe = self.recipes[self.mash_index]
+                self.mashtank.need_cleaning_queue.get()
+                while(self.get_task_status(self.current_recipe.id_) != "done"):
+                    time.sleep(0.05)
+    
+                self.mashtank.need_cleaning_queue.task_done()  # keep it for testing
                 self.update_task(self.current_recipe.id_, "waiting")
 
                 for step in self.current_recipe.mash_steps:
