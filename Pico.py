@@ -37,27 +37,27 @@ class Pico(object):
 
         self.data = {}
         self.data["task"] = []
-        self.data["task"].append({
-            "task name": "Fill in malt for Dark IPA",
-            "status": "done",
-            "id": 0
-        })
+        # self.data["task"].append({
+        #     "task name": "Fill in malt for Dark IPA",
+        #     "status": "done",
+        #     "id": 0
+        # })
         
-        self.data["task"].append({
-            "task name": "Fill in malt for bitter",
-            "status": "waiting",
-            "id": 1
-        })
-        self.data["task"].append({
-            "task name": "Dump Dark IPA",
-            "status": "unavailable",
-            "id": 2
-        })
-        self.data["task"].append({
-            "task name": "Fill in malt for Stout",
-            "status": "unavailable",
-            "id": 3
-        })
+        # self.data["task"].append({
+        #     "task name": "Fill in malt for bitter",
+        #     "status": "waiting",
+        #     "id": 1
+        # })
+        # self.data["task"].append({
+        #     "task name": "Dump Dark IPA",
+        #     "status": "unavailable",
+        #     "id": 2
+        # })
+        # self.data["task"].append({
+        #     "task name": "Fill in malt for Stout",
+        #     "status": "unavailable",
+        #     "id": 3
+        # })
         
 
     def add_task(self, recipe_name, task_name, status):
@@ -65,7 +65,7 @@ class Pico(object):
         id_ = len(self.data["task"])
         self.data["task"].append({
             "recipe_name": recipe_name,
-            "task_name": task_name,
+            "task name": task_name,
             "status": status,
             "id": id_
         })
@@ -84,22 +84,24 @@ class Pico(object):
 
     def add_recipe(self, recipe):
         self.hottank.push_volume(recipe.batch_size)
-        recipe.id_ = self.add_task(recipe.name, "Fill malt for "+ str(recipe.name), "unavailable")
+        recipe.mash_task_id = self.add_task(recipe.name, "Fill malt for "+ str(recipe.name), "unavailable")
+        recipe.boil_task_id = self.add_task(recipe.name, "Dump "+ str(recipe.name), "unavailable")
         self.recipes.append(recipe)
 
 
     def FillMashTankThread(self):
         while self.run_thread:
             if self.mash_index < len(self.recipes):
-                self.current_recipe = self.recipes[self.mash_index]
-                self.mashtank.need_cleaning_queue.get()
-                while(self.get_task_status(self.current_recipe.id_) != "done"):
-                    time.sleep(0.05)
-    
-                self.mashtank.need_cleaning_queue.task_done()  # keep it for testing
-                self.update_task(self.current_recipe.id_, "waiting")
+                self.mash_current_recipe = self.recipes[self.mash_index]
 
-                for step in self.current_recipe.mash_steps:
+                self.mashtank.need_cleaning_queue.get()
+                self.update_task(self.mash_current_recipe.mash_task_id, "waiting")
+                while(self.get_task_status(self.mash_current_recipe.mash_task_id) != "done"):
+                    time.sleep(0.5)
+                    
+                self.mashtank.need_cleaning_queue.task_done()
+
+                for step in self.mash_current_recipe.mash_steps:
                     self.mashtank.push_steps(step)
                 self.start_mash_queue.put(None)  # go next recipe
                 self.start_mash_queue.join()  # blocking -- waiting to push next recipe
@@ -110,10 +112,22 @@ class Pico(object):
     def FillBoilTankThread(self):
         while self.run_thread:
             if self.boil_index < len(self.recipes):
+                self.boil_current_recipe = self.recipes[self.boil_index]
+
                 #for step in self.recipes[self.boil_index].boil_steps:
                 self.boiltank.push_steps({'temperature':98, 'duration':self.recipes[self.boil_index].boil_time})  # only one step considered -- no hop droper
                 self.start_boil_queue.put(None)  # go next recipe
-                self.start_boil_queue.join()  # blocking -- waiting to push next recipe
+                self.start_boil_queue.join()  # blocking -- recipe on going
+
+                
+                self.boiltank.need_cleaning_queue.get()
+                self.update_task(self.boil_current_recipe.boil_task_id, "waiting")
+                while(self.get_task_status(self.boil_current_recipe.boil_task_id) != "done"):
+                    time.sleep(0.05)
+                self.boiltank.need_cleaning_queue.task_done()
+                    
+
+                
                 self.boil_index += 1
             else:
                 time.sleep(0.05)  # waiting for a new recipe from user

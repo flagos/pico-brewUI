@@ -34,9 +34,11 @@ class Fake_MashTank(object):
 
 class Fake_BoilTank(object):
     """Fake class to test MashTank """
-    def __init__(self, start_boil_queue, push_boil_steps_queue):
+    def __init__(self, need_cleaning_queue, start_boil_queue, push_boil_steps_queue):
         self.start_boil_queue       = start_boil_queue
         self.push_boil_steps_queue = push_boil_steps_queue
+        self.need_cleaning_queue   = need_cleaning_queue
+        
 
     def push_steps(self, step):
         self.push_boil_steps_queue.put(step)
@@ -56,7 +58,7 @@ class PicoTest(unittest.TestCase):
         self.pico = Pico.Pico()
         self.pico.real_init(Fake_HotTank(self.push_volume_queue),
                             Fake_MashTank(self.need_cleaning_queue, self.start_mash_queue, self.push_mash_steps_queue),
-                            Fake_BoilTank(self.start_boil_queue, self.push_boil_steps_queue),
+                            Fake_BoilTank(queue.Queue(), self.start_boil_queue, self.push_boil_steps_queue),
                             None)
         pass
 
@@ -76,11 +78,12 @@ class PicoTest(unittest.TestCase):
         self.pico.start_threads()
         recipe = self.pico.fetch_recipe(recipe_e["url"])
         self.pico.add_recipe(recipe)
-        self.need_cleaning_queue.put(None)
 
+        self.pico.mashtank.need_cleaning_queue.put(None)
         time.sleep(1)
-        self.pico.data["task"][-1]["status"] = "done"  # should be done by user on UI
-        self.need_cleaning_queue.join()
+        self.pico.update_task(recipe.mash_task_id, "true")  # should be done by user on UI
+        self.pico.mashtank.need_cleaning_queue.join()
+        
         
         volume = self.push_volume_queue.get()
         assert volume == 1.2 * 18.93
@@ -99,10 +102,15 @@ class PicoTest(unittest.TestCase):
 
         self.start_mash_queue.get()
         self.start_mash_queue.task_done()
-
+        
         self.start_boil_queue.get()
         self.start_boil_queue.task_done()
 
+        self.pico.boiltank.need_cleaning_queue.put(None)
+        time.sleep(1)
+        self.pico.update_task(recipe.boil_task_id, "true")  # should be done by user on UI
+        self.pico.boiltank.need_cleaning_queue.join()
+        
 
     def test_2_recipes(self):
         recipe1_e = {
@@ -136,30 +144,34 @@ class PicoTest(unittest.TestCase):
         recipe_e = recipe1_e
         recipe = self.pico.fetch_recipe(recipe_e["url"])
         self.pico.add_recipe(recipe)
-        self.need_cleaning_queue.put(None)
-        self.pico.data["task"][-1]["status"] = "done"  # should be done by user on UI
-        self.need_cleaning_queue.join()
+
+        # add malt 
+        self.pico.mashtank.need_cleaning_queue.put(None)
+        time.sleep(1)
+        self.pico.update_task(recipe.mash_task_id, "true")  # should be done by user on UI
+        self.pico.mashtank.need_cleaning_queue.join()
+
+
         recipe_e = recipe2_e
         recipe = self.pico.fetch_recipe(recipe_e["url"])
         self.pico.add_recipe(recipe)
 
-
         recipe_e = recipe1_e
         volume = self.push_volume_queue.get()
-        assert volume == 1.2 * recipe_e["volume"]
+        assert volume == 1.2 * recipe_e["volume"]  # check drive hot tank
 
-        for step in recipe_e["mash_steps"]:
+        for step in recipe_e["mash_steps"]:  # check mash tank programmation
             out = self.push_mash_steps_queue.get()
             assert out["temperature"] == step["temperature"]
             assert out["duration"]    == step["duration"]
             assert out["dump"]        == step["dump"]
 
-        for step in recipe_e["boil_steps"]:
+        for step in recipe_e["boil_steps"]:  # check boil tank drive
             out = self.push_boil_steps_queue.get()
             assert out["temperature"] == step["temperature"]
             assert out["duration"] == step["duration"]
 
-        self.start_mash_queue.get()
+        self.start_mash_queue.get()  # check launch tanks
         self.start_boil_queue.get()
 
 
@@ -170,11 +182,12 @@ class PicoTest(unittest.TestCase):
         assert self.push_mash_steps_queue.empty() is True
         self.start_mash_queue.task_done()
 
-        self.need_cleaning_queue.put(None)
-        self.pico.data["task"][-1]["status"] = "done"  # should be done by user on UI
-        self.need_cleaning_queue.join()
-        
+        self.pico.mashtank.need_cleaning_queue.put(None)
+        time.sleep(1)
+        self.pico.update_task(recipe.mash_task_id, "true")  # should be done by user on UI
+        self.pico.mashtank.need_cleaning_queue.join()
 
+        
         for step in recipe_e["mash_steps"]:
             out = self.push_mash_steps_queue.get()
             assert out["temperature"] == step["temperature"]
@@ -184,6 +197,11 @@ class PicoTest(unittest.TestCase):
         assert self.push_boil_steps_queue.empty() is True
         self.start_boil_queue.task_done()
 
+        self.pico.boiltank.need_cleaning_queue.put(None)
+        time.sleep(1)
+        self.pico.update_task(self.pico.recipes[0].boil_task_id, "true")  # should be done by user on UI
+        self.pico.boiltank.need_cleaning_queue.join()
+        
 
         for step in recipe_e["boil_steps"]:
             out = self.push_boil_steps_queue.get()
@@ -196,6 +214,12 @@ class PicoTest(unittest.TestCase):
         self.start_boil_queue.get()
         self.start_boil_queue.task_done()
 
+        self.pico.boiltank.need_cleaning_queue.put(None)
+        time.sleep(1)
+        self.pico.update_task(self.pico.recipes[1].boil_task_id, "true")  # should be done by user on UI
+        self.pico.boiltank.need_cleaning_queue.join()
+        
+        
 
 
 if __name__ == '__main__':

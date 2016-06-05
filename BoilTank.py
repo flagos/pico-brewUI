@@ -44,18 +44,18 @@ class BoilTank(Thread, Tank):
     def run(self):
         self.set_consign(None)
 
-        self.need_cleaning_queue.put(None)
-        self.need_cleaning_queue.join()
+        #self.need_cleaning_queue.put(None)
+        #self.need_cleaning_queue.join()
 
         while (self.running):
 
-            self.start_boil_queue.get() # boiltank has recipe
+            self.start_boil_queue.get()  # boiltank has recipe
 
-            self.start_heat_queue.get() # wait for enough water to boil
+            self.start_heat_queue.get()  # wait for enough water to boil
             self.set_consign(self.boil_steps[0]['temperature'])
             self.start_heat_queue.task_done()
 
-            self.start_counting_queue.get() # start the counting boil steps
+            self.start_counting_queue.get()  # start the counting boil steps
             while (self.boil_steps):
                 boil_step = self.boil_steps.pop(0)
 
