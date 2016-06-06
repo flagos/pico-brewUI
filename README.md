@@ -11,10 +11,10 @@ A webserver for pico brewery automation. The hardware is described here: https:/
 To start the server, please install python (seen ok with 3.5) and pip.
 
 Then, in the repository:  
-$ sudo pip install virtualenv
-$ virtualenv -p python3 env
-$ source env/bin/activate  
-$ pip install <see in .travis.yml for package to install>
+$ sudo pip install virtualenv  
+$ virtualenv -p python3 env  
+$ source env/bin/activate   
+$ pip install <see in .travis.yml for package to install>  
 $ python app.py  
 
 Thank you !
