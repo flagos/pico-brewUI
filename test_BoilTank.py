@@ -29,7 +29,7 @@ class HotBoilTest(unittest.TestCase):
         bk = self.boiltank
         self.assertTrue(bk.SetPoint is None)
 
-        bk.add_boil_step(95, 0.2)
+        bk.push_steps({'temperature':95, 'duration':0.2})
         bk.start_boil_queue.put(None)
 
         self.assertTrue(bk.SetPoint is None)  # not heating
@@ -70,7 +70,7 @@ class HotBoilTest(unittest.TestCase):
         bk = self.boiltank
         self.assertTrue(bk.SetPoint is None)
 
-        bk.add_boil_step(95, 0.2)
+        bk.push_steps({'temperature':95, 'duration':0.2})
         self.start_boil_queue.put(None)
         self.assertTrue(bk.SetPoint is None)  # not heating
 

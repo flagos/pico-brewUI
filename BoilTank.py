@@ -38,8 +38,8 @@ class BoilTank(Thread, Tank):
         Tank.__init__(self)
         pass
 
-    def add_boil_step(self, temperature, duration):
-        self.boil_steps.append({'temperature':temperature, 'duration':duration})
+    def push_steps(self, step):
+        self.boil_steps.append(step)
 
     def run(self):
         self.set_consign(None)

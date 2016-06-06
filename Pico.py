@@ -4,7 +4,6 @@ from builtins import object
 import threading
 import time
 import queue
-
 import Recipe
 
 
@@ -37,27 +36,6 @@ class Pico(object):
 
         self.data = {}
         self.data["task"] = []
-        # self.data["task"].append({
-        #     "task name": "Fill in malt for Dark IPA",
-        #     "status": "done",
-        #     "id": 0
-        # })
-        
-        # self.data["task"].append({
-        #     "task name": "Fill in malt for bitter",
-        #     "status": "waiting",
-        #     "id": 1
-        # })
-        # self.data["task"].append({
-        #     "task name": "Dump Dark IPA",
-        #     "status": "unavailable",
-        #     "id": 2
-        # })
-        # self.data["task"].append({
-        #     "task name": "Fill in malt for Stout",
-        #     "status": "unavailable",
-        #     "id": 3
-        # })
         
 
     def add_task(self, recipe_name, task_name, status):
