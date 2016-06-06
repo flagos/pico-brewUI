@@ -21,9 +21,9 @@ class MashTank(Thread, Tank):
         Tank.__init__(self)
         pass
 
-    def add_mash_step(self, temperature=None, duration=None, name=None, water_volume=None, dump=False):
-        self.mash_steps.append({'temperature': temperature, 'duration':duration, 'name':name, 'water_volume':water_volume, 'dump':dump})
-        pass
+    def push_steps(self, step):
+        
+        self.mash_steps.append(step)
 
     def information(self, step, time):
         if MyGlobals.pico is not None:
@@ -36,7 +36,6 @@ class MashTank(Thread, Tank):
         
 
     def run(self):
-
         while True:
             self.start_time=0
             self.boiltank_start_heating = False
@@ -44,13 +43,13 @@ class MashTank(Thread, Tank):
 
             self.need_cleaning_queue.put(None)
             self.need_cleaning_queue.join()
-
-            self.start_mash_queue.get() # wait for start
+            
+            self.start_mash_queue.get()  # wait for start
 
             step_number = 0
-            
+
             while self.mash_steps:
-                self.information("mashing " + str(step_number), "Not started")
+                self.information(str(step_number), "Not started")
 
                 mash_step = self.mash_steps.pop(0)
 
@@ -61,7 +60,7 @@ class MashTank(Thread, Tank):
 
                 self.set_consign(mash_step['temperature'])
 
-                while (self.read_temperature() < mash_step['temperature'] - 1): # wait for temperature
+                while (self.read_temperature() < mash_step['temperature'] - 1):  # wait for temperature
                     time.sleep(self.period)
                     self.information(None, "waiting for temp")
 
@@ -70,7 +69,7 @@ class MashTank(Thread, Tank):
                     time.sleep(self.period)
                     self.information(None, str(self.lasting()))
                     
-                if(mash_step['dump'] is True):
+                if('dump' in mash_step and mash_step['dump'] is True):
                     self.information("Dumping #" + str(step_number), None)
                     self.set_consign(None)
                     if self.boiltank_start_heating is False:
@@ -85,12 +84,6 @@ class MashTank(Thread, Tank):
             self.boiltank.start_counting_queue.put(None)
             self.start_mash_queue.task_done()
             pass
-
-    def read_temperature(self):
-        if self.testing_queue_input is not None:
-            return self.testing_queue_input.get()
-        else:
-            return self.feedback_value  # pragma: no cover
 
     def dump_tank(self):
         self.current_volume = 0

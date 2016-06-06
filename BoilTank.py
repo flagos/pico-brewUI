@@ -84,12 +84,3 @@ class BoilTank(Thread, Tank):
 
     def start_chiller(self):
         pass
-
-
-    def read_temperature(self):
-        if self.testing_queue_input is not None:
-            t = self.testing_queue_input.get()
-            self.testing_queue_input.task_done()
-            return t
-        else:
-            return self.feedback_value  # pragma: no cover

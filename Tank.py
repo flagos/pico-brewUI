@@ -56,14 +56,14 @@ class Chrono(object):
 
         self.start_chrono += pause_duration
 
-        self.start_pause = None # keep this line last !
+        self.start_pause = None  # keep this line last !
         # do not write here !
 
     def lasting(self):
         if (self.start_pause is not None):
             return self.lasting
         now = time.time()
-        return now - self.start_chrono
+        return int(self.duration - (now - self.start_chrono))
 
 
 class Tank(PID, Chrono):
@@ -93,3 +93,12 @@ class Tank(PID, Chrono):
 
         #compute pid
         self.update(value)
+
+
+    def read_temperature(self):
+        if self.testing_queue_input is not None:
+            t = self.testing_queue_input.get()
+            self.testing_queue_input.task_done()
+            return t
+        else:
+            return self.last_value  # pragma: no cover

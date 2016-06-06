@@ -40,7 +40,7 @@ class MashTankTest(unittest.TestCase):
 
 
     def test_recipe_with_one_step(self):
-        self.mashtank.add_mash_step(68, 0.1, "saccharification", 20)
+        self.mashtank.push_steps({'temperature':68, 'duration':0.1, 'name':"saccharification", 'water_volume':20})
 
         self.need_cleaning_queue.get()
         self.need_cleaning_queue.task_done()
@@ -65,9 +65,9 @@ class MashTankTest(unittest.TestCase):
 
 
     def test_recipe_with_three_step(self):
-        self.mashtank.add_mash_step(68, 0.1, "saccharification", 20)
-        self.mashtank.add_mash_step(78, 0.1, "mashout", 0, True)
-        self.mashtank.add_mash_step(68, 0.1, "second_run", 10, True)
+        self.mashtank.push_steps({'temperature':68, 'duration':0.1, 'name':"saccharification", 'water_volume':20})
+        self.mashtank.push_steps({'temperature':78, 'duration':0.1, 'name':"mashout", 'water_volume':0, 'dump':True})
+        self.mashtank.push_steps({'temperature':68, 'duration':0.1, 'name':"second_run", 'water_volume':10, 'dump':True})
 
         self.need_cleaning_queue.get()
         self.need_cleaning_queue.task_done()
