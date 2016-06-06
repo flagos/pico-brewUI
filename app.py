@@ -252,13 +252,16 @@ if __name__ == "__main__":
     need_cleaning_queue  = queue.Queue()
 
     boil = BoilTank.BoilTank(start_heat_queue, start_boil_queue, start_counting_queue, need_cleaning_queue)
-
+    
     start_mash_queue    = queue.Queue()
     need_cleaning_queue = queue.Queue()
 
     mash = MashTank.MashTank(hot, boil, start_mash_queue, need_cleaning_queue)
-
+    
     regule = Regulation.Regulation(hot, mash, boil)
     pico.real_init(hot, mash, boil, regule)
     pico.start_threads()
+    boil.start()
+    mash.start()
+
     app.run()
