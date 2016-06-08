@@ -3,6 +3,7 @@ from builtins import object
 import time
 from datetime import timedelta, datetime
 from PID import PID
+import os
 
 SAMPLE_HISTORY = 10
 
@@ -30,9 +31,13 @@ class Chrono(object):
     def launch_chrono(self, duration):
         self.start_chrono = time.time()
         self.duration     = duration
+        self.count        = 0
 
 
     def is_over(self):
+        self.count += 1
+        if os.getenv('CHRONO_DEBUG', "false") == "true" and self.count >= 3:
+            return True
         if (self.start_pause is not None):
             return False
         elif(self.start_chrono is None):
