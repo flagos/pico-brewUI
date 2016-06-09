@@ -19,11 +19,22 @@ class IntegrationTest(unittest.TestCase):
         os.close(self.db_fd)
         os.unlink(app.app.config['DATABASE'])
 
-    def test_empty_db(self):
+    def test_flask_is_alive(self):
         rv = self.app.get('/')
-        #assert b'No entries here so far' in rv.data
-        print(rv.data)
+        assert(rv.data)
 
+    def test_adding_a_recipe(self):
+        self.app.get('/add/recipe', data=dict(
+            url='https://www.brewtoad.com/recipes/black-walnut-brown-1968'
+        ))
+        self.app.get('/update/task', data=dict(
+            task_id='0',
+            task_status='true'
+        ))
+        #time.sleep(120)
 
+        
+
+        
 if __name__ == '__main__':
     unittest.main()
