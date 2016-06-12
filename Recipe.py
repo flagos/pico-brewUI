@@ -67,8 +67,8 @@ class Recipe(object):
         self.boil_time = self.json["boil_time"]
         #print "Boil time: " + str(self.boil_time)
 
-        pp = pprint.PrettyPrinter(indent=4)
-        pp.pprint(self.mash_steps)
+        #pp = pprint.PrettyPrinter(indent=4)
+        #pp.pprint(self.mash_steps)
         pass
 
     def export(self):

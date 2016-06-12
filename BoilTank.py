@@ -44,9 +44,7 @@ class BoilTank(Thread, Tank):
     def run(self):
         self.set_consign(None)
 
-        #self.need_cleaning_queue.put(None)
-        #self.need_cleaning_queue.join()
-
+        
         while (self.running):
 
             self.start_boil_queue.get()  # boiltank has recipe
@@ -60,26 +58,30 @@ class BoilTank(Thread, Tank):
                 boil_step = self.boil_steps.pop(0)
 
                 self.set_consign(boil_step['temperature'])
+                self.information("Boiling", "Not started")
 
                 while self.read_temperature() + 2 < boil_step['temperature']:
                     time.sleep(self.period)
 
                 self.launch_chrono(boil_step["duration"])
                 while self.is_over() is False:
+                    self.information("Boiling", self.lasting())
                     time.sleep(self.period)
 
-                pass
-
+            
             self.set_consign(None)
+            self.information("Chilling", None)
             self.start_chiller()
 
             self.stop_time = time.time()
+            self.start_boil_queue.task_done()
 
             self.need_cleaning_queue.put(None)
+            self.information("Cleaning", "waiting")
             self.need_cleaning_queue.join()
 
             self.start_counting_queue.task_done()
-            self.start_boil_queue.task_done()
+            self.information("Dumping", "waiting")
             pass
 
     def start_chiller(self):

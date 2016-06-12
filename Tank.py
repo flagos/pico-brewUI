@@ -3,6 +3,7 @@ from builtins import object
 import time
 from datetime import timedelta, datetime
 from PID import PID
+from globals import MyGlobals
 import os
 
 SAMPLE_HISTORY = 10
@@ -25,6 +26,7 @@ class Chrono(object):
     def __init__(self):
         self.start_chrono = None
         self.start_pause  = None
+        self.count        = 0
 
 
 
@@ -82,6 +84,7 @@ class Tank(PID, Chrono):
         self.volumes      = List_max(SAMPLE_HISTORY)
         self.powers       = List_max(SAMPLE_HISTORY)
         self.timing       = List_max(SAMPLE_HISTORY)
+        self.recipe_index = 0
 
 
         PID.__init__(self)
@@ -107,3 +110,12 @@ class Tank(PID, Chrono):
             return t
         else:
             return self.last_value  # pragma: no cover
+
+    def information(self, msg, time):
+        if MyGlobals.pico is not None:
+            pico = MyGlobals.pico
+            if msg is not None:
+                pico.recipes[self.recipe_index].step = str(msg)
+                
+            if time is not None:
+                pico.recipes[self.recipe_index].rem_time = str(time)

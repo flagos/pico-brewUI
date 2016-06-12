@@ -1,6 +1,5 @@
 from threading import Thread
 import time
-from globals import MyGlobals
 from Tank import Tank
 
 class MashTank(Thread, Tank):
@@ -22,18 +21,7 @@ class MashTank(Thread, Tank):
         pass
 
     def push_steps(self, step):
-        
         self.mash_steps.append(step)
-
-    def information(self, step, time):
-        if MyGlobals.pico is not None:
-            pico = MyGlobals.pico
-            if step is not None:
-                pico.recipes[pico.mash_index].step = "mashing " + str(step)
-                
-            if time is not None:
-                pico.recipes[pico.mash_index].rem_time = str(time)
-        
 
     def run(self):
         while True:
@@ -49,7 +37,7 @@ class MashTank(Thread, Tank):
             step_number = 0
 
             while self.mash_steps:
-                self.information(str(step_number), "Not started")
+                self.information("Mash " +str(step_number), "Not started")
 
                 mash_step = self.mash_steps.pop(0)
 
@@ -70,10 +58,11 @@ class MashTank(Thread, Tank):
                     self.information(None, str(self.lasting()))
                     
                 if('dump' in mash_step and mash_step['dump'] is True):
-                    self.information("Dumping #" + str(step_number), None)
+                    self.information("Mash Dumping #" + str(step_number), None)
                     self.set_consign(None)
                     if self.boiltank_start_heating is False:
                         self.boiltank.start_heat_queue.put(None)
+                        
                         self.boiltank.start_heat_queue.join()    # wait for boil tank to be heating
                         self.boiltank_start_heating = True
                     self.set_consign(None)

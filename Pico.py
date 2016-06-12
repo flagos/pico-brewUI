@@ -71,6 +71,7 @@ class Pico(object):
         while self.run_thread:
             if self.mash_index < len(self.recipes):
                 self.mash_current_recipe = self.recipes[self.mash_index]
+                self.mashtank.recipe_index = self.mash_index
 
                 self.mashtank.need_cleaning_queue.get()
                 self.update_task(self.mash_current_recipe.mash_task_id, "waiting")
@@ -91,6 +92,7 @@ class Pico(object):
         while self.run_thread:
             if self.boil_index < len(self.recipes):
                 self.boil_current_recipe = self.recipes[self.boil_index]
+                self.boiltank.recipe_index = self.mash_index
 
                 #for step in self.recipes[self.boil_index].boil_steps:
                 self.boiltank.push_steps({'temperature':98, 'duration':self.recipes[self.boil_index].boil_time})  # only one step considered -- no hop droper
