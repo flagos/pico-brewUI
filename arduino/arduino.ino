@@ -1,13 +1,5 @@
-// *** SendandReceiveArguments ***
-
-// This example expands the previous SendandReceive example. The Arduino will now receive multiple
-// and sent multiple float values.
-// It adds a demonstration of how to:
-// - Return multiple types status; It can return an Acknowlegde and Error command
-// - Receive multiple parameters,
-// - Send multiple parameters
-// - Call a function periodically
-
+#include "OneWire.h"
+#include "DallasTemperature.h"
 #include "CmdMessenger.h"  // CmdMessenger
 #include "TimerOne.h"
 #include <avr/wdt.h>
@@ -16,6 +8,26 @@
 unsigned long previousToggleLed = 0;   // Last time the led was toggled
 bool ledState                   = 0;   // Current state of Led
 const int kBlinkLed             = 13;  // Pin of internal Led
+
+
+/*
+ *   Thermometer
+ */
+#define ONE_WIRE_BUS 10
+#define TEMPERATURE_PRECISION 12
+
+// Setup a oneWire instance to communicate with any OneWire devices (not just Maxim/Dallas temperature ICs)
+OneWire oneWire(ONE_WIRE_BUS);
+
+// Pass our oneWire reference to Dallas Temperature. 
+DallasTemperature sensors(&oneWire);
+
+// Device addresses
+DeviceAddress pipeThermometer   = { 0x28, 0xFF, 0xE0, 0xC4, 0x91, 0x15, 0x04, 0x54};
+DeviceAddress boilThermometer   = { 0x28, 0xFF, 0x0B, 0xC4, 0x91, 0x15, 0x04, 0xFE};
+ 
+float    pipeTemp,        boilTemp;
+
 
 // Attach a new CmdMessenger object to the default Serial port
 CmdMessenger cmdMessenger = CmdMessenger(Serial);
@@ -119,14 +131,22 @@ void setup()
   // Listen on serial connection for messages from the pc
   Serial.begin(9600);
 
-  //while(!Serial);
-
   // Adds newline to every command
   cmdMessenger.printLfCr();
 
   // Attach my application's user-defined callback methods
   attachCommandCallbacks();
 
+  // Start up the library
+  //sensors.begin();
+
+  // set the resolution to 12 bit
+  sensors.setResolution(pipeThermometer, TEMPERATURE_PRECISION);
+  sensors.setResolution(boilThermometer, TEMPERATURE_PRECISION);
+  
+  sensors.setWaitForConversion(false);
+  
+  
   // Send the status to the PC that says the Arduino has booted
   cmdMessenger.sendCmd(kAcknowledge,"Arduino has started!");
 
@@ -141,14 +161,31 @@ void setup()
   wdt_enable(WDTO_2S);
 }
 
+
+
+void interruptTemperature (void) 
+{
+
+  pipeTemp = sensors.getTempC(pipeThermometer);  
+  boilTemp = sensors.getTempC(boilThermometer);
+  
+  // call sensors.requestTemperatures() to issue a global temperature 
+  // request to all devices on the bus
+  sensors.requestTemperatures();
+}
+
+
 void callback_1second(void) {
 
   cmdMessenger.sendCmd(kAcknowledge,"Arduino has timer");
 
+  interruptTemperature(); // get temperature data and request measure
+
+
   cmdMessenger.sendCmdStart(kReadTemperature);
-  cmdMessenger.sendCmdArg<uint16_t>((uint16_t) 100);
-  cmdMessenger.sendCmdArg<uint16_t>((uint16_t)98);
-  cmdMessenger.sendCmdArg<uint16_t>((uint16_t)96);
+  cmdMessenger.sendCmdArg<uint16_t>((uint16_t) 100*100); // API is supposed to have 3 thermometers
+  cmdMessenger.sendCmdArg<uint16_t>((uint16_t) (pipeTemp*100));
+  cmdMessenger.sendCmdArg<uint16_t>((uint16_t) (boilTemp*100));
   cmdMessenger.sendCmdEnd ();
 }
 
