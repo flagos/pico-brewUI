@@ -68,6 +68,7 @@ class Pico(object):
 
 
     def FillMashTankThread(self):
+        self.mashtank.set_pico(self)
         while self.run_thread:
             if self.mash_index < len(self.recipes):
                 self.mash_current_recipe = self.recipes[self.mash_index]
@@ -80,8 +81,6 @@ class Pico(object):
                     
                 self.mashtank.need_cleaning_queue.task_done()
 
-                for step in self.mash_current_recipe.mash_steps:
-                    self.mashtank.push_steps(step)
                 self.start_mash_queue.put(None)  # go next recipe
                 self.start_mash_queue.join()  # blocking -- waiting to push next recipe
                 self.mash_index += 1

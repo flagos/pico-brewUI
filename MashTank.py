@@ -14,14 +14,17 @@ class MashTank(Thread, Tank):
         self.testing_queue_input = testing_queue_input
         self.testing_queue_output = testing_queue_output
 
-        self.mash_steps = []
+        self.recipe_index = 0
 
         Thread.__init__(self, daemon=True)
         Tank.__init__(self)
         pass
 
-    def push_steps(self, step):
-        self.mash_steps.append(step)
+    def set_pico(self, pico):
+        self.pico = pico
+    
+    def get_step(self):
+        return self.pico.recipes[self.recipe_index].mash_steps[self.step_number]
 
     def run(self):
         while True:
@@ -34,31 +37,29 @@ class MashTank(Thread, Tank):
             
             self.start_mash_queue.get()  # wait for start
 
-            step_number = 0
+            self.step_number = 0
 
-            while self.mash_steps:
-                self.information("Mash " +str(step_number), "Not started")
+            while self.step_number < len(self.pico.recipes[self.recipe_index].mash_steps):
+                self.information("Mash " +str(self.step_number), "Not started")
 
-                mash_step = self.mash_steps.pop(0)
+                if(self.get_step()['water_volume']):
+                    self.information(None, "adding "+ str(self.get_step()['water_volume']) + "mL")
+                    self.hottank.pop_volume(self.get_step()['water_volume'])
+                    self.current_volume = self.get_step()['water_volume']
 
-                if(mash_step['water_volume']):
-                    self.information(None, "adding "+ str(mash_step['water_volume']) + "mL")
-                    self.hottank.pop_volume(mash_step['water_volume'])
-                    self.current_volume = mash_step['water_volume']
+                self.set_consign(self.get_step()['temperature'])
 
-                self.set_consign(mash_step['temperature'])
-
-                while (self.read_temperature() < mash_step['temperature'] - 1):  # wait for temperature
+                while (self.read_temperature() < self.get_step()['temperature'] - 1):  # wait for temperature
                     time.sleep(self.period)
                     self.information(None, "waiting for temp")
 
-                self.launch_chrono(mash_step["duration"])
+                self.launch_chrono(self.get_step()["duration"])
                 while self.is_over() is False:
                     time.sleep(self.period)
                     self.information(None, str(self.lasting()))
                     
-                if('dump' in mash_step and mash_step['dump'] is True):
-                    self.information("Mash Dumping #" + str(step_number), None)
+                if('dump' in self.get_step() and self.get_step()['dump'] is True):
+                    self.information("Mash Dumping #" + str(self.step_number), None)
                     self.set_consign(None)
                     if self.boiltank_start_heating is False:
                         self.boiltank.start_heat_queue.put(None)
@@ -68,7 +69,7 @@ class MashTank(Thread, Tank):
                     self.set_consign(None)
                     self.dump_tank()
                     
-                step_number += 1
+                self.step_number += 1
 
             self.boiltank.start_counting_queue.put(None)
             self.start_mash_queue.task_done()

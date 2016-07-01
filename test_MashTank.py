@@ -24,6 +24,16 @@ class Fake_BoilTank(object):
         self.start_heat_queue     = start_heat_queue
         self.start_counting_queue = start_counting_queue
 
+class Fake_Pico(object):
+
+    def __init__(self):
+        self.recipes = []
+
+class Fake_Recipe(object):
+
+    def __init__(self):
+        self.mash_steps = []
+
 
 class MashTankTest(unittest.TestCase):
 
@@ -35,12 +45,15 @@ class MashTankTest(unittest.TestCase):
         self.start_heat_queue     = queue.Queue()
         self.start_mash_queue     = queue.Queue()
         self.need_cleaning_queue  = queue.Queue()
+        self.pico                 = Fake_Pico()
         self.mashtank = MashTank.MashTank(Fake_HotTank(self.volume_queue), Fake_BoilTank(self.start_heat_queue, self.start_counting_queue), self.start_mash_queue, self.need_cleaning_queue, 0.01, self.input_queue, self.output_queue)
         self.mashtank.start()
 
 
     def test_recipe_with_one_step(self):
-        self.mashtank.push_steps({'temperature':68, 'duration':0.1, 'name':"saccharification", 'water_volume':20})
+        recipe = Fake_Recipe()
+        recipe.mash_steps.append({'temperature':68, 'duration':0.1, 'name':"saccharification", 'water_volume':20})
+        self.pico.recipes.append(recipe)
 
         self.need_cleaning_queue.get()
         self.need_cleaning_queue.task_done()
