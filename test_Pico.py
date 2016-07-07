@@ -25,11 +25,10 @@ class Fake_MashTank(object):
         self.need_cleaning_queue   = need_cleaning_queue
         self.start_mash_queue      = start_mash_queue
         self.push_mash_steps_queue = push_mash_steps_queue
+        self.recipe_index          = 0
 
-
-    def push_steps(self, step):
-        self.push_mash_steps_queue.put(step)
-
+    def set_pico(self, pico):
+        self.pico = pico
 
 
 class Fake_BoilTank(object):
@@ -42,6 +41,9 @@ class Fake_BoilTank(object):
 
     def push_steps(self, step):
         self.push_boil_steps_queue.put(step)
+        
+    def set_pico(self, pico):
+        self.pico = pico
 
 class PicoTest(unittest.TestCase):
 

@@ -47,6 +47,7 @@ class MashTankTest(unittest.TestCase):
         self.need_cleaning_queue  = queue.Queue()
         self.pico                 = Fake_Pico()
         self.mashtank = MashTank.MashTank(Fake_HotTank(self.volume_queue), Fake_BoilTank(self.start_heat_queue, self.start_counting_queue), self.start_mash_queue, self.need_cleaning_queue, 0.01, self.input_queue, self.output_queue)
+        self.mashtank.set_pico(self.pico)
         self.mashtank.start()
 
 
@@ -78,10 +79,12 @@ class MashTankTest(unittest.TestCase):
 
 
     def test_recipe_with_three_step(self):
-        self.mashtank.push_steps({'temperature':68, 'duration':0.1, 'name':"saccharification", 'water_volume':20})
-        self.mashtank.push_steps({'temperature':78, 'duration':0.1, 'name':"mashout", 'water_volume':0, 'dump':True})
-        self.mashtank.push_steps({'temperature':68, 'duration':0.1, 'name':"second_run", 'water_volume':10, 'dump':True})
-
+        recipe = Fake_Recipe()
+        recipe.mash_steps.append({'temperature':68, 'duration':0.1, 'name':"saccharification", 'water_volume':20})
+        recipe.mash_steps.append({'temperature':78, 'duration':0.1, 'name':"mashout", 'water_volume':0, 'dump':True})
+        recipe.mash_steps.append({'temperature':68, 'duration':0.1, 'name':"second_run", 'water_volume':10, 'dump':True})
+        self.pico.recipes.append(recipe)
+       
         self.need_cleaning_queue.get()
         self.need_cleaning_queue.task_done()
 
@@ -119,6 +122,7 @@ class MashTankTest(unittest.TestCase):
 
     def test_two_recipe(self):
         self.test_recipe_with_one_step()
+        self.mashtank.recipe_index += 1
         self.test_recipe_with_three_step()
         pass
 
