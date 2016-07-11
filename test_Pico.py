@@ -88,8 +88,8 @@ class PicoTest(unittest.TestCase):
         volume = self.push_volume_queue.get()
         assert volume == 1.2 * 18.93
 
-        for step in recipe_e["mash_steps"]:
-            out = self.pico.recipes[self.pico.mashtank.recipe_index].mash_steps
+        for idx, step in enumerate(recipe_e["mash_steps"]):
+            out = self.pico.recipes[self.pico.mashtank.recipe_index].mash_steps[idx]
             assert out["temperature"] == step["temperature"]
             assert out["duration"]    == step["duration"]
             assert out["dump"]        == step["dump"]
@@ -160,8 +160,8 @@ class PicoTest(unittest.TestCase):
         volume = self.push_volume_queue.get()
         assert volume == 1.2 * recipe_e["volume"]  # check drive hot tank
 
-        for step in recipe_e["mash_steps"]:  # check mash tank programmation
-            out = self.pico.recipes[self.pico.mashtank.recipe_index].mash_steps
+        for idx, step in enumerate(recipe_e["mash_steps"]):  # check mash tank programmation
+            out = self.pico.recipes[self.pico.mashtank.recipe_index].mash_steps[idx]
             assert out["temperature"] == step["temperature"]
             assert out["duration"]    == step["duration"]
             assert out["dump"]        == step["dump"]
@@ -187,8 +187,8 @@ class PicoTest(unittest.TestCase):
         self.pico.mashtank.need_cleaning_queue.join()
 
         
-        for step in recipe_e["mash_steps"]:
-            out = self.pico.recipes[self.pico.mashtank.recipe_index].mash_steps
+        for idx, step in enumerate(recipe_e["mash_steps"]):
+            out = self.pico.recipes[self.pico.mashtank.recipe_index].mash_steps[idx]
             assert out["temperature"] == step["temperature"]
             assert out["duration"]    == step["duration"]
             assert out["dump"]        == step["dump"]
