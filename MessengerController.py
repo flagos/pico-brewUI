@@ -78,7 +78,7 @@ class MessengerController(object):
     def list_usb_ports(self):
         """ Use the grep generator to get a list of all USB ports.
         """
-        ports =  [port for port in list_ports.grep('USB')]
+        ports = [port for port in list_ports.grep('USB')]
         return ports
 
     def on_error(self, received_command, *args, **kwargs):
@@ -86,14 +86,14 @@ class MessengerController(object):
         """
         print(('Error:', args[0][0]))
 
-    def on_read_temperature(self,  received_command, *args, **kwargs):
+    def on_read_temperature(self, received_command, *args, **kwargs):
         """ Callback on temperature """
 
         self.temperature["Hot"]  = int(args[0][0])/100
         self.temperature["Mash"] = int(args[0][1])/100
         self.temperature["Boil"] = int(args[0][2])/100
 
-    def on_dump_in_reached(self,  received_command, *args, **kwargs):
+    def on_dump_in_reached(self, received_command, *args, **kwargs):
         """ Callback on dump_in reached """
 
         self.valve_status[args[0][0]] = False

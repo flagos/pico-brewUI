@@ -1,4 +1,5 @@
 import serial
+import time
 
 from MessengerController import MessengerController
 
@@ -7,8 +8,9 @@ HOTPIN  = 0
 MASHPIN = 1
 BOILPIN = 2
 
-HOT_VALVE = 4
-MASH_VALVE = 5
+MASH_VALVE_ON  = 11
+MASH_VALVE_OFF = 12
+HOT_VALVE = 5
 
 class LLD(MessengerController):
 
@@ -46,10 +48,16 @@ class LLD(MessengerController):
 
 
     def _valve(self, tank, setting):
-        if(tank.tank_name == "Hot"):
-            self.set_pin(HOT_VALVE, setting)
-        elif (tank.tank_name == "Mash"):
-            self.set_pin(MASHPIN, setting)
+        if(tank.tank_name == "Mash"):
+            pin = 0
+            if setting is True:
+                pin = MASH_VALVE_ON
+            else:
+                pin = MASH_VALVE_OFF
+
+            self.set_pin(pin, True)
+            time.sleep(7)  # will freeze UI :-/
+            self.set_pin(pin, False)
 
 
     def _pump(self, setting):
@@ -69,10 +77,6 @@ class LLD(MessengerController):
             self._resistor_duty(tank, cycle)
 
 
-    def set_valve(self, setting):
-        if (self.lock['valve'] is True):
-            self._valve(tank, setting)
-
     def set_pump(self, setting):
         if (self.lock['pump'] is True):
             self._pump(setting)
@@ -89,6 +93,7 @@ class LLD(MessengerController):
 
     def valve_switch(self, tank, setting):
         if (self.lock['valve'] is False):
+            self._valve(tank, setting)
             if (setting is False):
                 self.valve_setting[tank.tank_name] = False
             else:
