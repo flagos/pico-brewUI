@@ -177,7 +177,7 @@ void interruptTemperature (void)
 
 void callback_1second(void) {
 
-  cmdMessenger.sendCmd(kAcknowledge,"Arduino has timer");
+  //cmdMessenger.sendCmd(kAcknowledge,"Arduino has timer");
 
   interruptTemperature(); // get temperature data and request measure
 

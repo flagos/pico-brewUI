@@ -89,9 +89,9 @@ class MessengerController(object):
     def on_read_temperature(self,  received_command, *args, **kwargs):
         """ Callback on temperature """
 
-        self.temperature["Hot"]  = args[0][0]
-        self.temperature["Mash"] = args[0][1]
-        self.temperature["Boil"] = args[0][2]
+        self.temperature["Hot"]  = int(args[0][0])/100
+        self.temperature["Mash"] = int(args[0][1])/100
+        self.temperature["Boil"] = int(args[0][2])/100
 
     def on_dump_in_reached(self,  received_command, *args, **kwargs):
         """ Callback on dump_in reached """
@@ -137,7 +137,7 @@ class MessengerController(object):
         """
         while (True):
             self.messenger.feed_in_data()
-
+            time.sleep(0.01)  # please do not hurt my core
 
 if __name__ == '__main__':
     msg = MessengerController()
