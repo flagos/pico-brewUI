@@ -4,7 +4,7 @@ import unittest
 import BoilTank
 import queue
 import time
-
+from test_Mashtank import Fake_Pico, Fake_Recipe
 
 class HotBoilTest(unittest.TestCase):
 
@@ -14,6 +14,7 @@ class HotBoilTest(unittest.TestCase):
         self.start_counting_queue = queue.Queue()
         self.need_cleaning_queue  = queue.Queue()
         self.input_test_queue     = queue.Queue()
+        self.pico                 = Fake_Pico()
 
         self.boiltank = BoilTank.BoilTank(self.start_heat_queue,
                                           self.start_boil_queue,
@@ -21,6 +22,7 @@ class HotBoilTest(unittest.TestCase):
                                           self.need_cleaning_queue,
                                           .01,
                                           self.input_test_queue)
+        self.mashtank.set_pico(self.pico)
         self.boiltank.start()
 
         pass
@@ -29,7 +31,8 @@ class HotBoilTest(unittest.TestCase):
         bk = self.boiltank
         self.assertTrue(bk.SetPoint is None)
 
-        bk.push_steps({'temperature':95, 'duration':0.2})
+        recipe = Fake_Recipe()
+        recipe.append({'temperature':95, 'duration':0.2})
         bk.start_boil_queue.put(None)
 
         self.assertTrue(bk.SetPoint is None)  # not heating
