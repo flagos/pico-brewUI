@@ -38,8 +38,8 @@ class BoilTank(Thread, Tank):
         Tank.__init__(self)
         pass
 
-    def push_steps(self, step):
-        self.boil_steps.append(step)
+    #def push_steps(self, step):
+        #self.boil_steps.append(step)
 
     def run(self):
         self.set_consign(None)
@@ -54,8 +54,8 @@ class BoilTank(Thread, Tank):
             self.start_heat_queue.task_done()
 
             self.start_counting_queue.get()  # start the counting boil steps
-            while (self.boil_steps):
-                boil_step = self.boil_steps.pop(0)
+            while (self.pico.recipes[self.recipe_index].boil_steps):
+                boil_step = self.pico.recipes[self.recipe_index].boil_steps.pop(0)
 
                 self.set_consign(boil_step['temperature'])
                 self.information("Boiling", "Not started")

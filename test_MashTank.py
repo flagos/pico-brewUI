@@ -33,7 +33,7 @@ class Fake_Recipe(object):
 
     def __init__(self):
         self.mash_steps = []
-
+        self.boil_steps = []
 
 class MashTankTest(unittest.TestCase):
 
