@@ -119,3 +119,6 @@ class Tank(PID, Chrono):
                 
             if time is not None:
                 pico.recipes[self.recipe_index].rem_time = str(time)
+
+    def set_pico(self, pico):
+        self.pico = pico

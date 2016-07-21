@@ -14,15 +14,10 @@ class MashTank(Thread, Tank):
         self.testing_queue_input = testing_queue_input
         self.testing_queue_output = testing_queue_output
 
-        self.recipe_index = 0
-
         Thread.__init__(self, daemon=True)
         Tank.__init__(self)
         pass
 
-    def set_pico(self, pico):
-        self.pico = pico
-    
     def get_step(self):
         return self.pico.recipes[self.recipe_index].mash_steps[self.step_number]
 
