@@ -70,4 +70,5 @@ class MashTank(Thread, Tank):
             self.start_mash_queue.task_done()
 
     def dump_tank(self):
+        self.pico.boiltank.current_volume += self.current_volume
         self.current_volume = 0

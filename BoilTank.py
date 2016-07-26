@@ -75,6 +75,8 @@ class BoilTank(Thread, Tank):
             self.information("Cleaning", "waiting")
             self.need_cleaning_queue.join()
 
+            self.current_volume = 0
+            
             self.start_counting_queue.task_done()
             self.information("Dumping", "waiting")
 

@@ -53,9 +53,9 @@ def volume():
 
     data = {}
     data["label"] = pico.hottank.timing.array
-    data["hot"]   = [50,45,42,44,48,50]
-    data["mash"]  = [20, 25, 30, 30, 30, 30, 30]
-    data["boil"]  = [0, 0, 7, 12, 20, 20, 20]
+    data["hot"]   = pico.hottank.volumes.array
+    data["mash"]  = pico.mashtank.volumes.array
+    data["boil"]  = pico.boiltank.volumes.array
 
     return json.dumps(data)
 
