@@ -38,12 +38,8 @@ class BoilTank(Thread, Tank):
         Tank.__init__(self)
         pass
 
-    #def push_steps(self, step):
-        #self.boil_steps.append(step)
-
     def run(self):
         self.set_consign(None)
-
         
         while (self.running):
 
@@ -68,7 +64,6 @@ class BoilTank(Thread, Tank):
                     self.information("Boiling", self.lasting())
                     time.sleep(self.period)
 
-            
             self.set_consign(None)
             self.information("Chilling", None)
             self.start_chiller()
@@ -82,7 +77,6 @@ class BoilTank(Thread, Tank):
 
             self.start_counting_queue.task_done()
             self.information("Dumping", "waiting")
-            pass
 
     def start_chiller(self):
         pass

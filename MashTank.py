@@ -68,8 +68,6 @@ class MashTank(Thread, Tank):
 
             self.boiltank.start_counting_queue.put(None)
             self.start_mash_queue.task_done()
-            pass
 
     def dump_tank(self):
         self.current_volume = 0
-        pass

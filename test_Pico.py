@@ -32,14 +32,9 @@ class Fake_MashTank(object):
 
 class Fake_BoilTank(object):
     """Fake class to test MashTank """
-    def __init__(self, need_cleaning_queue, start_boil_queue, push_boil_steps_queue):
+    def __init__(self, need_cleaning_queue, start_boil_queue):
         self.start_boil_queue       = start_boil_queue
-        self.push_boil_steps_queue = push_boil_steps_queue
         self.need_cleaning_queue   = need_cleaning_queue
-        
-
-    def push_steps(self, step):
-        self.push_boil_steps_queue.put(step)
         
     def set_pico(self, pico):
         self.pico = pico
@@ -48,17 +43,14 @@ class PicoTest(unittest.TestCase):
 
     def setUp(self, saturation=50):
         self.push_volume_queue     = queue.Queue()
-
         self.need_cleaning_queue   = queue.Queue()
         self.start_boil_queue      = queue.Queue()
-        self.push_boil_steps_queue = queue.Queue()
-
         self.start_mash_queue      = queue.Queue()
 
         self.pico = Pico.Pico()
         self.pico.real_init(Fake_HotTank(self.push_volume_queue),
                             Fake_MashTank(self.need_cleaning_queue, self.start_mash_queue),
-                            Fake_BoilTank(queue.Queue(), self.start_boil_queue, self.push_boil_steps_queue),
+                            Fake_BoilTank(queue.Queue(), self.start_boil_queue),
                             None)
         pass
 
@@ -95,8 +87,8 @@ class PicoTest(unittest.TestCase):
             assert out["dump"]        == step["dump"]
 
 
-        for step in recipe_e["boil_steps"]:
-            out = self.push_boil_steps_queue.get()
+        for idx, step in enumerate(recipe_e["boil_steps"]):
+            out = self.pico.recipes[self.pico.boiltank.recipe_index].boil_steps[idx]
             assert out["temperature"] == step["temperature"]
             assert out["duration"] == step["duration"]
 
@@ -166,8 +158,8 @@ class PicoTest(unittest.TestCase):
             assert out["duration"]    == step["duration"]
             assert out["dump"]        == step["dump"]
 
-        for step in recipe_e["boil_steps"]:  # check boil tank drive
-            out = self.push_boil_steps_queue.get()
+        for idx, step in enumerate(recipe_e["boil_steps"]):
+            out = self.pico.recipes[self.pico.boiltank.recipe_index].boil_steps[idx]
             assert out["temperature"] == step["temperature"]
             assert out["duration"] == step["duration"]
 
@@ -193,7 +185,6 @@ class PicoTest(unittest.TestCase):
             assert out["duration"]    == step["duration"]
             assert out["dump"]        == step["dump"]
 
-        assert self.push_boil_steps_queue.empty() is True
         self.start_boil_queue.task_done()
 
         self.pico.boiltank.need_cleaning_queue.put(None)
@@ -202,8 +193,8 @@ class PicoTest(unittest.TestCase):
         self.pico.boiltank.need_cleaning_queue.join()
         
 
-        for step in recipe_e["boil_steps"]:
-            out = self.push_boil_steps_queue.get()
+        for idx, step in enumerate(recipe_e["boil_steps"]):
+            out = self.pico.recipes[self.pico.boiltank.recipe_index].boil_steps[idx]
             assert out["temperature"] == step["temperature"]
             assert out["duration"] == step["duration"]
 
