@@ -27,9 +27,9 @@ class Fake_BoilTank(object):
 
 class Fake_Pico(object):
 
-    def __init__(self, boiltank):
+    def __init__(self):
         self.recipes  = []
-        self.boiltank = boiltank 
+        self.boiltank = None
 
 class Fake_Recipe(object):
 
@@ -48,7 +48,8 @@ class MashTankTest(unittest.TestCase):
         self.start_mash_queue     = queue.Queue()
         self.need_cleaning_queue  = queue.Queue()
         boiltank                  = Fake_BoilTank(self.start_heat_queue, self.start_counting_queue)
-        self.pico                 = Fake_Pico(boiltank)
+        self.pico                 = Fake_Pico()
+        self.pico.boiltank        = boiltank
         self.mashtank = MashTank.MashTank(Fake_HotTank(self.volume_queue), boiltank, self.start_mash_queue, self.need_cleaning_queue, 0.01, self.input_queue, self.output_queue)
         self.mashtank.set_pico(self.pico)
         self.mashtank.start()
