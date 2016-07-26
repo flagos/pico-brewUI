@@ -301,11 +301,6 @@ var url      = $('#input-url').val();
       
       $('#submit-url').on('click',callback_submit_url);
       
-      //$('#card-task').change(callback_task_click);
-
-
-      
-
       console.log('finish loading');
      
   });

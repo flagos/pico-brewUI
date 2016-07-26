@@ -15,12 +15,9 @@ class HotTank(Thread, Tank):
         self.temperature_order = 55  # be safe
         Thread.__init__(self, daemon=True)
         Tank.__init__(self)
-        pass
 
     def push_volume(self, vol):
         self.target_volume += vol
-        pass
-
 
     def pop_volume(self, vol):
         self.current_volume -= vol
@@ -32,18 +29,9 @@ class HotTank(Thread, Tank):
     def add_liters(self, vol):
         #blocking call till the volume is not present
         self.current_volume += vol
-        #print "add "+str(vol)+" L current_volume: "+str(self.current_volume)
-        pass
-
-
-    def read_temperature(self):
-        if self.testing_queue_input is not None:
-            return self.testing_queue_input.get()
-        else:
-            return self.feedback_value  # pragma: no cover
 
     def run(self):
-        while 1:
+        while True:
             temperature = self.read_temperature()
             if (self.current_volume < self.target_volume):
                 if (self.current_volume < 10):
@@ -60,4 +48,3 @@ class HotTank(Thread, Tank):
             if self.testing_queue_output is not None:
                 self.testing_queue_output.put(self.current_volume)
             time.sleep(self.period)
-            pass

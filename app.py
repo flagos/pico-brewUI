@@ -261,7 +261,8 @@ if __name__ == "__main__":
     regule = Regulation.Regulation(hot, mash, boil)
     pico.real_init(hot, mash, boil, regule)
     pico.start_threads()
-    boil.start()
+    hot.start()
     mash.start()
+    boil.start()
 
     app.run()
