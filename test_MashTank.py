@@ -66,16 +66,15 @@ class MashTankTest(unittest.TestCase):
 
         self.start_mash_queue.put(None)
 
-        self.assertEqual(self.volume_queue.get(), 20) # ok for volume
+        self.assertEqual(self.volume_queue.get(), 20)  # ok for volume
 
         self.input_queue.put(66)
         self.input_queue.put(66)
-        start = time.time()
         self.input_queue.put(67)
         time.sleep(0.1)
-        self.assertFalse(self.mashtank.is_over()) # start at the rigth moment
+        self.assertFalse(self.mashtank.is_over())  # start at the rigth moment
 
-        self.start_counting_queue.get() # launch boil counting
+        self.start_counting_queue.get()  # launch boil counting
 
         self.start_mash_queue.join()
         self.assertTrue(self.mashtank.SetPoint is None)
@@ -93,15 +92,14 @@ class MashTankTest(unittest.TestCase):
 
         self.start_mash_queue.put(None)
 
-        self.assertEqual(self.volume_queue.get(), 20) # ok for volume
+        self.assertEqual(self.volume_queue.get(), 20)  # ok for volume
 
         # first step
         self.input_queue.put(66)
         self.input_queue.put(66)
-        start = time.time()
         self.input_queue.put(69)
         time.sleep(0.1)
-        self.assertFalse(self.mashtank.is_over()) # start at the rigth moment
+        self.assertFalse(self.mashtank.is_over())  # start at the rigth moment
 
         # second step
         self.input_queue.put(76)
@@ -111,7 +109,7 @@ class MashTankTest(unittest.TestCase):
         self.start_heat_queue.task_done()
 
         # third step
-        self.assertEqual(self.volume_queue.get(), 10) # ok for volume
+        self.assertEqual(self.volume_queue.get(), 10)  # ok for volume
         self.input_queue.put(66)
         self.input_queue.put(66)
         self.input_queue.put(69)
