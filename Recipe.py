@@ -12,6 +12,7 @@ class Recipe(object):
     def __init__(self, url):
         self.url = url
         self.mash_steps = []
+        self.boil_steps = []
 
         # var for status display
         self.playing  = True
@@ -58,13 +59,14 @@ class Recipe(object):
         # Add sparge
         spargenumber = 1
         for s in range(spargenumber):
-            sparge = {"temperature" : 78,
+            sparge = {"temperature": 78,
                       "water_volume": old_div((self.batch_size - self.mash_steps[0]["water_volume"]),spargenumber),
                       "duration": 10,
                       "dump":True}
             self.mash_steps.append(sparge)
 
         self.boil_time = self.json["boil_time"]
+        self.boil_steps.append({'temperature':98, 'duration':self.boil_time})
         #print "Boil time: " + str(self.boil_time)
 
         #pp = pprint.PrettyPrinter(indent=4)

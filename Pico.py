@@ -88,17 +88,15 @@ class Pico(object):
                 time.sleep(0.05)  # waiting for a new recipe from user
 
     def FillBoilTankThread(self):
+        self.boiltank.set_pico(self)
         while self.run_thread:
             if self.boil_index < len(self.recipes):
                 self.boil_current_recipe = self.recipes[self.boil_index]
-                self.boiltank.recipe_index = self.mash_index
+                self.boiltank.recipe_index = self.boil_index
 
-                #for step in self.recipes[self.boil_index].boil_steps:
-                self.boiltank.push_steps({'temperature':98, 'duration':self.recipes[self.boil_index].boil_time})  # only one step considered -- no hop droper
                 self.start_boil_queue.put(None)  # go next recipe
                 self.start_boil_queue.join()  # blocking -- recipe on going
 
-                
                 self.boiltank.need_cleaning_queue.get()
                 self.update_task(self.boil_current_recipe.boil_task_id, "waiting")
                 while(self.get_task_status(self.boil_current_recipe.boil_task_id) != "done"):
