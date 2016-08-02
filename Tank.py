@@ -79,6 +79,7 @@ class Tank(PID, Chrono):
         self.temperature_samples = []
         self.last_fill           = 0
         self.current_volume      = 0
+        self.resistor_duty       = 0  # set by LLD
 
         self.temperatures = List_max(SAMPLE_HISTORY)
         self.volumes      = List_max(SAMPLE_HISTORY)
@@ -98,6 +99,7 @@ class Tank(PID, Chrono):
             self.temperatures.append(value)
             self.timing.append(str(nowd.hour) + ":" + str(nowd.minute))
             self.volumes.append(self.current_volume)
+            self.powers.append(self.resistor_duty)
 
         #compute pid
         self.update(value)

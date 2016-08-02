@@ -94,6 +94,7 @@ void OnSetPin()
   unsigned char pin = (unsigned char) cmdMessenger.readCharArg();
   bool value        =                 cmdMessenger.readBoolArg();
 
+  pinMode(pin, OUTPUT);
   digitalWrite(pin, value?HIGH:LOW);
   cmdMessenger.sendCmd(kAcknowledge,"Set Pin");
 }

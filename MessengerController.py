@@ -42,7 +42,7 @@ class MessengerController(object):
                          'DumpInWater_reached'
                          ]
 
-        if (MyGlobals.args['hardware_disconnected'] is True):
+        if (MyGlobals.args['hardware_disconnected'] is False):
             try:
                 # try to open the first available usb port
                 self.port_name = self.list_usb_ports()[0][0]
@@ -92,6 +92,7 @@ class MessengerController(object):
         self.temperature["Hot"]  = int(args[0][0])/100
         self.temperature["Mash"] = int(args[0][1])/100
         self.temperature["Boil"] = int(args[0][2])/100
+        print('DEBUG')
 
     def on_dump_in_reached(self, received_command, *args, **kwargs):
         """ Callback on dump_in reached """
@@ -144,8 +145,7 @@ if __name__ == '__main__':
 
     try:
         print('Press Ctrl+C to exit...')
-        print()
-        #msg.run()
+        msg.run()
     except KeyboardInterrupt:
         msg.stop()
         print('Exiting...')

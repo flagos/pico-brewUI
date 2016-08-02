@@ -62,10 +62,10 @@ def volume():
 @app.route("/power.json")
 def power():
     data = {}
-    data["label"] = ["16:00","16:05","16:10","16:15","16:20","16:25"]
-    data["hot"]   = [1100, 1200, 1300, 1640, 1480, 1400, 1520]
-    data["mash"]  = [600,520,550,480,450,500]
-    data["boil"]  = [600, 400, 1000, 600, 500, 900, 800]
+    data["label"] = pico.hottank.timing.array
+    data["hot"]   = pico.hottank.powers.array
+    data["mash"]  = pico.mashtank.powers.array
+    data["boil"]  = pico.boiltank.powers.array
 
     return json.dumps(data)
 
@@ -240,7 +240,7 @@ def pump():
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Brewery software for a 3 tanks RIMS setup')
-    parser.add_argument('--hardware_disconnected', action='store_false', help='set this switch if you have no arduino wired')
+    parser.add_argument('--hardware_disconnected', action='store_true', help='set this switch if you have no arduino wired')
     MyGlobals.args = vars(parser.parse_args())
 
     hot = HotTank.HotTank(saturation=50, period=1)

@@ -33,12 +33,18 @@ class LLD(MessengerController):
         self.lock["resistor"] = True
         self.lock["pump"]     = True
 
+        self.resistor_duty = {}
+        self.resistor_duty["Hot"] = 0
+        self.resistor_duty["Mash"] = 0
+        self.resistor_duty["Boil"] = 0
+
         self.pump_setting = False
 
         MessengerController.__init__(self)
 
 
     def _resistor_duty(self, tank, cycle):
+        tank.resistor_duty = cycle
         if(tank.tank_name == "Hot"):
             self.set_pwm_pin(HOTPIN, cycle)
         elif (tank.tank_name == "Mash"):
