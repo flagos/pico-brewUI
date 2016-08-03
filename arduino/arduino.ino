@@ -113,7 +113,7 @@ void OnPwmPin()
 void OnDumpIn()
 {
   int valve       = (int)      cmdMessenger.readFloatArg();
-  int milliliters = (int)      cmdMessenger.readFloatArg();  // 65 liters each time by design
+  int milliliters = (int)      cmdMessenger.readFloatArg();  // 65 liters max each time by design
 
   cmdMessenger.sendCmd(kAcknowledge,"Set valve dosage");
 
