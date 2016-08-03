@@ -147,9 +147,6 @@ if __name__ == '__main__':
         msg.run()
     except KeyboardInterrupt:
         #msg.stop()
-        msg.set_pin(2, True)
-        print("up")
-        time.sleep(2)
-        msg.set_pin(2, False)
+        msg.set_pwm_pin(5, 0.5)
         print('Exiting...')
         time.sleep(100)

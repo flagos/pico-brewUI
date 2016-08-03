@@ -102,17 +102,18 @@ void OnSetPin()
 // Callback function for a set pin bool
 void OnPwmPin()
 {
-  unsigned char pin   = (unsigned char) cmdMessenger.readCharArg();
-  unsigned char value = (unsigned char) cmdMessenger.readCharArg();
+  int pin   = (int) cmdMessenger.readFloatArg();
+  int value = (int) cmdMessenger.readFloatArg();
 
+  pinMode(pin, OUTPUT);
   analogWrite(pin, value);
   cmdMessenger.sendCmd(kAcknowledge,"Set Pin PWM");
 }
 
 void OnDumpIn()
 {
-  unsigned char valve       = (unsigned char) cmdMessenger.readCharArg();
-  unsigned      milliliters = (unsigned)      cmdMessenger.readInt16Arg();  // 65 liters each time by design
+  int valve       = (int)      cmdMessenger.readFloatArg();
+  int milliliters = (int)      cmdMessenger.readFloatArg();  // 65 liters each time by design
 
   cmdMessenger.sendCmd(kAcknowledge,"Set valve dosage");
 
@@ -127,6 +128,7 @@ void OnDumpIn()
 // Setup function
 void setup()
 {
+  
   // Listen on serial connection for messages from the pc
   Serial.begin(9600);
 
@@ -154,8 +156,7 @@ void setup()
 
   Timer1.initialize(1000000);
   Timer1.attachInterrupt(callback_1second);
-
-
+  
   // enable Watchdog (2 second)
   wdt_enable(WDTO_2S);
 }
