@@ -97,9 +97,9 @@ class CmdMessenger(object):
         it will be used for reading.
         """
         self._file_buffer += self._read(size).decode(self._encoding)
-        #print "BUFFER", self._file_buffer
+        #print("BUFFER", self._file_buffer)
         self._process_buffer()
-        #print "COMMANDS", self._commands
+        #print("COMMANDS", self._commands)
         self._exec_commands()
 
     def feed_in_string(self, string):

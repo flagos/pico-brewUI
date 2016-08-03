@@ -92,7 +92,6 @@ class MessengerController(object):
         self.temperature["Hot"]  = int(args[0][0])/100
         self.temperature["Mash"] = int(args[0][1])/100
         self.temperature["Boil"] = int(args[0][2])/100
-        print('DEBUG')
 
     def on_dump_in_reached(self, received_command, *args, **kwargs):
         """ Callback on dump_in reached """
@@ -147,5 +146,10 @@ if __name__ == '__main__':
         print('Press Ctrl+C to exit...')
         msg.run()
     except KeyboardInterrupt:
-        msg.stop()
+        #msg.stop()
+        msg.set_pin(2, True)
+        print("up")
+        time.sleep(2)
+        msg.set_pin(2, False)
         print('Exiting...')
+        time.sleep(100)

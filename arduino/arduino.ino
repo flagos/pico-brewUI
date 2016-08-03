@@ -91,8 +91,8 @@ void OnPing()
 // Callback function for a set pin bool
 void OnSetPin()
 {
-  unsigned char pin = (unsigned char) cmdMessenger.readCharArg();
-  bool value        =                 cmdMessenger.readBoolArg();
+  int pin           = (int)                 cmdMessenger.readFloatArg();
+  bool value        = (bool)          ((int)cmdMessenger.readFloatArg());
 
   pinMode(pin, OUTPUT);
   digitalWrite(pin, value?HIGH:LOW);
@@ -113,8 +113,6 @@ void OnDumpIn()
 {
   unsigned char valve       = (unsigned char) cmdMessenger.readCharArg();
   unsigned      milliliters = (unsigned)      cmdMessenger.readInt16Arg();  // 65 liters each time by design
-
-
 
   cmdMessenger.sendCmd(kAcknowledge,"Set valve dosage");
 
