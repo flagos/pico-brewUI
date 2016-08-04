@@ -89,7 +89,7 @@ class LLD(MessengerController):
 
 
     def resistor_switch(self, tank, setting):
-        if (self.lock['resistor'] is False):
+        if (self.lock['resistor'] is True):
             if (setting is False):
                 self.setting[tank.tank_name] = False
                 return self._resistor_duty(tank, 0)
@@ -98,7 +98,7 @@ class LLD(MessengerController):
 
 
     def valve_switch(self, tank, setting):
-        if (self.lock['valve'] is False):
+        if (self.lock['valve'] is True):
             self._valve(tank, setting)
             if (setting is False):
                 self.valve_setting[tank.tank_name] = False
@@ -107,7 +107,7 @@ class LLD(MessengerController):
 
 
     def pump_switch(self, setting):
-        if (self.lock['pump'] is False):
+        if (self.lock['pump'] is True):
             if setting is False:
                 self.pump_setting  = False
             else:

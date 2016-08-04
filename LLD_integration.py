@@ -66,7 +66,7 @@ class LLDTest(unittest.TestCase):
 
     def check_valve(self, tank):
 
-        self.lld.valve_switch(tank, True)
+        self.lld.valve_switch(tank, False)
         assert(input("Is valve "+ tank.tank_name +" OFF ? [y/n]") == "y")
 
         self.lld.valve_switch(tank, True)
@@ -76,9 +76,9 @@ class LLDTest(unittest.TestCase):
     def test_valve(self):
         ''' Test valves '''
 
-        self.check_valve(self.hot)
+        #self.check_valve(self.hot)
         self.check_valve(self.mash)
-        self.check_valve(self.boil)
+        #self.check_valve(self.boil)
 
     def check_one_dosage(self, tank):
         print("Start dosing 2 liters in "+ tank.tank_name)
