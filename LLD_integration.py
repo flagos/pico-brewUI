@@ -51,9 +51,12 @@ class LLDTest(unittest.TestCase):
     def test_temperature(self):
         ''' Read temperatures '''
 
-        self.lld.get_temperature(self.hot)
-        self.lld.get_temperature(self.mash)
-        self.lld.get_temperature(self.boil)
+        t = self.lld.get_temperature(self.hot)
+        assert(input("Is hot tank temp at " + str(t) + " ? [y/n]") == "y")
+        t = self.lld.get_temperature(self.mash)
+        assert(input("Is mash tank temp at " + str(t) + " ? [y/n]") == "y")
+        t = self.lld.get_temperature(self.boil)
+        assert(input("Is boil tank temp at " + str(t) + " ? [y/n]") == "y")
 
     def test_pump(self):
         ''' Test pump '''
@@ -76,7 +79,7 @@ class LLDTest(unittest.TestCase):
     def test_valve(self):
         ''' Test valves '''
 
-        #self.check_valve(self.hot)
+        self.check_valve(self.hot)
         self.check_valve(self.mash)
         #self.check_valve(self.boil)
 

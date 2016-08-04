@@ -10,7 +10,7 @@ BOILPIN = 2
 
 MASH_VALVE_ON  = 11
 MASH_VALVE_OFF = 12
-HOT_VALVE = 5
+HOT_VALVE      = 9
 
 class LLD(MessengerController):
 
@@ -64,7 +64,9 @@ class LLD(MessengerController):
             self.set_pin(pin, True)
             time.sleep(7)  # will freeze UI :-/
             self.set_pin(pin, False)
-
+        elif(tank.tank_name == "Hot"):
+            pin = HOT_VALVE
+            self.set_pin(pin, setting)
 
     def _pump(self, setting):
         pass
