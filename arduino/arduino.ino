@@ -3,18 +3,17 @@
 #include "CmdMessenger.h"  // CmdMessenger
 #include "TimerOne.h"
 #include <avr/wdt.h>
+#include "Dimmer.h"
+#include "mapping.h"
 
 // Blinking led variables
 unsigned long previousToggleLed = 0;   // Last time the led was toggled
 bool ledState                   = 0;   // Current state of Led
-const int kBlinkLed             = 13;  // Pin of internal Led
 
 
 /*
  *   Thermometer
  */
-#define ONE_WIRE_BUS 10
-#define TEMPERATURE_PRECISION 12
 
 // Setup a oneWire instance to communicate with any OneWire devices (not just Maxim/Dallas temperature ICs)
 OneWire oneWire(ONE_WIRE_BUS);
@@ -156,6 +155,19 @@ void setup()
 
   Timer1.initialize(1000000);
   Timer1.attachInterrupt(callback_1second);
+
+
+  // RELAY & ZERO_CROSS
+  pinMode(HOT_RESISTOR,  OUTPUT);
+  pinMode(MASH_RESISTOR, OUTPUT);
+  pinMode(BOIL_RESISTOR, OUTPUT);
+  digitalWrite(HOT_RESISTOR , 0);
+  digitalWrite(MASH_RESISTOR, 0);
+  digitalWrite(BOIL_RESISTOR, 0);
+  set_lengths(1, 1, 1, 1);
+  
+  pinMode(ZERO_CROSS_IT_PIN, INPUT_PULLUP);
+  attachInterrupt(ZERO_CROSS_IT, zero_cross_sync_it, RISING);  
   
   // enable Watchdog (2 second)
   wdt_enable(WDTO_2S);
