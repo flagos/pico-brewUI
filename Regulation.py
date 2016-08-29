@@ -12,7 +12,7 @@ class Regulation(object):
         self.hot  = hot
         self.mash = mash
         self.boil = boil
-        self.lld  = LLD()
+        self.lld  = LLD(hot, mash, boil)
 
         self.sample_time = 5
         hot.setSampleTime(self.sample_time)
@@ -27,7 +27,8 @@ class Regulation(object):
         hot  = self.hot
         mash = self.mash
         boil = self.boil
-
+        tanks = (mash, boil, hot)
+        
         lld = self.lld
 
         while True:
@@ -39,20 +40,12 @@ class Regulation(object):
             max_duty = 1
 
             if (mash.output >= max_duty):
-                lld.set_resistor_duty(mash, max_duty)
-                lld.set_resistor_duty(boil, 0)
-                lld.set_resistor_duty(hot, 0)
+                lld.set_resistors_duty(tanks, (max_duty, 0, 0))
             elif (mash.output + boil.output >= max_duty):
-                lld.set_resistor_duty(mash, mash.output)
-                lld.set_resistor_duty(boil, max_duty - mash.output)
-                lld.set_resistor_duty(hot, 0)
+                lld.set_resistors_duty(tanks, (mash.output, max_duty - mash.output, 0))
             elif (mash.output + boil.output + hot.output >= max_duty):
-                lld.set_resistor_duty(mash, mash.output)
-                lld.set_resistor_duty(boil, boil.output)
-                lld.set_resistor_duty(hot, max_duty - mash.output - boil.output)
+                lld.set_resistors_duty(tanks, (mash.output, boil.output, max_duty - mash.output - boil.output))
             else:
-                lld.set_resistor_duty(mash, mash.output)
-                lld.set_resistor_duty(boil, boil.output)
-                lld.set_resistor_duty(hot, hot.output)
+                lld.set_resistors_duty(tanks, (mash.output, boil.output, hot.output))
 
             time.sleep(self.sample_time)

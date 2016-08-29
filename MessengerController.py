@@ -39,7 +39,8 @@ class MessengerController(object):
                          'PwmPin',
                          'ReadTemperature',
                          'DumpInWater',
-                         'DumpInWater_reached'
+                         'DumpInWater_reached',
+                         'Resistor'
                          ]
 
         if (MyGlobals.args['hardware_disconnected'] is False):
@@ -121,6 +122,10 @@ class MessengerController(object):
         self.messenger.send_cmd(self.commands.index('PwmPin'), pin, int(value*255))
 
         self.messenger.wait_for_ack(ackid=self.commands.index('acknowledge'))
+
+    def set_resistors(self, mash, boil, hot):
+        self.messenger.send_cmd(self.commands.index('Resistor'), mash, boil, hot)
+
 
     def dump_in_water(self, valve, value):
         """ Set a pwm value to a pin (blocking)

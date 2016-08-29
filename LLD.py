@@ -33,24 +33,9 @@ class LLD(MessengerController):
         self.lock["resistor"] = True
         self.lock["pump"]     = True
 
-        self.resistor_duty = {}
-        self.resistor_duty["Hot"] = 0
-        self.resistor_duty["Mash"] = 0
-        self.resistor_duty["Boil"] = 0
-
         self.pump_setting = False
 
         MessengerController.__init__(self)
-
-
-    def _resistor_duty(self, tank, cycle):
-        tank.resistor_duty = cycle
-        if(tank.tank_name == "Hot"):
-            self.set_pwm_pin(HOTPIN, cycle)
-        elif (tank.tank_name == "Mash"):
-            self.set_pwm_pin(MASHPIN, cycle)
-        elif (tank.tank_name == "Boil"):
-            self.set_pwm_pin(BOILPIN, cycle)
 
 
     def _valve(self, tank, setting):
@@ -80,9 +65,11 @@ class LLD(MessengerController):
     def _ping_arduino(self):
         pass
 
-    def set_resistor_duty(self, tank, cycle):
-        if (self.setting[tank.tank_name] is True):
-            self._resistor_duty(tank, cycle)
+    def set_resistors_duty(self, tanks, cycles):
+        tanks[0].resistor_duty = cycles[0]
+        tanks[1].resistor_duty = cycles[1]
+        tanks[2].resistor_duty = cycles[2]
+        self.set_resistors(int(cycles[0]*50), int(cycles[1]*50), int(cycles[2]*50))
 
 
     def set_pump(self, setting):
