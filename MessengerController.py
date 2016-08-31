@@ -124,7 +124,8 @@ class MessengerController(object):
         self.messenger.wait_for_ack(ackid=self.commands.index('acknowledge'))
 
     def set_resistors(self, mash, boil, hot):
-        self.messenger.send_cmd(self.commands.index('Resistor'), mash, boil, hot)
+        print(mash)
+        self.messenger.send_cmd(self.commands.index('Resistor'), hot, mash, boil, 100 - mash - boil - hot)
 
 
     def dump_in_water(self, valve, value):

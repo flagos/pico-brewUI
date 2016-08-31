@@ -10,6 +10,7 @@ class FakeTank(object):
 
     def __init__(self, name):
         self.tank_name = name
+        self.resistor_duty = 0
 
 class LLDTest(unittest.TestCase):
 
@@ -21,15 +22,16 @@ class LLDTest(unittest.TestCase):
         self.boil = FakeTank("Boil")
 
 
-    def check_one_resistor(self, tank):
-
+    def check_one_resistor(self, tank, m, b, h):
+        tanks = (self.mash, self.boil, self.hot)
+        
         print("Set " + tank.tank_name + " at 20%")
-        self.lld.set_resistor_duty(tank, 0.2)
+        self.lld.set_resistors_duty(tanks, (m, b, h))
 
         assert(input("Is tank " + tank.tank_name + " at 20 % ? [y/n]") == "y")
 
         print("Set " + tank.tank_name + " at 0%")
-        self.lld.set_resistor_duty(tank, 0)
+        self.lld.set_resistors_duty(tanks, (0, 0, 0))
 
         assert(input("Is tank " + tank.tank_name + " at  0 % ? [y/n]") == "y")
 
@@ -37,9 +39,9 @@ class LLDTest(unittest.TestCase):
     def test_resistor(self):
         ''' Check resistor duty cycle '''
 
-        self.check_one_resistor(self.hot)
-        self.check_one_resistor(self.mash)
-        self.check_one_resistor(self.boil)
+        self.check_one_resistor(self.hot,    0,   0, 0.2)
+        #self.check_one_resistor(self.mash, 0.2,   0,   0)
+        #self.check_one_resistor(self.boil,   0, 0.2,   0)
 
 
     def check_one_temperature(self, tank):

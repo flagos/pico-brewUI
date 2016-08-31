@@ -66,10 +66,11 @@ class LLD(MessengerController):
         pass
 
     def set_resistors_duty(self, tanks, cycles):
+        '''beware: order of tanks is mash, boil, hot for readibility'''
         tanks[0].resistor_duty = cycles[0]
         tanks[1].resistor_duty = cycles[1]
         tanks[2].resistor_duty = cycles[2]
-        self.set_resistors(int(cycles[0]*50), int(cycles[1]*50), int(cycles[2]*50))
+        self.set_resistors(int(cycles[0]*50)*2, int(cycles[1]*50)*2, int(cycles[2]*50)*2)
 
 
     def set_pump(self, setting):

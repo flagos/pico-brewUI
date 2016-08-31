@@ -46,7 +46,8 @@ enum
   kPwmPin              , // Command to request set pin PWM
   kReadTemperature     , // Command to send temperatures from ds18b20
   kDumpInWater         , // Command to dose in water
-  kDumpInWater_reached  // Command to send that water has been filled in
+  kDumpInWater_reached , // Command to send that water has been filled in
+  Resistor               // Command to set SSR values
 
 };
 
@@ -62,6 +63,7 @@ void attachCommandCallbacks()
   cmdMessenger.attach(kSetPin     , OnSetPin);
   cmdMessenger.attach(kPwmPin     , OnPwmPin);
   cmdMessenger.attach(kDumpInWater, OnDumpIn);
+  cmdMessenger.attach(Resistor    , OnResistor);
 }
 
 // ------------------  C A L L B A C K S -----------------------
@@ -131,6 +133,20 @@ void OnDumpIn()
   cmdMessenger.sendCmd(kAcknowledge,"Set valve dosage");
 
 }
+
+void OnResistor()
+{
+  int ssr0       = (int)      cmdMessenger.readFloatArg();
+  int ssr1       = (int)      cmdMessenger.readFloatArg();
+  int ssr2       = (int)      cmdMessenger.readFloatArg();
+  int idle       = (int)      cmdMessenger.readFloatArg();
+
+  set_lengths(ssr0, ssr1, ssr2, idle);
+
+  cmdMessenger.sendCmd(kAcknowledge,"Set Resistor");
+
+}
+
 
 
 
