@@ -6,10 +6,13 @@
 #include "Dimmer.h"
 #include "mapping.h"
 
+
+
 // Blinking led variables
 unsigned long previousToggleLed = 0;   // Last time the led was toggled
 bool ledState                   = 0;   // Current state of Led
 
+static int count = 0;
 
 /*
  *   Thermometer
@@ -62,6 +65,17 @@ void attachCommandCallbacks()
 }
 
 // ------------------  C A L L B A C K S -----------------------
+
+
+void zero_cross_sync_it2(void) {
+  count++;
+  count %= 100;
+  if (count==0)
+    toggleLed();
+  
+  //cmdMessenger.sendCmd(kAcknowledge,"IT");
+}
+
 
 // Called when a received command has no attached function
 void OnUnknownCommand()
@@ -164,10 +178,11 @@ void setup()
   digitalWrite(HOT_RESISTOR , 0);
   digitalWrite(MASH_RESISTOR, 0);
   digitalWrite(BOIL_RESISTOR, 0);
-  set_lengths(1, 1, 1, 1);
+  set_lengths(0, 0, 0, 100);
   
   pinMode(ZERO_CROSS_IT_PIN, INPUT_PULLUP);
   attachInterrupt(ZERO_CROSS_IT, zero_cross_sync_it, RISING);  
+  //attachInterrupt(ZERO_CROSS_IT, zero_cross_sync_it2, RISING);  
   
   // enable Watchdog (2 second)
   wdt_enable(WDTO_2S);
@@ -222,7 +237,7 @@ void loop()
   // this means that cmdMessenger are taking a longer time than this
   if (hasExpired(previousToggleLed,2000)) // Toggle every 2 secs
   {
-    toggleLed();
+    //toggleLed();
   }
 
   // reset watchdog
@@ -236,3 +251,5 @@ void toggleLed()
   ledState = !ledState;
   digitalWrite(kBlinkLed, ledState?HIGH:LOW);
 }
+
+

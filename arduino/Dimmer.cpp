@@ -3,7 +3,7 @@
 #include "Arduino.h"
 
 
-static int count = 0, current_idx = 0, idx = 0;
+static int count = 0, idx = 0;
 static int lengths[4];
 
 
@@ -18,29 +18,31 @@ void zero_cross_sync_it(void) {
 
   int state_idx = get_index(idx);
   
-  if( current_idx == 0) {
+  idx++;
+  idx %= lengths[3];
+
+  if( state_idx == 0) {
     digitalWrite( MASH_RESISTOR, 0 );      
     digitalWrite( BOIL_RESISTOR, 0 );      
     digitalWrite( HOT_RESISTOR,  1 );
   }
-  if( current_idx == 1) {
+  if( state_idx == 1) {
     digitalWrite( HOT_RESISTOR,  0 );
     digitalWrite( BOIL_RESISTOR, 0 );      
     digitalWrite( MASH_RESISTOR, 1 );      
   }
-  if( current_idx == 2) {
+  if( state_idx == 2) {
     digitalWrite( HOT_RESISTOR,  0 );      
     digitalWrite( MASH_RESISTOR, 0 );
     digitalWrite( BOIL_RESISTOR, 1 );           
   }
-  if( current_idx == 3) {
+  if( state_idx == 3) {
     digitalWrite( HOT_RESISTOR,  0 );      
     digitalWrite( MASH_RESISTOR, 0 );
     digitalWrite( BOIL_RESISTOR, 0 );           
   }
   
-  idx++;
-  idx %= lengths[3];
+
 }
 
 
