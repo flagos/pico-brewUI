@@ -12,7 +12,7 @@ class Regulation(object):
         self.hot  = hot
         self.mash = mash
         self.boil = boil
-        self.lld  = LLD(hot, mash, boil)
+        self.lld  = LLD()
 
         self.sample_time = 5
         hot.setSampleTime(self.sample_time)
