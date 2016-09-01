@@ -105,13 +105,8 @@ class LLD(MessengerController):
 
 
     def get_temperature(self, tank):
+        return self.temperature[tank.tank_name]
 
-        if tank.tank_name == "Hot":
-            return self.temperature["Hot"]
-        elif tank.tank_name == "Mash":
-            return self.temperature["Mash"]
-        elif tank.tank_name == "Boil":
-            return self.temperature["Boil"]
 
     def dose_water_blocking(self, tank, liters):
         self._dose_liters(tank, liters)
