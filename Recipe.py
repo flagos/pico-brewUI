@@ -8,6 +8,7 @@ import urllib.request, urllib.parse, urllib.error,json
 import pprint
 
 class Recipe(object):
+    id_counter = 0
 
     def __init__(self, url):
         self.url = url
@@ -18,6 +19,8 @@ class Recipe(object):
         self.playing  = True
         self.step     = "waiting"
         self.rem_time = ""
+        self.id_      = Recipe.id_counter
+        Recipe.id_counter += 1
 
 
     def fetch_recipe(self):
@@ -75,6 +78,7 @@ class Recipe(object):
 
     def export(self):
         export_hash = {
+            "id": self.id_,
             "recipe_name": self.name,
             "step": self.step,
             "time": self.rem_time,
