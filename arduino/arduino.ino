@@ -4,6 +4,7 @@
 #include "TimerOne.h"
 #include <avr/wdt.h>
 #include "Dimmer.h"
+#include "Flow_meter.h"
 #include "mapping.h"
 
 
@@ -45,8 +46,7 @@ enum
   kSetPin              , // Command to request set pin ON/OFF
   kPwmPin              , // Command to request set pin PWM
   kReadTemperature     , // Command to send temperatures from ds18b20
-  kDumpInWater         , // Command to dose in water
-  kDumpInWater_reached , // Command to send that water has been filled in
+  kReadFlow            , // Command to send that water has been filled in
   Resistor               // Command to set SSR values
 
 };
@@ -62,7 +62,6 @@ void attachCommandCallbacks()
   cmdMessenger.attach(kPing       , OnPing);
   cmdMessenger.attach(kSetPin     , OnSetPin);
   cmdMessenger.attach(kPwmPin     , OnPwmPin);
-  cmdMessenger.attach(kDumpInWater, OnDumpIn);
   cmdMessenger.attach(Resistor    , OnResistor);
 }
 
@@ -125,15 +124,6 @@ void OnPwmPin()
   cmdMessenger.sendCmd(kAcknowledge,"Set Pin PWM");
 }
 
-void OnDumpIn()
-{
-  int valve       = (int)      cmdMessenger.readFloatArg();
-  int milliliters = (int)      cmdMessenger.readFloatArg();  // 65 liters max each time by design
-
-  cmdMessenger.sendCmd(kAcknowledge,"Set valve dosage");
-
-}
-
 void OnResistor()
 {
   int ssr0       = (int)      cmdMessenger.readFloatArg();
@@ -146,10 +136,6 @@ void OnResistor()
   cmdMessenger.sendCmd(kAcknowledge,"Set Resistor");
 
 }
-
-
-
-
 
 
 // ------------------ M A I N  ----------------------
@@ -197,8 +183,9 @@ void setup()
   set_lengths(0, 0, 0, 100);
   
   pinMode(ZERO_CROSS_IT_PIN, INPUT_PULLUP);
+  pinMode(FLOW_METER_IT_PIN, INPUT_PULLUP);
   attachInterrupt(ZERO_CROSS_IT, zero_cross_sync_it, RISING);  
-  //attachInterrupt(ZERO_CROSS_IT, zero_cross_sync_it2, RISING);  
+  attachInterrupt(FLOW_METER_IT, flow_meter_it,      FALLING);  
   
   // enable Watchdog (2 second)
   wdt_enable(WDTO_2S);
@@ -230,6 +217,13 @@ void callback_1second(void) {
   cmdMessenger.sendCmdArg<uint16_t>((uint16_t) (pipeTemp*100));
   cmdMessenger.sendCmdArg<uint16_t>((uint16_t) (boilTemp*100));
   cmdMessenger.sendCmdEnd ();
+
+  unsigned long flow = compute_flow_Ml();
+  cmdMessenger.sendCmdStart(kReadFlow);
+  cmdMessenger.sendCmdArg<uint16_t>((uint16_t) flow);
+  cmdMessenger.sendCmdEnd ();
+  
+
 }
 
 // Returns if it has been more than interval (in ms) ago. Used for periodic actions
