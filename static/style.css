@@ -137,7 +137,15 @@ label.waiting {
 
 #modal-add-recipe input#input-url {
     color: black;
-} 
+}
+
+#modal-edit-recipe {
+    color: black;
+}
+
+#modal-edit-recipe .title {
+    float: left;
+}
 
 /*valve*/
 .valve-name {

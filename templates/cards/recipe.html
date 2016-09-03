@@ -9,9 +9,9 @@
           <tbody>
           </tbody>
         </table>
-        <span class="edit">
-          <a class="modal-trigger" href="#modal-edit-recipes"><img src="static/icons/edit.png" width=28px/></a>
-        </span>
+        <!-- <span class="edit"> -->
+        <!--   <a class="modal-trigger" href="#modal-edit-recipe"><img src="static/icons/edit.png" width=28px/></a> -->
+        <!-- </span> -->
         <span class="add-task">
           <a class="btn-floating btn-large waves-effect waves-light red  modal-trigger"  href="#modal-add-recipe"><i class="material-icons" style="font-style: normal;">+</i></a>
         </span>
@@ -36,10 +36,18 @@
         </div>
 
         <!-- Modal edit recipes -->
-        <div id="modal-edit-recipes" class="modal bottom-sheet">
+        <div id="modal-edit-recipe" class="modal bottom-sheet">
           <div class="modal-content">
             <h4>Edit Recipe</h4>
             <h5>Mash steps</h5>
+            <ul class="collection">
+              <li class="collection-item avatar">
+                <div class="title">Saccharification</div>
+                <div class="temperature"> 68°C </div>
+                <div class="secondary-content time"> 20min </div>
+                <!-- <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a> -->
+              </li>
+            </ul>
             <h5>Boil steps</h5>
           </div>
           <div class="modal-footer">
