@@ -31,15 +31,16 @@ class MessengerController(object):
         self.temperature["Mash"] = 100
         self.temperature["Boil"] = 100
 
-        self.valve_status = []
+        self.flow_level_current = 0
+        self.flow_level_target  = 0
+
         self.commands = ['acknowledge',
                          'error',
                          'ping',
                          'SetPin',
                          'PwmPin',
                          'ReadTemperature',
-                         'DumpInWater',
-                         'DumpInWater_reached',
+                         'ReadFlow',
                          'Resistor'
                          ]
 
@@ -66,8 +67,8 @@ class MessengerController(object):
             self.messenger.attach(func=self.on_error, msgid=self.commands.index('error'))
             self.messenger.attach(func=self.on_read_temperature,
                                   msgid=self.commands.index('ReadTemperature'))
-            self.messenger.attach(func=self.on_dump_in_reached,
-                                  msgid=self.commands.index('DumpInWater_reached'))
+            self.messenger.attach(func=self.on_read_flow,
+                                  msgid=self.commands.index('ReadFlow'))
 
 
             thread = threading.Thread(target=self.run, args=())
@@ -94,10 +95,10 @@ class MessengerController(object):
         self.temperature["Mash"] = int(args[0][1])/100
         self.temperature["Boil"] = int(args[0][2])/100
 
-    def on_dump_in_reached(self, received_command, *args, **kwargs):
-        """ Callback on dump_in reached """
+    def on_read_flow(self, received_command, *args, **kwargs):
+        """ Callback on flow """
 
-        self.valve_status[args[0][0]] = False
+        self.flow_level_current = int(args[0][0])
 
 
     def stop(self):

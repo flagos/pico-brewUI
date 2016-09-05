@@ -56,11 +56,14 @@ class LLD(MessengerController):
     def _pump(self, setting):
         pass
 
-    def _dose_liters(self, tank, liters):
-        pass
+    def _dose_liters(self, tank, milliliters):
+        self.flow_level_target += milliliters
+        self._dose_liters(tank, True)
 
     def _wait_for_dosage(self, tank):
-        pass
+        while(self.flow_level_current < self.flow_level_target):
+            time.sleep(0.02)
+        self._dose_liters(tank, False)
 
     def _ping_arduino(self):
         pass
@@ -108,9 +111,9 @@ class LLD(MessengerController):
         return self.temperature[tank.tank_name]
 
 
-    def dose_water_blocking(self, tank, liters):
-        self._dose_liters(tank, liters)
-        self._wait_for_dosage(liters)
+    def dose_water_blocking(self, tank, milliliters):
+        self._dose_liters(tank, milliliters)
+        self._wait_for_dosage(tank)
 
 
 if __name__ == '__main__':

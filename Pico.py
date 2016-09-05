@@ -33,6 +33,7 @@ class Pico(object):
         self.run_thread = True
 
         self.regule = regulation
+        self.lld    = self.regule.lld
 
         self.data = {}
         self.data["task"] = []

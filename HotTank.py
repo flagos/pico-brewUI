@@ -29,6 +29,7 @@ class HotTank(Thread, Tank):
     def add_liters(self, vol):
         #blocking call till the volume is not present
         self.current_volume += vol
+        self.pico.lld.dose_water_blocking(self, 1000*vol)
 
     def run(self):
         while True:
