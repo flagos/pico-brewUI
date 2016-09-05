@@ -241,6 +241,7 @@ def pump():
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Brewery software for a 3 tanks RIMS setup')
     parser.add_argument('--hardware_disconnected', action='store_true', help='set this switch if you have no arduino wired')
+    parser.add_argument('--two_tanks', action='store_true', help='remove hot tank')
     MyGlobals.args = vars(parser.parse_args())
 
     hot = HotTank.HotTank(saturation=50, period=1)

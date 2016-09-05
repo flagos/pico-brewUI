@@ -21,6 +21,9 @@ class MashTank(Thread, Tank):
     def get_step(self):
         return self.pico.recipes[self.recipe_index].mash_steps[self.step_number]
 
+    def fill_volume(self, vol):
+        self.hottank.pop_volume(vol)
+
     def run(self):
         while True:
             self.start_time=0
@@ -39,7 +42,7 @@ class MashTank(Thread, Tank):
 
                 if(self.get_step()['water_volume']):
                     self.information(None, "adding "+ str(self.get_step()['water_volume']) + "mL")
-                    self.hottank.pop_volume(self.get_step()['water_volume'])
+                    self.fill_volume(self.get_step()['water_volume'])
                     self.current_volume = self.get_step()['water_volume']
 
                 self.set_consign(self.get_step()['temperature'])
