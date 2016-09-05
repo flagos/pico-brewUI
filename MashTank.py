@@ -1,6 +1,7 @@
 from threading import Thread
 import time
 from Tank import Tank
+from globals import MyGlobals
 
 class MashTank(Thread, Tank):
 
@@ -22,8 +23,12 @@ class MashTank(Thread, Tank):
         return self.pico.recipes[self.recipe_index].mash_steps[self.step_number]
 
     def fill_volume(self, vol):
-        self.hottank.pop_volume(vol)
-
+        if (MyGlobals.args['two_tanks'] is False):
+            self.hottank.pop_volume(vol)
+        else:
+            self.pico.lld.dose_water_blocking(self, 1000*vol)
+           
+            
     def run(self):
         while True:
             self.start_time=0
