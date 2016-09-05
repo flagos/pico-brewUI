@@ -87,7 +87,6 @@ class Tank(PID, Chrono):
         self.timing       = List_max(SAMPLE_HISTORY)
         self.recipe_index = 0
 
-
         PID.__init__(self)
         Chrono.__init__(self)
 

@@ -25,12 +25,22 @@ class Fake_BoilTank(object):
         self.start_counting_queue = start_counting_queue
         self.current_volume       = 0
 
+class Fake_LLD(object):
+
+    def __init__(self):
+        pass
+
+    def dose_water_blocking(self, tank, milliliters):
+        # doing nothing but maybe we can check values here
+        pass
+
 class Fake_Pico(object):
 
     def __init__(self):
         self.recipes  = []
         self.boiltank = None
-
+        self.lld      = Fake_LLD()
+        
 class Fake_Recipe(object):
 
     def __init__(self):

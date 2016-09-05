@@ -33,7 +33,8 @@ class Pico(object):
         self.run_thread = True
 
         self.regule = regulation
-        self.lld    = self.regule.lld
+        if self.regule is not None:
+            self.lld    = self.regule.lld
 
         self.data = {}
         self.data["task"] = []
@@ -69,6 +70,7 @@ class Pico(object):
 
 
     def FillMashTankThread(self):
+        self.hottank.set_pico(self)
         self.mashtank.set_pico(self)
         while self.run_thread:
             if self.mash_index < len(self.recipes):

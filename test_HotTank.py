@@ -3,7 +3,7 @@ standard_library.install_aliases()
 import unittest
 import HotTank
 import queue
-
+from test_MashTank import Fake_Pico
 
 class HotTankTest(unittest.TestCase):
 
@@ -11,6 +11,8 @@ class HotTankTest(unittest.TestCase):
         self.input_queue  = queue.Queue()
         self.output_queue = queue.Queue()
         self.hottank = HotTank.HotTank(saturation, 0.01, self.input_queue, self.output_queue)
+        self.pico                 = Fake_Pico()
+        self.hottank.set_pico(self.pico)
         self.hottank.start()
 
     def run_test(self, orders, temperatures, expected):

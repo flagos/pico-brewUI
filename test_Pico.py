@@ -7,7 +7,13 @@ import queue
 import time
 
 
-class Fake_HotTank(object):
+class Fake_Tank(object):
+
+    def set_pico(self, pico):
+        self.pico = pico
+   
+    
+class Fake_HotTank(Fake_Tank):
     """Fake class to test MashTank """
 
     def __init__(self, push_volume_queue):
@@ -18,26 +24,19 @@ class Fake_HotTank(object):
         self.push_volume_queue.put(vol)
         pass
 
-
-class Fake_MashTank(object):
+class Fake_MashTank(Fake_Tank):
     """Fake class to test pico"""
     def __init__(self, need_cleaning_queue, start_mash_queue):
         self.need_cleaning_queue   = need_cleaning_queue
         self.start_mash_queue      = start_mash_queue
         self.recipe_index          = 0
 
-    def set_pico(self, pico):
-        self.pico = pico
-
-
-class Fake_BoilTank(object):
+class Fake_BoilTank(Fake_Tank):
     """Fake class to test MashTank """
     def __init__(self, need_cleaning_queue, start_boil_queue):
         self.start_boil_queue       = start_boil_queue
         self.need_cleaning_queue   = need_cleaning_queue
         
-    def set_pico(self, pico):
-        self.pico = pico
 
 class PicoTest(unittest.TestCase):
 
