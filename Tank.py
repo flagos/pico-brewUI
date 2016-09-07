@@ -98,7 +98,7 @@ class Tank(PID, Chrono):
             self.temperatures.append(value)
             self.timing.append(str(nowd.hour) + ":" + str(nowd.minute))
             self.volumes.append(self.current_volume)
-            self.powers.append(self.resistor_duty)
+            self.powers.append(self.resistor_duty*3500)
 
         #compute pid
         self.update(value)
