@@ -15,6 +15,8 @@ class MashTank(Thread, Tank):
         self.testing_queue_input = testing_queue_input
         self.testing_queue_output = testing_queue_output
 
+        self.pico.lld.pump_switch(False)
+
         Thread.__init__(self, daemon=True)
         Tank.__init__(self)
         pass
@@ -49,6 +51,7 @@ class MashTank(Thread, Tank):
                     self.information(None, "adding "+ str(self.get_step()['water_volume']) + "mL")
                     self.fill_volume(self.get_step()['water_volume'])
                     self.current_volume = self.get_step()['water_volume']
+                    self.pico.lld.pump_switch(True)
 
                 self.set_consign(self.get_step()['temperature'])
 
@@ -64,6 +67,7 @@ class MashTank(Thread, Tank):
                 if('dump' in self.get_step() and self.get_step()['dump'] is True):
                     self.information("Mash Dumping #" + str(self.step_number), None)
                     self.set_consign(None)
+                    self.pico.lld.pump_switch(False)
                     if self.boiltank_start_heating is False:
                         self.boiltank.start_heat_queue.put(None)
                         
@@ -76,6 +80,10 @@ class MashTank(Thread, Tank):
 
             self.boiltank.start_counting_queue.put(None)
             self.start_mash_queue.task_done()
+
+            self.set_consign(None)
+            self.pico.lld.pump_switch(False)
+            
 
     def dump_tank(self):
         self.pico.boiltank.current_volume += self.current_volume
