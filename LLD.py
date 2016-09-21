@@ -13,6 +13,9 @@ MASH_VALVE_OFF = 12
 HOT_VALVE      = 9
 
 class LLD(MessengerController):
+    '''
+    Here is the driver class for our system. If you want to adapt it, you normally should only modify methods stating with an _, all the others methods should remain generic.
+    '''
 
     def __init__(self):
         #self.arduino = serial.Serial('/dev/tty.usbserial', 115000)
@@ -33,7 +36,10 @@ class LLD(MessengerController):
         self.lock["resistor"] = True
         self.lock["pump"]     = True
 
+        self.cycles = (0, 0, 0)
+
         self.pump_setting = False
+        self.set_pump(False)
 
         MessengerController.__init__(self)
 
@@ -65,33 +71,46 @@ class LLD(MessengerController):
             time.sleep(0.02)
         self._dose_liters(tank, False)
 
+    def _resistor_setting(self, cycles):
+        for index, cycle in enumerate(cycles):
+            if cycle is not None:
+                self.cycles[index] = cycle
+                
+        self.set_resistors(int(self.cycles[0]*50)*2, int(self.cycles[1]*50)*2, int(self.cycles[2]*50)*2)
+        
+
     def _ping_arduino(self):
         pass
 
-    def set_resistors_duty(self, tanks, cycles):
+    def set_resistors_duty(self, cycles):
         '''beware: order of tanks is mash, boil, hot for readibility'''
-        tanks[0].resistor_duty = cycles[0]
-        tanks[1].resistor_duty = cycles[1]
-        tanks[2].resistor_duty = cycles[2]
-        self.set_resistors(int(cycles[0]*50)*2, int(cycles[1]*50)*2, int(cycles[2]*50)*2)
-
+        if self.lock['resistor'] is True:
+            self._resistor_setting(cycles)
+            
 
     def set_pump(self, setting):
         if (self.lock['pump'] is True):
             self._pump(setting)
 
+    def set_valve(self, tank, setting):
+        if (self.lock['valve'] is True):
+            self._valve(tank, setting)
+
 
     def resistor_switch(self, tank, setting):
-        if (self.lock['resistor'] is True):
+        if (self.lock['resistor'] is False):
             if (setting is False):
                 self.setting[tank.tank_name] = False
-                return self._resistor_duty(tank, 0)
+                cycles = (0, 0, 0)
+                tanks_name = ("Mash", "Boil", "Hot")
+                cycles[tanks_name.index(tank.tank_name)] = setting
+                self.set_resistors_duty(cycles)
             else:
                 self.setting[tank.tank_name] = True
 
 
     def valve_switch(self, tank, setting):
-        if (self.lock['valve'] is True):
+        if (self.lock['valve'] is False):
             self._valve(tank, setting)
             if (setting is False):
                 self.valve_setting[tank.tank_name] = False
@@ -100,7 +119,8 @@ class LLD(MessengerController):
 
 
     def pump_switch(self, setting):
-        if (self.lock['pump'] is True):
+        if (self.lock['pump'] is False):
+            self._pump(setting)
             if setting is False:
                 self.pump_setting  = False
             else:

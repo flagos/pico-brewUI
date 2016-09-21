@@ -34,6 +34,10 @@ class Fake_LLD(object):
         # doing nothing but maybe we can check values here
         pass
 
+    def set_pump(self, setting):
+        # doing nothing but still we can check
+        pass
+
 class Fake_Pico(object):
 
     def __init__(self):

@@ -22,6 +22,11 @@ class Regulation(object):
         thread.daemon = True                            # Daemonize thread
         thread.start()                                  # Start the execution
 
+    def set_resistors(self, tanks, cycles):
+        tanks[0].resistor_duty = cycles[0]
+        tanks[1].resistor_duty = cycles[1]
+        tanks[2].resistor_duty = cycles[2]
+        self.lld.set_resistors_duty(cycles)
 
     def update_pid(self):
         hot  = self.hot
@@ -40,12 +45,12 @@ class Regulation(object):
             max_duty = 1
 
             if (mash.output >= max_duty):
-                lld.set_resistors_duty(tanks, (max_duty, 0, 0))
+                self.set_resistors(tanks, (max_duty, 0, 0))
             elif (mash.output + boil.output >= max_duty):
-                lld.set_resistors_duty(tanks, (mash.output, max_duty - mash.output, 0))
+                self.set_resistors(tanks, (mash.output, max_duty - mash.output, 0))
             elif (mash.output + boil.output + hot.output >= max_duty):
-                lld.set_resistors_duty(tanks, (mash.output, boil.output, max_duty - mash.output - boil.output))
+                self.set_resistors(tanks, (mash.output, boil.output, max_duty - mash.output - boil.output))
             else:
-                lld.set_resistors_duty(tanks, (mash.output, boil.output, hot.output))
+                self.set_resistors(tanks, (mash.output, boil.output, hot.output))
 
             time.sleep(self.sample_time)
